@@ -1,0 +1,224 @@
+/* ===================================
+   MODERN NAVIGATION SYSTEM
+   Glassmorphic, Responsive, & Adaptive
+   =================================== */
+
+:root {
+    /* Navbar Specific Variables */
+    --nav-height-desktop: 80px;
+    --nav-height-mobile: 70px;
+    --nav-bg-glass: rgba(255, 255, 255, 0.65);
+    --nav-border-glass: rgba(255, 255, 255, 0.4);
+    --nav-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --nav-blur: 24px;
+    --nav-radius: 24px;
+    --nav-text-color: #1f2937;
+    --nav-active-color: #2563eb;
+    --nav-hover-bg: rgba(0, 0, 0, 0.04);
+    --nav-transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* === BASE NAVIGATION CONTAINER === */
+.modern-nav {
+    position: fixed;
+    z-index: 1000;
+    transition: var(--nav-transition);
+    width: 100%;
+    pointer-events: none;
+    /* Allows clicking through the container area */
+}
+
+.nav-inner {
+    pointer-events: auto;
+    /* Re-enable clicks on the actual navbar */
+    background: var(--nav-bg-glass);
+    backdrop-filter: blur(var(--nav-blur));
+    -webkit-backdrop-filter: blur(var(--nav-blur));
+    border: 1px solid var(--nav-border-glass);
+    box-shadow: var(--nav-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+}
+
+/* === DESKTOP: FLOATING TOP BAR === */
+@media (min-width: 769px) {
+    .modern-nav {
+        top: 2rem;
+        left: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .nav-inner {
+        width: auto;
+        min-width: 600px;
+        max-width: 90%;
+        border-radius: var(--nav-radius);
+        height: var(--nav-height-desktop);
+    }
+
+    .nav-brand {
+        font-weight: 700;
+        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--nav-text-color);
+        text-decoration: none;
+        margin-right: 2rem;
+    }
+
+    .nav-brand i {
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .nav-item {
+        text-decoration: none;
+        color: var(--nav-text-color);
+        padding: 0.6rem 1.2rem;
+        border-radius: 12px;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: var(--nav-transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .nav-item:hover {
+        background: var(--nav-hover-bg);
+        transform: translateY(-2px);
+        color: var(--nav-active-color);
+    }
+
+    .nav-item.active {
+        background: rgba(37, 99, 235, 0.1);
+        color: var(--nav-active-color);
+        font-weight: 600;
+    }
+
+    .nav-item i {
+        font-size: 1.1rem;
+        transition: transform 0.3s ease;
+    }
+
+    .nav-item:hover i {
+        transform: scale(1.1);
+    }
+}
+
+/* === MOBILE: FIXED BOTTOM BAR === */
+@media (max-width: 768px) {
+    .modern-nav {
+        bottom: 0;
+        left: 0;
+        top: auto;
+    }
+
+    .nav-inner {
+        width: 100%;
+        border-radius: 20px 20px 0 0;
+        height: var(--nav-height-mobile);
+        padding: 0 1rem;
+        justify-content: space-around;
+        border-bottom: none;
+        background: rgba(255, 255, 255, 0.85);
+        /* Slightly more opaque for mobile */
+    }
+
+    .nav-brand {
+        display: none;
+        /* Hide brand on mobile bottom nav to save space */
+    }
+
+    .nav-links {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: var(--color-gray-500);
+        font-size: 0.75rem;
+        gap: 4px;
+        padding: 8px 12px;
+        border-radius: 12px;
+        transition: var(--nav-transition);
+        flex: 1;
+    }
+
+    .nav-item i {
+        font-size: 1.4rem;
+        margin-bottom: 2px;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .nav-item span {
+        font-weight: 500;
+        opacity: 0.8;
+    }
+
+    .nav-item.active {
+        color: var(--nav-active-color);
+    }
+
+    .nav-item.active i {
+        transform: translateY(-4px);
+        filter: drop-shadow(0 4px 6px rgba(37, 99, 235, 0.3));
+    }
+
+    /* Hide text labels on very small screens if needed, or keep them for clarity */
+    @media (max-width: 360px) {
+        .nav-item span {
+            display: none;
+        }
+
+        .nav-item i {
+            font-size: 1.6rem;
+        }
+    }
+}
+
+/* === ANIMATIONS === */
+@keyframes navFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* Add a subtle float animation to the desktop navbar container */
+@media (min-width: 769px) {
+    .modern-nav {
+        animation: navFloat 6s ease-in-out infinite;
+    }
+
+    .modern-nav:hover {
+        animation-play-state: paused;
+    }
+}

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descriptive Statistics - Week 2 Visual Notebook</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-color: #000000;
+            --secondary-bg: #f8f9fa;
+            --border-color: #e9ecef;
+            --highlight-color: #000000;
+            --highlight-text: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-top: 3rem;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.75rem;
+            margin-top: 2rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--bg-color);
+            padding: 6rem 0 4rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            font-weight: 300;
+            margin-top: 1rem;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            z-index: 1000;
+            padding: 0.8rem 2rem;
+            margin: 0 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        nav:hover {
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .nav-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #000;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-link:active {
+            transform: scale(0.95);
+        }
+
+        .nav-link i {
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Cards & Boxes */
+        .card {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .highlight-box {
+            background-color: var(--secondary-bg);
+            border-left: 4px solid var(--accent-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .example-box {
+            border: 2px dashed #ccc;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .example-label {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg-color);
+            padding: 0 10px;
+            font-weight: bold;
+            color: #666;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* Visual Elements */
+        .icon-large {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            margin: 2rem 0;
+        }
+
+        .chart-mini {
+            position: relative;
+            height: 220px;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                font-size: 0.95rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+                margin-top: 2.5rem;
+            }
+
+            h3 {
+                font-size: 1.25rem;
+                margin-top: 1.5rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            header {
+                padding: 4rem 0 2.5rem;
+            }
+
+            nav {
+                top: 10px;
+                margin: 0 1rem;
+                padding: 0.5rem 1rem;
+                border-radius: 30px;
+            }
+
+            .nav-list {
+                gap: 0.2rem;
+            }
+
+            .nav-link {
+                font-size: 0;
+                padding: 0.5rem 0.7rem;
+                min-width: 36px;
+            }
+
+            .nav-link i {
+                font-size: 1rem;
+                margin-right: 0;
+            }
+
+            .card {
+                padding: 1.5rem 1.25rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .highlight-box,
+            .example-box {
+                margin: 1.5rem 0;
+            }
+
+            .chart-container {
+                height: 260px;
+                margin: 1.5rem 0;
+            }
+
+            .chart-mini {
+                height: 200px;
+            }
+
+            .step-process {
+                flex-direction: column;
+                gap: 1.5rem;
+                margin: 2rem 0;
+            }
+
+            .step-process::before {
+                display: none;
+            }
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 1rem;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            font-weight: 600;
+            background-color: var(--secondary-bg);
+        }
+
+        /* Interactive Elements */
+        .btn {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--highlight-text);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent-color);
+            color: var(--highlight-text);
+        }
+
+        /* Step Process */
+        .step-process {
+            display: flex;
+            justify-content: space-between;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .step-process::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #eee;
+            z-index: 0;
+        }
+
+        .step-item {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            flex: 1;
+            background: var(--bg-color);
+            padding: 0 10px;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background: #111;
+            color: #fff;
+            padding: 4rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="icon-large"><i class="fa-solid fa-chart-pie"></i></div>
+            <h1>Descriptive Statistics</h1>
+            <p class="subtitle">Unveiling the Secrets Hidden in Data</p>
+            <p style="margin-top: 2rem; font-style: italic;">"Data is the new oil. It's valuable, but if unrefined it
+                cannot really be used."</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="#overview" class="nav-link"><i class="fa-solid fa-binoculars"></i>Overview</a></li>
+                <li><a href="#organization" class="nav-link"><i class="fa-solid fa-table"></i>Organization</a></li>
+                <li><a href="#visualization" class="nav-link"><i class="fa-solid fa-chart-column"></i>Visualization</a>
+                </li>
+                <li><a href="#relative-freq" class="nav-link"><i class="fa-solid fa-percent"></i>Relative Freq</a></li>
+                <li><a href="#histograms" class="nav-link"><i class="fa-solid fa-chart-simple"></i>Histograms</a></li>
+                <li><a href="#cumulative" class="nav-link"><i class="fa-solid fa-arrow-trend-up"></i>Cumulative</a></li>
+                <li><a href="#applications" class="nav-link"><i class="fa-solid fa-rocket"></i>Applications</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- Overview Section -->
+        <section id="overview">
+            <h2><i class="fa-solid fa-binoculars"></i> Week's Overview</h2>
+            <p>Welcome to Week 2! This week we transform from passive observers to active <strong>Data
+                    Detectives</strong>. We will learn how to take raw, messy data and turn it into clear, actionable
+                insights through organization, summarization, and visualization.</p>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3><i class="fa-solid fa-list-check"></i> Key Topics</h3>
+                    <ul style="list-style: none; margin-top: 1rem;">
+                        <li style="margin-bottom: 0.5rem;"><i class="fa-solid fa-check"></i> Data Organization &
+                            Frequency Tables</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fa-solid fa-check"></i> Data Visualization
+                            Techniques</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fa-solid fa-check"></i> Relative Frequency</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fa-solid fa-check"></i> Histograms & Grouped Data
+                        </li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fa-solid fa-check"></i> Cumulative Frequency</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3><i class="fa-solid fa-bullseye"></i> Learning Goals</h3>
+                    <p>By the end of this notebook, you will be able to:</p>
+                    <ul style="list-style: none; margin-top: 1rem;">
+                        <li style="margin-bottom: 0.5rem;"><i class="fa-solid fa-arrow-right"></i> Construct frequency
+                            tables from raw data.</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fa-solid fa-arrow-right"></i> Choose the right
+                            chart for your data.</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fa-solid fa-arrow-right"></i> Interpret histograms
+                            and distributions.</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fa-solid fa-arrow-right"></i> Apply these concepts
+                            to real-world problems.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Organization Section -->
+        <section id="organization">
+            <h2><i class="fa-solid fa-table"></i> 1. Data Organization & Frequency Tables</h2>
+            <p>Raw data is like a messy room. You can't find what you need until you organize it. Frequency tables are
+                our primary tool for tidying up categorical data.</p>
+
+            <div class="highlight-box">
+                <strong>Definition:</strong> A <em>Frequency Table</em> lists items (categories) together with the
+                number of times (frequency) they occur.
+            </div>
+
+            <div class="example-box">
+                <span class="example-label">Interactive Example</span>
+                <h3><i class="fa-solid fa-film"></i> Streaming Platform Survey</h3>
+                <p>We asked 50 students: "What is your favorite streaming platform?"</p>
+
+                <div class="grid-2">
+                    <div>
+                        <h4>Raw Data (The Mess)</h4>
+                        <div
+                            style="background: #f0f0f0; padding: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.9rem; height: 200px; overflow-y: auto;">
+                            Netflix, Amazon Prime, Netflix, Disney+, Netflix, Hotstar, Netflix, Amazon Prime, Netflix,
+                            Netflix, Disney+, Amazon Prime, Netflix, Hotstar, Netflix, Amazon Prime, Netflix, Disney+,
+                            Netflix, Amazon Prime, Netflix, Netflix, Disney+, Amazon Prime, Netflix, Hotstar, Netflix,
+                            Amazon Prime, Netflix, Netflix, Disney+, Amazon Prime, Netflix, Hotstar, Netflix, Amazon
+                            Prime, Netflix, Disney+, Netflix, Amazon Prime, Netflix, Netflix, Disney+, Amazon Prime,
+                            Netflix, Hotstar, Netflix, Amazon Prime, Netflix, Netflix
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Frequency Table (The Order)</h4>
+                        <table id="freqTable">
+                            <thead>
+                                <tr>
+                                    <th>Platform</th>
+                                    <th>Tally</th>
+                                    <th>Frequency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Netflix</td>
+                                    <td>|||| |||| |||| |||| ||||</td>
+                                    <td>25</td>
+                                </tr>
+                                <tr>
+                                    <td>Amazon Prime</td>
+                                    <td>|||| |||| ||||</td>
+                                    <td>14</td>
+                                </tr>
+                                <tr>
+                                    <td>Disney+</td>
+                                    <td>|||| ||</td>
+                                    <td>7</td>
+                                </tr>
+                                <tr>
+                                    <td>Hotstar</td>
+                                    <td>||||</td>
+                                    <td>4</td>
+                                </tr>
+                                <tr style="font-weight: bold; background: #eee;">
+                                    <td>Total</td>
+                                    <td></td>
+                                    <td>50</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visualization Section -->
+        <section id="visualization">
+            <h2><i class="fa-solid fa-chart-column"></i> 2. Data Visualization</h2>
+            <p>Our brains process visuals 60,000 times faster than text. A well-chosen chart can reveal the story of
+                your data instantly.</p>
+
+            <div class="step-process">
+                <div class="step-item">
+                    <div class="step-circle"><i class="fa-solid fa-chart-bar"></i></div>
+                    <h4>Bar Graph</h4>
+                    <p>Comparing categories</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-circle"><i class="fa-solid fa-chart-line"></i></div>
+                    <h4>Line Graph</h4>
+                    <p>Trends over time</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-circle"><i class="fa-solid fa-chart-pie"></i></div>
+                    <h4>Pie Chart</h4>
+                    <p>Proportions of whole</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Interactive Visualization Lab</h3>
+                <p>Toggle between different visualizations of the Streaming Platform data to see how they represent the
+                    same information differently.</p>
+
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <button class="btn" onclick="updateChart('bar')"><i class="fa-solid fa-chart-bar"></i> Bar
+                        Graph</button>
+                    <button class="btn" onclick="updateChart('pie')"><i class="fa-solid fa-chart-pie"></i> Pie
+                        Chart</button>
+                    <button class="btn" onclick="updateChart('doughnut')"><i class="fa-solid fa-circle-notch"></i>
+                        Doughnut</button>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Relative Frequency Section -->
+        <section id="relative-freq">
+            <h2><i class="fa-solid fa-percent"></i> 3. Relative Frequency</h2>
+            <p>Comparing raw numbers can be misleading if sample sizes differ. Relative frequency levels the playing
+                field by converting counts into proportions or percentages.</p>
+
+            <div class="highlight-box">
+                <p style="font-size: 1.2rem;"><strong>Formula:</strong></p>
+                <p>Relative Frequency = Frequency / Total Number of Observations</p>
+                <p>Percentage = Relative Frequency × 100%</p>
+            </div>
+
+            <div class="example-box">
+                <span class="example-label">Comparison Scenario</span>
+                <h3><i class="fa-solid fa-scale-balanced"></i> Which Sales Team is Better?</h3>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Team A</h4>
+                        <p>Sales Made: <strong>80</strong></p>
+                        <p>Calls Made: <strong>100</strong></p>
+                        <hr style="margin: 1rem 0;">
+                        <p>Success Rate: 80/100 = <strong>80%</strong></p>
+                    </div>
+                    <div class="card">
+                        <h4>Team B</h4>
+                        <p>Sales Made: <strong>160</strong></p>
+                        <p>Calls Made: <strong>200</strong></p>
+                        <hr style="margin: 1rem 0;">
+                        <p>Success Rate: 160/200 = <strong>80%</strong></p>
+                    </div>
+                </div>
+                <p><em>Insight:</em> Although Team B made double the sales, their <strong>Relative Frequency</strong>
+                    (Success Rate) is identical to Team A. They are equally effective!</p>
+            </div>
+        </section>
+
+        <!-- Histograms Section -->
+        <section id="histograms">
+            <h2><i class="fa-solid fa-chart-simple"></i> 4. Histograms & Grouped Data</h2>
+            <p>When dealing with continuous data (like age, height, time) or large ranges, we group data into "bins" or
+                intervals. A Histogram visualizes this grouped data.</p>
+
+            <div class="grid-2">
+                <div>
+                    <h3>Key Concepts</h3>
+                    <ul class="fa-ul" style="margin-left: 2rem;">
+                        <li><span class="fa-li"><i
+                                    class="fa-solid fa-ruler-horizontal"></i></span><strong>Bins/Intervals:</strong> The
+                            ranges we group data into (e.g., 0-10, 10-20).</li>
+                        <li><span class="fa-li"><i class="fa-solid fa-arrows-left-right"></i></span><strong>Class
+                                Width:</strong> The size of each interval.</li>
+                        <li><span class="fa-li"><i
+                                    class="fa-solid fa-border-all"></i></span><strong>Continuity:</strong> Unlike bar
+                            graphs, histogram bars touch each other to show continuous data.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Histogram vs Bar Graph</h3>
+                    <table style="font-size: 0.9rem;">
+                        <tr>
+                            <th>Feature</th>
+                            <th>Bar Graph</th>
+                            <th>Histogram</th>
+                        </tr>
+                        <tr>
+                            <td>Data Type</td>
+                            <td>Categorical (Names)</td>
+                            <td>Quantitative (Numbers)</td>
+                        </tr>
+                        <tr>
+                            <td>Bars</td>
+                            <td>Gaps between bars</td>
+                            <td>No gaps (touching)</td>
+                        </tr>
+                        <tr>
+                            <td>X-Axis</td>
+                            <td>Categories</td>
+                            <td>Number Ranges</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Interactive Histogram: Age Distribution</h3>
+                <p>Visualize the age distribution of 1000 users. Adjust the "Bin Size" to see how grouping affects the
+                    shape of the data.</p>
+
+                <div style="margin-bottom: 1rem;">
+                    <label for="binSlider">Bin Size (Years): <span id="binValue">5</span></label>
+                    <input type="range" id="binSlider" min="2" max="20" value="5"
+                        style="width: 100%; margin-top: 0.5rem;">
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="histogramChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cumulative Frequency Section -->
+        <section id="cumulative">
+            <h2><i class="fa-solid fa-arrow-trend-up"></i> 5. Cumulative Frequency</h2>
+            <p>Sometimes we want to know "how many are below X?". Cumulative frequency is the running total of
+                frequencies.</p>
+
+            <div class="example-box">
+                <span class="example-label">Real World Application</span>
+                <h3><i class="fa-solid fa-lightbulb"></i> Product Life Testing (Light Bulbs)</h3>
+                <p>We tested 100 light bulbs to see how long they last.</p>
+
+                <div class="chart-container">
+                    <canvas id="cumulativeChart"></canvas>
+                </div>
+
+                <p><strong>Interpretation:</strong> The curve shows that by 3000 hours, 60 bulbs (60%) had failed. This
+                    helps in setting warranty periods (e.g., setting a warranty at 1000 hours means only ~10% returns).
+                </p>
+            </div>
+        </section>
+
+        <!-- Applications Section -->
+        <section id="applications">
+            <h2><i class="fa-solid fa-rocket"></i> Real-World Applications</h2>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-shield-halved"></i> Case Study: Spam Detection</h3>
+                <p>How does your email know what is spam? Descriptive Statistics!</p>
+
+                <div class="step-process">
+                    <div class="step-item">
+                        <div class="step-circle">1</div>
+                        <h4>Data Collection</h4>
+                        <p>Collect millions of emails labeled "Spam" or "Not Spam".</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-circle">2</div>
+                        <h4>Frequency Analysis</h4>
+                        <p>Count word frequencies. "Free" appears in 98% of spam, 2% of normal.</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-circle">3</div>
+                        <h4>Decision Rule</h4>
+                        <p>If email contains "Free" + "Winner", probability of Spam > 99%.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3><i class="fa-solid fa-earth-asia"></i> Indian Context Examples</h3>
+            <div class="grid-2">
+                <div class="card">
+                    <h4><i class="fa-solid fa-cart-shopping"></i> E-Commerce (Flipkart/Amazon)</h4>
+                    <p>Uses <strong>Frequency Tables</strong> of your past purchases to recommend new products. "People
+                        who bought X also bought Y" is based on co-occurrence frequency.</p>
+                    <div class="chart-mini">
+                        <canvas id="ecomChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h4><i class="fa-solid fa-wheat-awn"></i> Agriculture</h4>
+                    <p><strong>Histograms</strong> of rainfall data help farmers decide the best planting season by
+                        analyzing historical weather distributions.</p>
+                    <div class="chart-mini">
+                        <canvas id="rainChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h4><i class="fa-solid fa-cricket-bat-ball-wicket"></i> Cricket Analytics</h4>
+                    <p><strong>Wagon Wheels</strong> are essentially radial frequency charts showing where a batsman
+                        scores runs.</p>
+                    <div class="chart-mini">
+                        <canvas id="wagonChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h4><i class="fa-solid fa-train-subway"></i> Metro/Transport</h4>
+                    <p><strong>Line Graphs</strong> of passenger density over time help schedule more trains during peak
+                        hours.</p>
+                    <div class="chart-mini">
+                        <canvas id="metroChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <h2>Keep Exploring!</h2>
+            <p>Statistics is the grammar of science. Master these basics, and you can read the story of the universe.
+            </p>
+            <div style="margin-top: 2rem; font-size: 2rem;">
+                <i class="fa-brands fa-python" style="margin: 0 10px;"></i>
+                <i class="fa-solid fa-database" style="margin: 0 10px;"></i>
+                <i class="fa-solid fa-brain" style="margin: 0 10px;"></i>
+            </div>
+            <p style="margin-top: 2rem; font-size: 0.8rem;">Created by your AI Tutor</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Chart 1: Streaming Platforms (Bar/Pie/Doughnut) ---
+        const ctx1 = document.getElementById('mainChart').getContext('2d');
+        let mainChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Netflix', 'Amazon Prime', 'Disney+', 'Hotstar'],
+                datasets: [{
+                    label: 'Number of Students',
+                    data: [25, 14, 7, 4],
+                    backgroundColor: [
+                        'rgba(0, 0, 0, 0.9)',
+                        'rgba(50, 50, 50, 0.8)',
+                        'rgba(100, 100, 100, 0.7)',
+                        'rgba(150, 150, 150, 0.6)'
+                    ],
+                    borderColor: 'rgba(0,0,0,1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'Favorite Streaming Platforms (n=50)', font: { size: 18 } }
+                }
+            }
+        });
+
+        function updateChart(type) {
+            mainChart.config.type = type;
+            if (type === 'bar') {
+                mainChart.options.scales = { y: { beginAtZero: true } };
+            } else {
+                mainChart.options.scales = {};
+            }
+            mainChart.update();
+        }
+
+        // --- Chart 2: Histogram (Age Distribution) ---
+        const ctx2 = document.getElementById('histogramChart').getContext('2d');
+
+        // Generate dummy age data (normal distribution centered around 30)
+        const ageData = [];
+        for (let i = 0; i < 1000; i++) {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+            num = num * 10 + 30; // Mean 30, SD 10
+            if (num > 0 && num < 80) ageData.push(num);
+        }
+
+        function createHistogramData(binSize) {
+            const bins = {};
+            const maxAge = 80;
+            for (let i = 0; i <= maxAge; i += binSize) {
+                bins[`${i}-${i + binSize}`] = 0;
+            }
+
+            ageData.forEach(age => {
+                const binIndex = Math.floor(age / binSize) * binSize;
+                const key = `${binIndex}-${binIndex + binSize}`;
+                if (bins[key] !== undefined) bins[key]++;
+            });
+
+            return {
+                labels: Object.keys(bins),
+                data: Object.values(bins)
+            };
+        }
+
+        let histData = createHistogramData(5);
+        let histogramChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: histData.labels,
+                datasets: [{
+                    label: 'Frequency',
+                    data: histData.data,
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    barPercentage: 1.0, // Make bars touch
+                    categoryPercentage: 1.0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Age Distribution Histogram' }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Age Groups (Bins)' } },
+                    y: { title: { display: true, text: 'Number of People' }, beginAtZero: true }
+                }
+            }
+        });
+
+        document.getElementById('binSlider').addEventListener('input', function (e) {
+            const binSize = parseInt(e.target.value);
+            document.getElementById('binValue').innerText = binSize;
+            const newData = createHistogramData(binSize);
+            histogramChart.data.labels = newData.labels;
+            histogramChart.data.datasets[0].data = newData.data;
+            histogramChart.update();
+        });
+
+        // --- Chart 3: Cumulative Frequency (Bulbs) ---
+        const ctx3 = document.getElementById('cumulativeChart').getContext('2d');
+        new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: ['0', '1000', '2000', '3000', '4000', '5000'],
+                datasets: [{
+                    label: 'Cumulative Failures',
+                    data: [0, 10, 30, 60, 85, 100],
+                    borderColor: 'black',
+                    backgroundColor: 'rgba(0,0,0,0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: 'white',
+                    pointBorderColor: 'black'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: 'Cumulative Failure of Light Bulbs' }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Total Failed Bulbs' },
+                        max: 100,
+                        beginAtZero: true
+                    },
+                    x: {
+                        title: { display: true, text: 'Hours of Operation' }
+                    }
+                }
+            }
+        });
+
+        // --- Indian Context Mini Charts ---
+
+        // E-Commerce: Co-occurrence bar chart (X with other items)
+        const ecomCtx = document.getElementById('ecomChart').getContext('2d');
+        new Chart(ecomCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Phone + Case', 'Laptop + Mouse', 'Shoes + Socks', 'Book + Notebook'],
+                datasets: [{
+                    label: 'Co-occurrence Frequency',
+                    data: [32, 21, 18, 12],
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: '"People who bought X also bought Y"' }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 10 } }
+                }
+            }
+        });
+
+        // Agriculture: Rainfall histogram-style bar chart
+        const rainCtx = document.getElementById('rainChart').getContext('2d');
+        new Chart(rainCtx, {
+            type: 'bar',
+            data: {
+                labels: ['0-50', '50-100', '100-150', '150-200', '200-250'],
+                datasets: [{
+                    label: 'Number of Days',
+                    data: [5, 12, 20, 9, 4],
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    barPercentage: 1.0,
+                    categoryPercentage: 1.0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Rainfall Histogram (mm)' }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Rainfall Range' } },
+                    y: { title: { display: true, text: 'Days' }, beginAtZero: true }
+                }
+            }
+        });
+
+        // Cricket Analytics: Wagon wheel-style radial frequency
+        const wagonCtx = document.getElementById('wagonChart').getContext('2d');
+        new Chart(wagonCtx, {
+            type: 'polarArea',
+            data: {
+                labels: ['Cover', 'Straight', 'On-side', 'Square', 'Fine leg'],
+                datasets: [{
+                    label: 'Runs Scored',
+                    data: [24, 18, 30, 14, 8],
+                    backgroundColor: [
+                        'rgba(0,0,0,0.9)',
+                        'rgba(60,60,60,0.9)',
+                        'rgba(120,120,120,0.9)',
+                        'rgba(180,180,180,0.9)',
+                        'rgba(220,220,220,0.9)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right' },
+                    title: { display: true, text: 'Wagon Wheel: Runs by Region' }
+                }
+            }
+        });
+
+        // Metro/Transport: Line graph of passenger density over time
+        const metroCtx = document.getElementById('metroChart').getContext('2d');
+        new Chart(metroCtx, {
+            type: 'line',
+            data: {
+                labels: ['6 AM', '8 AM', '10 AM', '12 PM', '2 PM', '4 PM', '6 PM', '8 PM'],
+                datasets: [{
+                    label: 'Passenger Count (relative)',
+                    data: [20, 80, 45, 30, 35, 70, 90, 40],
+                    borderColor: 'black',
+                    backgroundColor: 'rgba(0,0,0,0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Metro Passenger Density Through the Day' }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Time of Day' } },
+                    y: { title: { display: true, text: 'Relative Density' }, beginAtZero: true }
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>

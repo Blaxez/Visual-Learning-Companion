@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithmic Thinking & Applications - Notes</title>
+    
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/notebook.css">
+    <link rel="stylesheet" href="../styles/navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        .breadcrumb { padding: var(--space-6) 0; background: var(--color-gray-50); }
+        .breadcrumb-nav { display: flex; align-items: center; gap: var(--space-3); font-size: var(--text-sm); color: var(--color-gray-600); }
+        .breadcrumb-nav a { color: var(--color-gray-700); transition: color var(--transition-fast); }
+        .breadcrumb-nav a:hover { color: var(--color-black); }
+        .breadcrumb-separator { color: var(--color-gray-400); }
+        
+        .subject-header {
+            background: linear-gradient(135deg, var(--color-purple-600) 0%, var(--color-purple-500) 100%);
+            color: var(--color-white);
+            padding: var(--space-12) 0 var(--space-8);
+            text-align: center;
+            border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+            margin-bottom: var(--space-8);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .subject-header-icon { font-size: 3rem; margin-bottom: var(--space-3); opacity: 0.9; }
+        .subject-header h1 { color: white; margin-bottom: var(--space-4); }
+        .subject-header p { color: rgba(255, 255, 255, 0.9); font-size: var(--text-lg); max-width: 700px; margin: 0 auto var(--space-8); }
+        
+        .coming-soon-section {
+            padding: var(--space-20) 0;
+            text-align: center;
+        }
+        
+        .coming-soon-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .coming-soon-icon {
+            font-size: 4rem;
+            color: var(--color-gray-300);
+            margin-bottom: var(--space-4);
+        }
+        
+        .coming-soon-content h2 {
+            margin-bottom: var(--space-4);
+            color: var(--color-gray-700);
+        }
+        
+        .coming-soon-content p {
+            font-size: var(--text-lg);
+            color: var(--color-gray-600);
+            margin-bottom: var(--space-8);
+        }
+        
+        .placeholder-topics {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--space-3);
+            margin-top: var(--space-8);
+        }
+        
+        .placeholder-topic {
+            background: var(--color-gray-100);
+            color: var(--color-gray-600);
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: 500;
+        }
+
+        .view-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-purple-600);
+            font-weight: 600;
+            transition: all var(--transition-fast);
+        }
+
+        .view-link:hover {
+            gap: var(--space-3);
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .subject-header {
+                padding: var(--space-6) 0 var(--space-4);
+                border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+                margin-bottom: var(--space-6);
+            }
+
+            .subject-header-icon {
+                font-size: 2rem;
+                margin-bottom: var(--space-2);
+            }
+
+            .subject-header h1 {
+                font-size: var(--text-xl);
+                padding: 0 var(--space-4);
+                margin-bottom: var(--space-1);
+            }
+
+            .subject-header p {
+                font-size: var(--text-sm);
+                padding: 0 var(--space-4);
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .coming-soon-section {
+                padding: var(--space-8) 0;
+            }
+
+            .coming-soon-icon {
+                font-size: 3rem;
+                margin-bottom: var(--space-3);
+            }
+
+            .coming-soon-content h2 {
+                font-size: var(--text-lg);
+                padding: 0 var(--space-4);
+                margin-bottom: var(--space-2);
+            }
+
+            .coming-soon-content p {
+                font-size: var(--text-sm);
+                padding: 0 var(--space-4);
+                margin-bottom: var(--space-4);
+            }
+
+            /* Hide placeholder topics on mobile */
+            .placeholder-topics {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Navigation Bar -->
+    <nav class="modern-nav">
+        <div class="nav-inner">
+            <a href="../index.html" class="nav-brand">
+                <i class="fas fa-layer-group"></i>
+                <span>Notes App</span>
+            </a>
+            <div class="nav-links">
+                <a href="../index.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="../FSP/index.html" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>FSP</span>
+                </a>
+                <a href="index.html" class="nav-item active">
+                    <i class="fas fa-code-branch"></i>
+                    <span>ATA</span>
+                </a>
+                <a href="../BDA/index.html" class="nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>BDA</span>
+                </a>
+                <a href="../LANA/index.html" class="nav-item">
+                    <i class="fas fa-square-root-alt"></i>
+                    <span>LANA</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <header class="subject-header">
+        <div class="container">
+            <div class="subject-header-icon">
+                <i class="fas fa-code-branch"></i>
+            </div>
+            <h1>Algorithmic Thinking & Applications</h1>
+            <p>Develop problem-solving skills and learn to design efficient algorithms for real-world applications</p>
+        </div>
+    </header>
+    
+    <section class="coming-soon-section">
+        <div class="container">
+            <div class="coming-soon-content">
+                <div class="coming-soon-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h2>Visual Notebooks Coming Soon</h2>
+                <p>
+                    We're crafting beautiful, interactive notebooks for this subject. 
+                    Check back soon to explore algorithmic thinking concepts with engaging visualizations!
+                </p>
+                
+                <div class="placeholder-topics">
+                    <span class="placeholder-topic">Algorithm Design</span>
+                    <span class="placeholder-topic">Complexity Analysis</span>
+                    <span class="placeholder-topic">Data Structures</span>
+                    <span class="placeholder-topic">Problem Solving</span>
+                    <span class="placeholder-topic">Optimization</span>
+                </div>
+                
+                <div style="margin-top: var(--space-12);">
+                    <a href="../index.html" class="btn btn-primary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to All Subjects
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer style="background: var(--color-gray-900); color: var(--color-white); padding: var(--space-8) 0; text-align: center; margin-top: var(--space-20);">
+        <div class="container">
+            <p style="color: var(--color-gray-500); font-size: var(--text-sm);">
+                Algorithmic Thinking & Applications | Visual Learning Companion
+            </p>
+        </div>
+    </footer>
+    
+</body>
+</html>
