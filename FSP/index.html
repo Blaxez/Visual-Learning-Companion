@@ -233,6 +233,7 @@
                 font-size: var(--text-sm);
                 padding: 0 var(--space-4);
                 display: -webkit-box;
+                line-clamp: 2;  
                 -webkit-line-clamp: 2;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
@@ -259,6 +260,7 @@
                 font-size: var(--text-xs);
                 margin-bottom: var(--space-3);
                 display: -webkit-box;
+                line-clamp: 2;
                 -webkit-line-clamp: 2;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
@@ -350,7 +352,7 @@
             <div class="grid grid-cols-1" style="gap: var(--space-8);">
                 
                 <!-- Week 1 Note -->
-                <div class="note-card" onclick="window.location.href='FSPWeekOne.html'">
+                <div class="note-card" onclick="window.location.href='Week1/FSPWeekOne.html'">
                     <div class="note-header">
                         <div class="note-week">Week 1</div>
                         <div class="note-status">
@@ -388,7 +390,7 @@
                 </div>
                 
                 <!-- Week 2A Note -->
-                <div class="note-card" onclick="window.location.href='FSPWeekTwoA.html'">
+                <div class="note-card" onclick="window.location.href='Week2/FSPWeekTwoA.html'">
                     <div class="note-header">
                         <div class="note-week">Week 2A</div>
                         <div class="note-status">
@@ -425,6 +427,43 @@
                         </span>
                     </div>
                 </div>
+
+                <!-- Week 2B Note -->
+                <div class="note-card" onclick="window.location.href='Week2/FSPWeekTwoB.html'">
+                    <div class="note-header">
+                        <div class="note-week">Week 2B</div>
+                        <div class="note-status">
+                            <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                            <span>Complete</span>
+                        </div>
+                    </div>
+                    <h3 class="note-title">Measures of Central Tendency</h3>
+                    <p class="note-description">
+                        Discover the "Heart of Data"! Master Mean, Median, and Mode through interactive calculators and real-world case studies like Spam Detection and Netflix Algorithms.
+                    </p>
+                    <div class="note-topics">
+                        <span class="topic-tag">Mean, Median, Mode</span>
+                        <span class="topic-tag">Outliers</span>
+                        <span class="topic-tag">Interactive Lab</span>
+                        <span class="topic-tag">Real-World Apps</span>
+                    </div>
+                    <div class="note-footer">
+                        <div class="note-meta">
+                            <div class="note-meta-item">
+                                <i class="fas fa-robot"></i>
+                                <span>Visual Guide</span>
+                            </div>
+                            <div class="note-meta-item">
+                                <i class="fas fa-calculator"></i>
+                                <span>Interactive Tools</span>
+                            </div>
+                        </div>
+                        <span class="view-link" style="color: #3b82f6;">
+                            Open Notebook
+                            <i class="fas fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </div>
                 
                 <!-- Coming Soon Cards -->
                 <div class="coming-soon-card">
@@ -440,12 +479,16 @@
     </section>
     
     <!-- Footer -->
-    <footer class="footer" style="background: var(--color-gray-900); color: var(--color-white); padding: var(--space-12) 0; text-align: center;">
-        <div class="container">
-            <p style="color: var(--color-gray-400); margin-bottom: var(--space-4);">
-                <a href="../index.html" style="color: var(--color-gray-300);">← Back to All Subjects</a>
-            </p>
-            <p style="color: var(--color-gray-500); font-size: var(--text-sm);">
+    <footer class="notebook-footer">
+        <div class="notebook-container">
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="index.html">FSP Notes</a>
+                <a href="../ATA/index.html">ATA</a>
+                <a href="../BDA/index.html">BDA</a>
+                <a href="../LANA/index.html">LANA</a>
+            </div>
+            <p style="margin-top: 2rem; font-size: 0.875rem;">
                 Foundations of Statistics & Probability | Visual Learning Companion
             </p>
         </div>

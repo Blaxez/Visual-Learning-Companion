@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Measures of Central Tendency - Week 2B Visual Notebook</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.8;
+            padding: 20px;
+            padding-top: 80px; /* Space for fixed nav */
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #000000;
+            color: #ffffff;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .nav-logo {
+            font-size: 1.3em;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .nav-logo i {
+            margin-right: 8px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 5px;
+        }
+
+        .nav-menu li a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s;
+            font-size: 0.95em;
+            display: block;
+        }
+
+        .nav-menu li a:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .nav-toggle:hover {
+            color: #cccccc;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: #000000;
+            color: #ffffff;
+            padding: 60px 40px;
+            margin-bottom: 40px;
+            border: 3px solid #000000;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            font-weight: 300;
+            margin: 10px 0;
+        }
+
+        .section {
+            background: #ffffff;
+            border: 2px solid #000000;
+            padding: 50px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: -10px;
+            bottom: -10px;
+            background: #f5f5f5;
+            z-index: -1;
+        }
+
+        .section h2 {
+            color: #000000;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #000000;
+            padding-bottom: 15px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .section h3 {
+            color: #000000;
+            font-size: 1.8em;
+            margin: 35px 0 20px 0;
+            font-weight: 400;
+            border-left: 6px solid #000000;
+            padding-left: 20px;
+        }
+
+        .section h4 {
+            color: #000000;
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            font-weight: 500;
+        }
+
+        .intro-text {
+            font-size: 1.2em;
+            line-height: 2;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-left: 4px solid #000000;
+        }
+
+        .definition-box {
+            background: #f5f5f5;
+            border-left: 8px solid #000000;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+        }
+
+        .example-box {
+            background: #ffffff;
+            border: 3px solid #000000;
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .example-box::before {
+            content: 'EXAMPLE';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #000000;
+            color: #ffffff;
+            padding: 5px 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .warning-box {
+            background: #ffffff;
+            border: 3px solid #000000;
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .warning-box::before {
+            content: '⚠ WARNING';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #000000;
+            color: #ffffff;
+            padding: 5px 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .success-box {
+            background: #ffffff;
+            border: 3px solid #000000;
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .success-box::before {
+            content: '✓ SUCCESS';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #000000;
+            color: #ffffff;
+            padding: 5px 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .sampling-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .sampling-card {
+            background: #ffffff;
+            border: 2px solid #000000;
+            padding: 25px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .sampling-card::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: -6px;
+            bottom: -6px;
+            background: #e0e0e0;
+            z-index: -1;
+            transition: all 0.3s;
+        }
+
+        .sampling-card:hover {
+            transform: translate(-3px, -3px);
+        }
+
+        .sampling-card:hover::after {
+            top: 8px;
+            left: 8px;
+        }
+
+        .interactive-demo {
+            background: #fafafa;
+            padding: 40px;
+            border: 3px solid #000000;
+            margin: 30px 0;
+        }
+
+        button {
+            background: #000000;
+            color: #ffffff;
+            border: 3px solid #000000;
+            padding: 15px 35px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            margin: 10px;
+            font-family: 'Georgia', serif;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        input.calc-input {
+            padding: 15px;
+            border: 2px solid #000000;
+            font-size: 1.1em;
+            width: 100%;
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: #ffffff;
+        }
+
+        th, td {
+            border: 2px solid #000000;
+            padding: 20px;
+            text-align: left;
+        }
+
+        th {
+            background: #000000;
+            color: #ffffff;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            body { padding: 70px 10px 10px; }
+            .nav-toggle { display: block; }
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 60px;
+                flex-direction: column;
+                background-color: #000000;
+                width: 100%;
+                transition: 0.3s;
+                gap: 0;
+            }
+            .nav-menu.active { left: 0; }
+            .nav-menu li { border-bottom: 1px solid #333; }
+            .nav-menu li a { padding: 15px 20px; }
+            .header h1 { font-size: 1.8em; }
+            .sampling-grid { grid-template-columns: 1fr; }
+            table { display: block; overflow-x: auto; white-space: nowrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-layer-group"></i> Notes App
+            </a>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../index.html">FSP</a></li>
+                <li><a href="../../ATA/index.html">ATA</a></li>
+                <li><a href="../../BDA/index.html">BDA</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Measures of Central Tendency</h1>
+            <p>The Heart of Data <i class="fas fa-heart"></i></p>
+            <p style="font-size: 1rem; margin-top: 10px; opacity: 0.8;">Finding the "Typical" in a World of Variation</p>
+        </div>
+
+        <!-- Overview Section -->
+        <div class="section">
+            <h2>Week's Overview</h2>
+            <div class="intro-text">
+                Welcome to Week 2B! We dive into the "Heart of Data" by exploring Measures of Central Tendency. We will learn how to find the single value that best represents an entire dataset, understanding the nuances between Mean, Median, and Mode.
+            </div>
+            
+            <div class="sampling-grid">
+                <div class="sampling-card">
+                    <h3><i class="fas fa-clipboard-list"></i> Key Topics</h3>
+                    <ul style="list-style: none; margin-top: 15px; line-height: 1.8;">
+                        <li><i class="fas fa-check"></i> Mean (Arithmetic Average)</li>
+                        <li><i class="fas fa-check"></i> Median (The Middle Value)</li>
+                        <li><i class="fas fa-check"></i> Mode (The Most Frequent)</li>
+                        <li><i class="fas fa-check"></i> Impact of Outliers</li>
+                    </ul>
+                </div>
+                <div class="sampling-card">
+                    <h3><i class="fas fa-bullseye"></i> Learning Goals</h3>
+                    <ul style="list-style: none; margin-top: 15px; line-height: 1.8;">
+                        <li><i class="fas fa-arrow-right"></i> Calculate Mean, Median, Mode</li>
+                        <li><i class="fas fa-arrow-right"></i> Understand when to use each</li>
+                        <li><i class="fas fa-arrow-right"></i> Analyze outlier effects</li>
+                        <li><i class="fas fa-arrow-right"></i> Real-world applications</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: The Mean -->
+        <div class="section">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">1</div>
+                <h2 style="margin: 0; border: none;">Mean: The Average <i class="fas fa-chart-bar"></i></h2>
+            </div>
+            
+            <p>The mean is what we commonly call the "average." It acts as the <strong>balancing point</strong> of your data, like the fulcrum of a seesaw.</p>
+
+            <div class="definition-box">
+                <h4>Definition & Formula</h4>
+                <p>The mean (<strong>x̄</strong>) is calculated by summing all values and dividing by the total count.</p>
+                <p style="text-align: center; margin-top: 10px; font-weight: bold;">Mean = (Sum of all values) / (Number of values)</p>
+            </div>
+
+            <div class="example-box">
+                <h4>Example: Student Data Usage</h4>
+                <p>Data (GB): 2, 3, 5, 7, 8</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>Step 1:</strong> Sum = 2 + 3 + 5 + 7 + 8 = <strong>25</strong></li>
+                    <li><strong>Step 2:</strong> Divide by 5 = <strong>5 GB</strong></li>
+                </ul>
+            </div>
+
+            <div class="interactive-demo">
+                <h3><i class="fas fa-calculator"></i> Interactive Mean Lab</h3>
+                <p>Enter numbers separated by commas to calculate the mean instantly.</p>
+                <input type="text" id="meanInput" class="calc-input" placeholder="e.g., 10, 20, 30, 40" oninput="calculateMean()">
+                <div id="meanResult" style="font-size: 2em; font-weight: bold; margin-top: 10px;">Mean: -</div>
+            </div>
+
+            <div class="warning-box">
+                <h4>Limitation: Sensitivity to Outliers</h4>
+                <p>The mean is easily pulled by extreme values (outliers).</p>
+                <p><strong>Example:</strong> If one student used <strong>100 GB</strong> instead of 8 GB, the mean jumps from 5 GB to <strong>23.4 GB</strong>! This no longer represents the "typical" student.</p>
+            </div>
+        </div>
+
+        <!-- Section 2: The Median -->
+        <div class="section">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">2</div>
+                <h2 style="margin: 0; border: none;">Median: The Middle Ground <i class="fas fa-scale-balanced"></i></h2>
+            </div>
+
+            <p>The median is the <strong>middle value</strong> when the data is arranged in order. It splits the data into two equal halves.</p>
+
+            <div class="sampling-grid">
+                <div class="sampling-card">
+                    <h4>Odd Number of Values</h4>
+                    <p>The median is the <strong>exact middle</strong> number.</p>
+                    <div style="background: #f0f0f0; padding: 10px; margin-top: 10px; font-family: monospace;">2, 3, <strong>5</strong>, 7, 8</div>
+                    <p>Median = 5</p>
+                </div>
+                <div class="sampling-card">
+                    <h4>Even Number of Values</h4>
+                    <p>The median is the <strong>average of the two middle</strong> numbers.</p>
+                    <div style="background: #f0f0f0; padding: 10px; margin-top: 10px; font-family: monospace;">2, 3, <strong>5, 7</strong>, 8, 9</div>
+                    <p>Median = (5 + 7) / 2 = 6</p>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <h4>Why use Median? Robustness!</h4>
+                <p>The median is <strong>NOT</strong> swayed by outliers. In our outlier example (2, 3, 5, 7, 100), the median is still <strong>5</strong>.</p>
+            </div>
+        </div>
+
+        <!-- Section 3: The Mode -->
+        <div class="section">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">3</div>
+                <h2 style="margin: 0; border: none;">Mode: The Most Frequent <i class="fas fa-bullhorn"></i></h2>
+            </div>
+
+            <p>The mode is simply the value that appears <strong>most often</strong>. It's the "popular vote" of statistics.</p>
+
+            <div class="sampling-grid">
+                <div class="sampling-card">
+                    <h4>Unimodal</h4>
+                    <p>One clear winner.</p>
+                    <p>12, <strong>15, 15, 15</strong>, 18</p>
+                    <p><strong>Mode: 15</strong></p>
+                </div>
+                <div class="sampling-card">
+                    <h4>Bimodal</h4>
+                    <p>Two values tie.</p>
+                    <p><strong>12, 12</strong>, 14, <strong>15, 15</strong></p>
+                    <p><strong>Modes: 12 & 15</strong></p>
+                </div>
+                <div class="sampling-card">
+                    <h4>No Mode</h4>
+                    <p>No repeats.</p>
+                    <p>2, 5, 8, 9, 11</p>
+                    <p><strong>None</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Comparison -->
+        <div class="section">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">4</div>
+                <h2 style="margin: 0; border: none;">Mean vs. Median: The Ultimate Showdown <i class="fas fa-scale-unbalanced"></i></h2>
+            </div>
+
+            <div class="example-box">
+                <h4>Scenario: The CEO's Salary</h4>
+                <table>
+                    <thead>
+                        <tr><th>Role</th><th>Salary (Monthly)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Intern</td><td>₹20,000</td></tr>
+                        <tr><td>Junior Dev</td><td>₹30,000</td></tr>
+                        <tr><td>Senior Dev</td><td>₹40,000</td></tr>
+                        <tr><td>Manager</td><td>₹40,000</td></tr>
+                        <tr><td>Designer</td><td>₹35,000</td></tr>
+                        <tr style="background: #ffebee;"><td><strong>CEO (Outlier)</strong></td><td><strong>₹5,00,000</strong></td></tr>
+                    </tbody>
+                </table>
+                
+                <div class="sampling-grid">
+                    <div class="sampling-card" style="border-color: #d32f2f;">
+                        <h4 style="color: #d32f2f;">Mean: ₹1,10,833</h4>
+                        <p>Suggests "typical" pay is >1 Lakh. <strong>Misleading.</strong></p>
+                    </div>
+                    <div class="sampling-card" style="border-color: #388e3c;">
+                        <h4 style="color: #388e3c;">Median: ₹37,500</h4>
+                        <p>Reflects normal employee pay. <strong>Accurate.</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Quick Decision Guide</h3>
+            <table>
+                <thead>
+                    <tr><th>Measure</th><th>Best Used When...</th><th>Sensitive to Outliers?</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Mean</strong></td><td>Symmetrical data, comparing groups</td><td>Yes</td></tr>
+                    <tr><td><strong>Median</strong></td><td>Skewed data (income, prices)</td><td>No</td></tr>
+                    <tr><td><strong>Mode</strong></td><td>Categorical data (most popular)</td><td>No</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 5: Real World -->
+        <div class="section">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">5</div>
+                <h2 style="margin: 0; border: none;">Real-World Applications <i class="fas fa-globe"></i></h2>
+            </div>
+
+            <div class="sampling-grid">
+                <div class="sampling-card">
+                    <h4><i class="fas fa-shield-virus"></i> Spam Detection</h4>
+                    <p>If an email has <strong>100 links</strong> while the <strong>median</strong> is 2, it's flagged as spam.</p>
+                </div>
+                <div class="sampling-card">
+                    <h4><i class="fas fa-play-circle"></i> Netflix Recommendations</h4>
+                    <p>Uses <strong>median</strong> watch time to recommend movies vs sitcoms.</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Indian Context Examples</h3>
+            <div class="sampling-grid">
+                <div class="sampling-card">
+                    <h4><i class="fas fa-bolt"></i> Electricity Bills</h4>
+                    <p><strong>Use Median:</strong> Avoid skew from heavy AC users to find "normal" bill.</p>
+                </div>
+                <div class="sampling-card">
+                    <h4><i class="fas fa-laptop-code"></i> IT Salaries</h4>
+                    <p><strong>Use Median:</strong> Founders earn exponentially more; median shows typical engineer pay.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="section" style="background: #000000; color: #ffffff; text-align: center; margin-bottom: 0;">
+            <h3 style="color: #ffffff; border: none;">Continue Your Learning Journey</h3>
+            <p>You've mastered the basics of Central Tendency! Next up: Measures of Dispersion.</p>
+            <div style="margin-top: 2rem;">
+                <a href="#" style="display: inline-block; background: #333; color: #888; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 10px; cursor: not-allowed;">
+                    <i class="fas fa-lock"></i> Next: Week 3 (Coming Soon)
+                </a>
+                <a href="FSPWeekTwoA.html" style="display: inline-block; border: 2px solid #ffffff; color: #ffffff; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 10px;">
+                    <i class="fas fa-arrow-left"></i> Previous: Week 2A
+                </a>
+            </div>
+            <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; color: #888;">
+                <a href="../../index.html" style="color: #888; text-decoration: none; margin: 0 10px;">Home</a> |
+                <a href="../index.html" style="color: #888; text-decoration: none; margin: 0 10px;">FSP Notes</a> |
+                <a href="../../ATA/index.html" style="color: #888; text-decoration: none; margin: 0 10px;">ATA</a> |
+                <a href="../../BDA/index.html" style="color: #888; text-decoration: none; margin: 0 10px;">BDA</a>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
+                Foundations of Statistics & Probability | Visual Learning Companion
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        if (navToggle) {
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+        }
+
+        // Interactive Mean Calculator
+        function calculateMean() {
+            const input = document.getElementById('meanInput').value;
+            const resultDisplay = document.getElementById('meanResult');
+            
+            if (!input.trim()) {
+                resultDisplay.innerText = "Mean: -";
+                return;
+            }
+
+            const numbers = input.split(',').map(num => parseFloat(num.trim())).filter(num => !isNaN(num));
+            
+            if (numbers.length === 0) {
+                resultDisplay.innerText = "Mean: -";
+                return;
+            }
+
+            const sum = numbers.reduce((a, b) => a + b, 0);
+            const mean = sum / numbers.length;
+            
+            resultDisplay.innerText = `Mean: ${mean.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
