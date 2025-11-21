@@ -1,2387 +1,3030 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foundations of Statistics & Probability - Visual Notebook</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../../styles/navbar.css" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
+      body {
+        font-family: "Georgia", "Times New Roman", serif;
+        background: #ffffff;
+        color: #1a1a1a;
+        line-height: 1.8;
+        padding: 20px;
+        padding-top: 80px; /* Space for fixed nav */
+        scroll-behavior: smooth;
+      }
+
+      /* Navbar Theme Overrides */
+      :root {
+        --nav-bg-glass: rgba(0, 0, 0, 0.9);
+        --nav-border-glass: rgba(255, 255, 255, 0.1);
+        --nav-text-color: #ffffff;
+        --nav-active-color: #3b82f6;
+        --nav-hover-bg: rgba(255, 255, 255, 0.1);
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: #000000;
+        color: #ffffff;
+        padding: 60px 40px;
+        margin-bottom: 40px;
+        border: 3px solid #000000;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 3em;
+        margin-bottom: 15px;
+        font-weight: 300;
+        letter-spacing: 2px;
+      }
+
+      .header p {
+        font-size: 1.3em;
+        font-weight: 300;
+        margin: 10px 0;
+      }
+
+      .section {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 50px;
+        margin-bottom: 40px;
+        position: relative;
+      }
+
+      .section::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: -10px;
+        bottom: -10px;
+        background: #f5f5f5;
+        z-index: -1;
+      }
+
+      .section h2 {
+        color: #000000;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        border-bottom: 4px solid #000000;
+        padding-bottom: 15px;
+        font-weight: 400;
+        letter-spacing: 1px;
+      }
+
+      .section h3 {
+        color: #000000;
+        font-size: 1.8em;
+        margin: 35px 0 20px 0;
+        font-weight: 400;
+        border-left: 6px solid #000000;
+        padding-left: 20px;
+      }
+
+      .section h4 {
+        color: #000000;
+        font-size: 1.4em;
+        margin: 25px 0 15px 0;
+        font-weight: 500;
+      }
+
+      .intro-text {
+        font-size: 1.2em;
+        line-height: 2;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-left: 4px solid #000000;
+      }
+
+      .flowchart {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 40px 0;
+        flex-wrap: wrap;
+        padding: 30px;
+        background: #fafafa;
+        border: 2px solid #e0e0e0;
+      }
+
+      .flow-step {
+        background: #000000;
+        color: #ffffff;
+        padding: 30px 25px;
+        border: 3px solid #000000;
+        margin: 10px;
+        min-width: 180px;
+        text-align: center;
+        font-size: 1.1em;
+        font-weight: 400;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .flow-step:hover {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      .flow-step::after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: -5px;
+        bottom: -5px;
+        background: #e0e0e0;
+        z-index: -1;
+      }
+
+      .arrow {
+        font-size: 2.5em;
+        color: #000000;
+        margin: 0 15px;
+        font-weight: bold;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 400px;
+        margin: 40px 0;
+        padding: 30px;
+        background: #fafafa;
+        border: 2px solid #e0e0e0;
+      }
+
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin: 30px 0;
+      }
+
+      .comparison-card {
+        background: #ffffff;
+        padding: 30px;
+        border: 3px solid #000000;
+        position: relative;
+        transition: all 0.3s;
+      }
+
+      .comparison-card::before {
+        content: "";
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        right: -8px;
+        bottom: -8px;
+        background: #f0f0f0;
+        z-index: -1;
+      }
+
+      .comparison-card:hover {
+        transform: translate(-5px, -5px);
+      }
+
+      .comparison-card h4 {
+        color: #000000;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        border-bottom: 2px solid #000000;
+        padding-bottom: 10px;
+      }
+
+      .comparison-card ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .comparison-card li {
+        padding: 8px 0;
+        padding-left: 25px;
+        position: relative;
+      }
+
+      .comparison-card li::before {
+        content: "▪";
+        position: absolute;
+        left: 0;
+        font-size: 1.5em;
+      }
+
+      .example-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .example-box::before {
+        content: "EXAMPLE";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .warning-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .warning-box::before {
+        content: "⚠ WARNING";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .success-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .success-box::before {
+        content: "✓ SUCCESS STORY";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .info-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .info-box::before {
+        content: "ℹ INFO";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .sampling-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin: 30px 0;
+      }
+
+      .sampling-card {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 25px;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .sampling-card::after {
+        content: "";
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        right: -6px;
+        bottom: -6px;
+        background: #e0e0e0;
+        z-index: -1;
+        transition: all 0.3s;
+      }
+
+      .sampling-card:hover {
+        transform: translate(-3px, -3px);
+      }
+
+      .sampling-card:hover::after {
+        top: 8px;
+        left: 8px;
+      }
+
+      .key-takeaway {
+        background: #000000;
+        color: #ffffff;
+        padding: 20px 20px 20px 70px;
+        margin: 15px 0;
+        position: relative;
+        font-size: 1.1em;
+      }
+
+      .key-takeaway::before {
+        content: "✓";
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2em;
+        font-weight: bold;
+      }
+
+      .interactive-demo {
+        background: #fafafa;
+        padding: 40px;
+        border: 3px solid #000000;
+        margin: 30px 0;
+      }
+
+      button {
+        background: #000000;
+        color: #ffffff;
+        border: 3px solid #000000;
+        padding: 15px 35px;
+        cursor: pointer;
+        font-size: 1.1em;
+        transition: all 0.3s;
+        margin: 10px;
+        font-family: "Georgia", serif;
+        letter-spacing: 1px;
+      }
+
+      button:hover {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      .stats-display {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+      }
+
+      .stat-card {
+        background: #ffffff;
+        padding: 25px;
+        text-align: center;
+        border: 2px solid #000000;
+        position: relative;
+      }
+
+      .stat-card::after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: -5px;
+        bottom: -5px;
+        background: #e0e0e0;
+        z-index: -1;
+      }
+
+      .stat-value {
+        font-size: 3em;
+        color: #000000;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .stat-label {
+        color: #000000;
+        font-size: 1em;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .definition-box {
+        background: #f5f5f5;
+        border-left: 8px solid #000000;
+        padding: 25px;
+        margin: 25px 0;
+        font-style: italic;
+      }
+
+      .process-steps {
+        counter-reset: step-counter;
+        list-style: none;
+        padding: 0;
+      }
+
+      .process-steps li {
+        counter-increment: step-counter;
+        padding: 25px;
+        margin: 20px 0;
+        background: #ffffff;
+        border: 2px solid #000000;
+        position: relative;
+        padding-left: 80px;
+      }
+
+      .process-steps li::before {
+        content: counter(step-counter);
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #000000;
+        color: #ffffff;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+
+      .visual-comparison {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin: 25px 0;
+        padding: 20px;
+        background: #fafafa;
+        border: 2px solid #e0e0e0;
+      }
+
+      .visual-item {
+        text-align: center;
+        flex: 1;
+        padding: 15px;
+      }
+
+      .visual-item h3 {
+        font-size: 1.3em;
+        margin: 10px 0;
+        border: none;
+        padding-left: 0;
+      }
+
+      .visual-item p {
+        font-size: 0.95em;
+        margin: 5px 0;
+      }
+
+      .visual-icon {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .vs-divider {
+        font-size: 2em;
+        font-weight: bold;
+        padding: 0 20px;
+        color: #000000;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 30px 0;
+        background: #ffffff;
+      }
+
+      th,
+      td {
+        border: 2px solid #000000;
+        padding: 20px;
+        text-align: left;
+      }
+
+      th {
+        background: #000000;
+        color: #ffffff;
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+
+      tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      .quote {
+        font-size: 1.3em;
+        font-style: italic;
+        text-align: center;
+        padding: 30px;
+        border-top: 3px solid #000000;
+        border-bottom: 3px solid #000000;
+        margin: 40px 0;
+        line-height: 1.8;
+      }
+
+      .mini-chart {
+        display: inline-block;
+        width: 100%;
+        height: 250px;
+        margin: 20px 0;
+      }
+
+      /* Tablet Styles */
+      @media (max-width: 1024px) {
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background: #ffffff;
-            color: #1a1a1a;
-            line-height: 1.8;
-            padding: 20px;
-            padding-top: 80px; /* Space for fixed nav */
-            scroll-behavior: smooth;
-        }
-
-        /* Navigation Bar */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: #000000;
-            color: #ffffff;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-        }
-
-        .nav-logo {
-            font-size: 1.3em;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: #ffffff;
-            text-decoration: none;
-        }
-
-        .nav-logo i {
-            margin-right: 8px;
+          padding: 70px 15px 15px;
         }
 
         .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 5px;
+          gap: 3px;
         }
 
         .nav-menu li a {
-            color: #ffffff;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s;
-            font-size: 0.95em;
-            display: block;
-        }
-
-        .nav-menu li a:hover {
-            background: #ffffff;
-            color: #000000;
-        }
-
-        .nav-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: #ffffff;
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 5px 10px;
-        }
-
-        .nav-toggle:hover {
-            color: #cccccc;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background: #000000;
-            color: #ffffff;
-            padding: 60px 40px;
-            margin-bottom: 40px;
-            border: 3px solid #000000;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 3em;
-            margin-bottom: 15px;
-            font-weight: 300;
-            letter-spacing: 2px;
-        }
-
-        .header p {
-            font-size: 1.3em;
-            font-weight: 300;
-            margin: 10px 0;
+          padding: 6px 12px;
+          font-size: 0.9em;
         }
 
         .section {
-            background: #ffffff;
-            border: 2px solid #000000;
-            padding: 50px;
-            margin-bottom: 40px;
-            position: relative;
+          padding: 40px 30px;
         }
 
-        .section::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: -10px;
-            bottom: -10px;
-            background: #f5f5f5;
-            z-index: -1;
-        }
-
-        .section h2 {
-            color: #000000;
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            border-bottom: 4px solid #000000;
-            padding-bottom: 15px;
-            font-weight: 400;
-            letter-spacing: 1px;
-        }
-
-        .section h3 {
-            color: #000000;
-            font-size: 1.8em;
-            margin: 35px 0 20px 0;
-            font-weight: 400;
-            border-left: 6px solid #000000;
-            padding-left: 20px;
-        }
-
-        .section h4 {
-            color: #000000;
-            font-size: 1.4em;
-            margin: 25px 0 15px 0;
-            font-weight: 500;
-        }
-
-        .intro-text {
-            font-size: 1.2em;
-            line-height: 2;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f9f9f9;
-            border-left: 4px solid #000000;
-        }
-
-        .flowchart {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 40px 0;
-            flex-wrap: wrap;
-            padding: 30px;
-            background: #fafafa;
-            border: 2px solid #e0e0e0;
-        }
-
-        .flow-step {
-            background: #000000;
-            color: #ffffff;
-            padding: 30px 25px;
-            border: 3px solid #000000;
-            margin: 10px;
-            min-width: 180px;
-            text-align: center;
-            font-size: 1.1em;
-            font-weight: 400;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .flow-step:hover {
-            background: #ffffff;
-            color: #000000;
-        }
-
-        .flow-step::after {
-            content: '';
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: -5px;
-            bottom: -5px;
-            background: #e0e0e0;
-            z-index: -1;
-        }
-
-        .arrow {
-            font-size: 2.5em;
-            color: #000000;
-            margin: 0 15px;
-            font-weight: bold;
+        .header h1 {
+          font-size: 2.5em;
         }
 
         .chart-container {
-            position: relative;
-            height: 400px;
-            margin: 40px 0;
-            padding: 30px;
-            background: #fafafa;
-            border: 2px solid #e0e0e0;
+          height: 350px;
+        }
+      }
+
+      /* Mobile Styles */
+      @media (max-width: 768px) {
+        body {
+          padding: 70px 10px 10px;
         }
 
+        /* Mobile Navigation */
+        .nav-toggle {
+          display: block;
+        }
+
+        .nav-menu {
+          position: fixed;
+          left: -100%;
+          top: 60px;
+          flex-direction: column;
+          background-color: #000000;
+          width: 100%;
+          text-align: left;
+          transition: 0.3s;
+          box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+          gap: 0;
+        }
+
+        .nav-menu.active {
+          left: 0;
+        }
+
+        .nav-menu li {
+          border-bottom: 1px solid #333;
+        }
+
+        .nav-menu li a {
+          padding: 15px 20px;
+          font-size: 1em;
+        }
+
+        /* Layout Adjustments */
         .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin: 30px 0;
+          grid-template-columns: 1fr;
         }
 
-        .comparison-card {
-            background: #ffffff;
-            padding: 30px;
-            border: 3px solid #000000;
-            position: relative;
-            transition: all 0.3s;
+        .flowchart {
+          flex-direction: column;
         }
 
-        .comparison-card::before {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            right: -8px;
-            bottom: -8px;
-            background: #f0f0f0;
-            z-index: -1;
+        .arrow {
+          transform: rotate(90deg);
         }
 
-        .comparison-card:hover {
-            transform: translate(-5px, -5px);
+        .section {
+          padding: 30px 15px;
         }
 
-        .comparison-card h4 {
-            color: #000000;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-            border-bottom: 2px solid #000000;
-            padding-bottom: 10px;
+        .section::before {
+          top: 5px;
+          left: 5px;
+          right: -5px;
+          bottom: -5px;
         }
 
-        .comparison-card ul {
-            list-style: none;
-            padding-left: 0;
+        .header {
+          padding: 40px 20px;
         }
 
-        .comparison-card li {
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
+        .header h1 {
+          font-size: 1.8em;
         }
 
-        .comparison-card li::before {
-            content: '▪';
-            position: absolute;
-            left: 0;
-            font-size: 1.5em;
+        .header p {
+          font-size: 1.1em;
         }
 
-        .example-box {
-            background: #ffffff;
-            border: 3px solid #000000;
-            padding: 30px;
-            margin: 30px 0;
-            position: relative;
+        .section h2 {
+          font-size: 2em;
         }
 
-        .example-box::before {
-            content: 'EXAMPLE';
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: #000000;
-            color: #ffffff;
-            padding: 5px 20px;
-            font-size: 0.9em;
-            font-weight: bold;
-            letter-spacing: 2px;
+        .section h3 {
+          font-size: 1.5em;
         }
 
-        .warning-box {
-            background: #ffffff;
-            border: 3px solid #000000;
-            padding: 30px;
-            margin: 30px 0;
-            position: relative;
+        .section h4 {
+          font-size: 1.2em;
         }
 
-        .warning-box::before {
-            content: '⚠ WARNING';
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: #000000;
-            color: #ffffff;
-            padding: 5px 20px;
-            font-size: 0.9em;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-
-        .success-box {
-            background: #ffffff;
-            border: 3px solid #000000;
-            padding: 30px;
-            margin: 30px 0;
-            position: relative;
-        }
-
-        .success-box::before {
-            content: '✓ SUCCESS STORY';
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: #000000;
-            color: #ffffff;
-            padding: 5px 20px;
-            font-size: 0.9em;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-
-        .info-box {
-            background: #ffffff;
-            border: 3px solid #000000;
-            padding: 30px;
-            margin: 30px 0;
-            position: relative;
-        }
-
-        .info-box::before {
-            content: 'ℹ INFO';
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: #000000;
-            color: #ffffff;
-            padding: 5px 20px;
-            font-size: 0.9em;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-
-        .sampling-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin: 30px 0;
-        }
-
-        .sampling-card {
-            background: #ffffff;
-            border: 2px solid #000000;
-            padding: 25px;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .sampling-card::after {
-            content: '';
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            right: -6px;
-            bottom: -6px;
-            background: #e0e0e0;
-            z-index: -1;
-            transition: all 0.3s;
-        }
-
-        .sampling-card:hover {
-            transform: translate(-3px, -3px);
-        }
-
-        .sampling-card:hover::after {
-            top: 8px;
-            left: 8px;
-        }
-
-        .key-takeaway {
-            background: #000000;
-            color: #ffffff;
-            padding: 20px 20px 20px 70px;
-            margin: 15px 0;
-            position: relative;
-            font-size: 1.1em;
-        }
-
-        .key-takeaway::before {
-            content: "✓";
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2em;
-            font-weight: bold;
+        /* Interactive Elements */
+        button {
+          padding: 12px 25px;
+          font-size: 1em;
+          margin: 8px 5px;
+          min-height: 44px; /* Touch-friendly */
         }
 
         .interactive-demo {
-            background: #fafafa;
-            padding: 40px;
-            border: 3px solid #000000;
-            margin: 30px 0;
+          padding: 25px 15px;
         }
 
-        button {
-            background: #000000;
-            color: #ffffff;
-            border: 3px solid #000000;
-            padding: 15px 35px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: all 0.3s;
-            margin: 10px;
-            font-family: 'Georgia', serif;
-            letter-spacing: 1px;
+        /* Charts */
+        .chart-container {
+          height: 300px;
+          padding: 15px;
         }
 
-        button:hover {
-            background: #ffffff;
-            color: #000000;
+        /* Tables */
+        table {
+          font-size: 0.9em;
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
         }
 
-        .stats-display {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+        th,
+        td {
+          padding: 12px 10px;
+        }
+
+        /* Cards */
+        .sampling-grid {
+          grid-template-columns: 1fr;
         }
 
         .stat-card {
-            background: #ffffff;
-            padding: 25px;
-            text-align: center;
-            border: 2px solid #000000;
-            position: relative;
-        }
-
-        .stat-card::after {
-            content: '';
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: -5px;
-            bottom: -5px;
-            background: #e0e0e0;
-            z-index: -1;
+          padding: 20px;
         }
 
         .stat-value {
-            font-size: 3em;
-            color: #000000;
-            font-weight: bold;
-            margin-bottom: 10px;
+          font-size: 2.5em;
         }
 
-        .stat-label {
-            color: #000000;
-            font-size: 1em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .definition-box {
-            background: #f5f5f5;
-            border-left: 8px solid #000000;
-            padding: 25px;
-            margin: 25px 0;
-            font-style: italic;
-        }
-
-        .process-steps {
-            counter-reset: step-counter;
-            list-style: none;
-            padding: 0;
-        }
-
-        .process-steps li {
-            counter-increment: step-counter;
-            padding: 25px;
-            margin: 20px 0;
-            background: #ffffff;
-            border: 2px solid #000000;
-            position: relative;
-            padding-left: 80px;
-        }
-
-        .process-steps li::before {
-            content: counter(step-counter);
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #000000;
-            color: #ffffff;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .visual-comparison {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin: 25px 0;
-            padding: 20px;
-            background: #fafafa;
-            border: 2px solid #e0e0e0;
-        }
-
-        .visual-item {
-            text-align: center;
-            flex: 1;
-            padding: 15px;
-        }
-
-        .visual-item h3 {
-            font-size: 1.3em;
-            margin: 10px 0;
-            border: none;
-            padding-left: 0;
-        }
-
-        .visual-item p {
-            font-size: 0.95em;
-            margin: 5px 0;
-        }
-
-        .visual-icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .vs-divider {
-            font-size: 2em;
-            font-weight: bold;
-            padding: 0 20px;
-            color: #000000;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-            background: #ffffff;
-        }
-
-        th, td {
-            border: 2px solid #000000;
-            padding: 20px;
-            text-align: left;
-        }
-
-        th {
-            background: #000000;
-            color: #ffffff;
-            font-weight: 500;
-            letter-spacing: 1px;
-        }
-
-        tr:nth-child(even) {
-            background: #f9f9f9;
+        .key-takeaway {
+          padding: 15px 15px 15px 60px;
+          font-size: 1em;
         }
 
         .quote {
-            font-size: 1.3em;
-            font-style: italic;
-            text-align: center;
-            padding: 30px;
-            border-top: 3px solid #000000;
-            border-bottom: 3px solid #000000;
-            margin: 40px 0;
-            line-height: 1.8;
+          font-size: 1.1em;
+          padding: 20px;
         }
 
-        .mini-chart {
-            display: inline-block;
-            width: 100%;
-            height: 250px;
-            margin: 20px 0;
+        .visual-comparison {
+          flex-direction: column;
+          padding: 15px;
+          margin: 20px 0;
         }
 
-        /* Tablet Styles */
-        @media (max-width: 1024px) {
-            body {
-                padding: 70px 15px 15px;
-            }
-
-            .nav-menu {
-                gap: 3px;
-            }
-
-            .nav-menu li a {
-                padding: 6px 12px;
-                font-size: 0.9em;
-            }
-
-            .section {
-                padding: 40px 30px;
-            }
-
-            .header h1 {
-                font-size: 2.5em;
-            }
-
-            .chart-container {
-                height: 350px;
-            }
+        .visual-item {
+          padding: 10px;
         }
 
-        /* Mobile Styles */
-        @media (max-width: 768px) {
-            body {
-                padding: 70px 10px 10px;
-            }
-
-            /* Mobile Navigation */
-            .nav-toggle {
-                display: block;
-            }
-
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 60px;
-                flex-direction: column;
-                background-color: #000000;
-                width: 100%;
-                text-align: left;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-                gap: 0;
-            }
-
-            .nav-menu.active {
-                left: 0;
-            }
-
-            .nav-menu li {
-                border-bottom: 1px solid #333;
-            }
-
-            .nav-menu li a {
-                padding: 15px 20px;
-                font-size: 1em;
-            }
-
-            /* Layout Adjustments */
-            .comparison-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .flowchart {
-                flex-direction: column;
-            }
-
-            .arrow {
-                transform: rotate(90deg);
-            }
-
-            .section {
-                padding: 30px 15px;
-            }
-
-            .section::before {
-                top: 5px;
-                left: 5px;
-                right: -5px;
-                bottom: -5px;
-            }
-
-            .header {
-                padding: 40px 20px;
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .header p {
-                font-size: 1.1em;
-            }
-
-            .section h2 {
-                font-size: 2em;
-            }
-
-            .section h3 {
-                font-size: 1.5em;
-            }
-
-            .section h4 {
-                font-size: 1.2em;
-            }
-
-            /* Interactive Elements */
-            button {
-                padding: 12px 25px;
-                font-size: 1em;
-                margin: 8px 5px;
-                min-height: 44px; /* Touch-friendly */
-            }
-
-            .interactive-demo {
-                padding: 25px 15px;
-            }
-
-            /* Charts */
-            .chart-container {
-                height: 300px;
-                padding: 15px;
-            }
-
-            /* Tables */
-            table {
-                font-size: 0.9em;
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-
-            th, td {
-                padding: 12px 10px;
-            }
-
-            /* Cards */
-            .sampling-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stat-card {
-                padding: 20px;
-            }
-
-            .stat-value {
-                font-size: 2.5em;
-            }
-
-            .key-takeaway {
-                padding: 15px 15px 15px 60px;
-                font-size: 1em;
-            }
-
-            .quote {
-                font-size: 1.1em;
-                padding: 20px;
-            }
-
-            .visual-comparison {
-                flex-direction: column;
-                padding: 15px;
-                margin: 20px 0;
-            }
-
-            .visual-item {
-                padding: 10px;
-            }
-
-            .visual-icon {
-                font-size: 2em;
-            }
-
-            .vs-divider {
-                margin: 15px 0;
-                padding: 8px 0;
-                font-size: 1.5em;
-            }
-
-            .flow-step {
-                min-width: 150px;
-                padding: 25px 20px;
-            }
+        .visual-icon {
+          font-size: 2em;
         }
 
-        /* Small Mobile */
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 1.5em;
-            }
-
-            .section h2 {
-                font-size: 1.7em;
-            }
-
-            .chart-container {
-                height: 250px;
-                padding: 10px;
-            }
-
-            .stats-display {
-                grid-template-columns: 1fr;
-            }
+        .vs-divider {
+          margin: 15px 0;
+          padding: 8px 0;
+          font-size: 1.5em;
         }
+
+        .flow-step {
+          min-width: 150px;
+          padding: 25px 20px;
+        }
+      }
+
+      /* Small Mobile */
+      @media (max-width: 480px) {
+        .header h1 {
+          font-size: 1.5em;
+        }
+
+        .section h2 {
+          font-size: 1.7em;
+        }
+
+        .chart-container {
+          height: 250px;
+          padding: 10px;
+        }
+
+        .stats-display {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="nav-logo">
-                <i class="fas fa-chart-line"></i>
-                FSP Week 1
-            </a>
-            <button class="nav-toggle" id="navToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#section1">Statistics</a></li>
-                <li><a href="#section2">Experiments</a></li>
-                <li><a href="#section3">Types</a></li>
-                <li><a href="#section4">Population</a></li>
-                <li><a href="#section5">Sampling</a></li>
-                <li><a href="#section6">Representative</a></li>
-                <li><a href="#section7">Demo</a></li>
-                <li><a href="#section8">Applications</a></li>
-                <li><a href="#section9">Takeaways</a></li>
-            </ul>
+    <!-- Navigation Bar -->
+    <nav class="modern-nav">
+      <div class="nav-inner">
+        <a href="../../index.html" class="nav-brand">
+          <i class="fas fa-layer-group"></i>
+          <span>Notes App</span>
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+          </a>
+          <a href="../index.html" class="nav-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>FSP</span>
+          </a>
+          <a href="../../ATA/index.html" class="nav-item">
+            <i class="fas fa-code-branch"></i>
+            <span>ATA</span>
+          </a>
+          <a href="../../BDA/index.html" class="nav-item">
+            <i class="fas fa-database"></i>
+            <span>BDA</span>
+          </a>
+          <a href="../../LANA/index.html" class="nav-item">
+            <i class="fas fa-square-root-alt"></i>
+            <span>LANA</span>
+          </a>
         </div>
+      </div>
     </nav>
 
     <div class="container">
-        <div class="header">
-            <h1>FOUNDATIONS OF STATISTICS & PROBABILITY</h1>
-            <p>Week 1: Introduction to Statistics</p>
-            <p>A Comprehensive Visual Guide</p>
+      <div class="header">
+        <h1>FOUNDATIONS OF STATISTICS & PROBABILITY</h1>
+        <p>Week 1: Introduction to Statistics</p>
+        <p>A Comprehensive Visual Guide</p>
+      </div>
+
+      <!-- Section 1: What is Statistics -->
+      <div class="section" id="section1">
+        <h2>1. The Essence of Statistics: Learning from Data</h2>
+
+        <div class="intro-text">
+          Statistics is not merely a collection of mathematical formulas—it is
+          the art and science of transforming raw data into meaningful insights
+          that drive decisions, solve problems, and reveal patterns in our
+          complex world.
         </div>
 
-        <!-- Section 1: What is Statistics -->
-        <div class="section" id="section1">
-            <h2>1. The Essence of Statistics: Learning from Data</h2>
-            
-            <div class="intro-text">
-                Statistics is not merely a collection of mathematical formulas—it is the art and science of transforming raw data into meaningful insights that drive decisions, solve problems, and reveal patterns in our complex world.
-            </div>
+        <div class="definition-box">
+          <strong>Definition:</strong> Statistics is the discipline concerned
+          with the collection, organization, analysis, interpretation, and
+          presentation of data. It provides methods for making informed
+          decisions in the face of uncertainty.
+        </div>
 
-            <div class="definition-box">
-                <strong>Definition:</strong> Statistics is the discipline concerned with the collection, organization, analysis, interpretation, and presentation of data. It provides methods for making informed decisions in the face of uncertainty.
-            </div>
+        <h3>The Complete Statistical Process</h3>
 
-            <h3>The Complete Statistical Process</h3>
-            
-            <div class="flowchart">
-                <div class="flow-step">
-                    <div style="font-size: 2em; margin-bottom: 10px;"><i class="fas fa-inbox"></i></div>
-                    <div><strong>Data Collection</strong></div>
-                    <div style="font-size: 0.9em; margin-top: 10px;">Gathering evidence</div>
-                </div>
-                <div class="arrow">→</div>
-                <div class="flow-step">
-                    <div style="font-size: 2em; margin-bottom: 10px;"><i class="fas fa-clipboard"></i></div>
-                    <div><strong>Data Description</strong></div>
-                    <div style="font-size: 0.9em; margin-top: 10px;">Summarizing patterns</div>
-                </div>
-                <div class="arrow">→</div>
-                <div class="flow-step">
-                    <div style="font-size: 2em; margin-bottom: 10px;"><i class="fas fa-search"></i></div>
-                    <div><strong>Data Analysis</strong></div>
-                    <div style="font-size: 0.9em; margin-top: 10px;">Identifying relationships</div>
-                </div>
-                <div class="arrow">→</div>
-                <div class="flow-step">
-                    <div style="font-size: 2em; margin-bottom: 10px;"><i class="fas fa-lightbulb"></i></div>
-                    <div><strong>Inference Drawing</strong></div>
-                    <div style="font-size: 0.9em; margin-top: 10px;">Making conclusions</div>
-                </div>
+        <div class="flowchart">
+          <div class="flow-step">
+            <div style="font-size: 2em; margin-bottom: 10px">
+              <i class="fas fa-inbox"></i>
             </div>
+            <div><strong>Data Collection</strong></div>
+            <div style="font-size: 0.9em; margin-top: 10px">
+              Gathering evidence
+            </div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="flow-step">
+            <div style="font-size: 2em; margin-bottom: 10px">
+              <i class="fas fa-clipboard"></i>
+            </div>
+            <div><strong>Data Description</strong></div>
+            <div style="font-size: 0.9em; margin-top: 10px">
+              Summarizing patterns
+            </div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="flow-step">
+            <div style="font-size: 2em; margin-bottom: 10px">
+              <i class="fas fa-search"></i>
+            </div>
+            <div><strong>Data Analysis</strong></div>
+            <div style="font-size: 0.9em; margin-top: 10px">
+              Identifying relationships
+            </div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="flow-step">
+            <div style="font-size: 2em; margin-bottom: 10px">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <div><strong>Inference Drawing</strong></div>
+            <div style="font-size: 0.9em; margin-top: 10px">
+              Making conclusions
+            </div>
+          </div>
+        </div>
 
-            <h3>Why Statistics Matters: Real-World Impact</h3>
-            
-            <ul class="process-steps">
-                <li><strong>Evidence-Based Decision Making:</strong> Move beyond intuition and gut feelings to decisions grounded in empirical evidence and rigorous analysis.</li>
-                <li><strong>Understanding Uncertainty:</strong> Quantify and manage uncertainty in predictions, helping us make better choices even when complete information is unavailable.</li>
-                <li><strong>Pattern Recognition:</strong> Identify trends, correlations, and anomalies in large datasets that would be impossible to detect through casual observation.</li>
-                <li><strong>Scientific Progress:</strong> Enable hypothesis testing and validation, forming the backbone of scientific research and discovery.</li>
+        <h3>Why Statistics Matters: Real-World Impact</h3>
+
+        <ul class="process-steps">
+          <li>
+            <strong>Evidence-Based Decision Making:</strong> Move beyond
+            intuition and gut feelings to decisions grounded in empirical
+            evidence and rigorous analysis.
+          </li>
+          <li>
+            <strong>Understanding Uncertainty:</strong> Quantify and manage
+            uncertainty in predictions, helping us make better choices even when
+            complete information is unavailable.
+          </li>
+          <li>
+            <strong>Pattern Recognition:</strong> Identify trends, correlations,
+            and anomalies in large datasets that would be impossible to detect
+            through casual observation.
+          </li>
+          <li>
+            <strong>Scientific Progress:</strong> Enable hypothesis testing and
+            validation, forming the backbone of scientific research and
+            discovery.
+          </li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Case Study: IPL Cricket Analytics</h4>
+          <p>
+            <strong>Context:</strong> The Indian Premier League (IPL) represents
+            one of the most data-driven sports leagues globally, where teams
+            invest heavily in statistical analysis.
+          </p>
+
+          <p>
+            <strong>Application:</strong> Data scientists analyze comprehensive
+            player statistics including:
+          </p>
+          <ul>
+            <li>
+              Batting metrics: strike rate, average runs, boundary percentage
+            </li>
+            <li>
+              Bowling metrics: economy rate, wickets per match, bowling average
+            </li>
+            <li>Fielding statistics: catches taken, run-out success rate</li>
+            <li>
+              Situational performance: pressure situations, specific opposition
+              analysis
+            </li>
+          </ul>
+
+          <p>
+            <strong>Impact:</strong> Teams use these insights for strategic
+            decisions including player auctions (valuing players at ₹15+
+            crores), match tactics, and training focus areas. Statistical
+            analysis has become the difference between winning and losing
+            championships.
+          </p>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="statsApplicationChart"></canvas>
+        </div>
+
+        <div class="quote">
+          "In God we trust. All others must bring data." — W. Edwards Deming
+        </div>
+      </div>
+
+      <!-- Section 2: Experimental Design -->
+      <div class="section" id="section2">
+        <h2>2. Designing Experiments: The Foundation of Reliable Data</h2>
+
+        <div class="intro-text">
+          The quality of your conclusions is directly determined by the quality
+          of your data. Poor experimental design leads to biased results, wasted
+          resources, and potentially harmful decisions based on flawed
+          information.
+        </div>
+
+        <h3>Core Principles of Experimental Design</h3>
+
+        <table>
+          <tr>
+            <th>Principle</th>
+            <th>Description</th>
+            <th>Purpose</th>
+          </tr>
+          <tr>
+            <td><strong>Control Group</strong></td>
+            <td>
+              A group that receives no treatment or a standard treatment for
+              comparison
+            </td>
+            <td>Establishes baseline to measure treatment effect</td>
+          </tr>
+          <tr>
+            <td><strong>Randomization</strong></td>
+            <td>Random assignment of subjects to different groups</td>
+            <td>Eliminates selection bias and confounding variables</td>
+          </tr>
+          <tr>
+            <td><strong>Replication</strong></td>
+            <td>Repeating the experiment with multiple subjects</td>
+            <td>Ensures results are not due to chance</td>
+          </tr>
+          <tr>
+            <td><strong>Blinding</strong></td>
+            <td>
+              Concealing treatment assignment from participants/researchers
+            </td>
+            <td>Prevents bias in behavior and measurement</td>
+          </tr>
+        </table>
+
+        <h3>The Teacher's Teaching Method Experiment</h3>
+
+        <div class="info-box">
+          <h4>Scenario:</h4>
+          <p>
+            A teacher wants to determine whether a new interactive teaching
+            method is more effective than traditional lecture-based teaching.
+          </p>
+
+          <h4>Proper Experimental Design:</h4>
+          <ol style="line-height: 2; padding-left: 20px">
+            <li>
+              <strong>Population:</strong> All students in the school (e.g., 500
+              students)
+            </li>
+            <li>
+              <strong>Randomization:</strong> Randomly select 100 students and
+              randomly assign 50 to each teaching method
+            </li>
+            <li>
+              <strong>Control Variables:</strong> Same teacher, same content,
+              same duration, same assessment
+            </li>
+            <li>
+              <strong>Blinding:</strong> Use independent assessors who don't
+              know which group received which method
+            </li>
+            <li>
+              <strong>Measurement:</strong> Standardized test scores, engagement
+              metrics, retention tests after 3 months
+            </li>
+            <li>
+              <strong>Analysis:</strong> Compare mean scores, standard
+              deviations, and statistical significance
+            </li>
+          </ol>
+        </div>
+
+        <div class="warning-box">
+          <h4>What NOT to Do:</h4>
+          <ul style="line-height: 2">
+            <li>
+              ❌ Test new method only on high-achieving students (selection
+              bias)
+            </li>
+            <li>
+              ❌ Let students choose which group they want (self-selection bias)
+            </li>
+            <li>
+              ❌ Use different teachers for different methods (confounding
+              variable)
+            </li>
+            <li>❌ Have unequal sample sizes without justification</li>
+            <li>❌ Change the experiment midway through data collection</li>
+          </ul>
+        </div>
+
+        <div class="success-box">
+          <h4>Indian Context: COVID-19 Vaccine Clinical Trials</h4>
+          <p><strong>Covaxin Development by Bharat Biotech:</strong></p>
+          <p>
+            The Phase 3 clinical trial involved 25,800 participants across 25
+            Indian cities, demonstrating rigorous experimental design:
+          </p>
+          <ul style="line-height: 2">
+            <li>
+              <strong>Randomization:</strong> Participants randomly assigned to
+              vaccine or placebo groups
+            </li>
+            <li>
+              <strong>Double-blinding:</strong> Neither participants nor
+              administrators knew who received vaccine vs. placebo
+            </li>
+            <li>
+              <strong>Control group:</strong> Placebo group for comparison
+            </li>
+            <li>
+              <strong>Diverse sample:</strong> Multiple age groups, geographic
+              locations, and demographics
+            </li>
+            <li>
+              <strong>Result:</strong> 77.8% efficacy against symptomatic
+              COVID-19 established through proper statistical analysis
+            </li>
+          </ul>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="experimentalDesignChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Section 3: Types of Statistics -->
+      <div class="section" id="section3">
+        <h2>
+          3. Descriptive & Inferential Statistics: Two Complementary Approaches
+        </h2>
+
+        <div class="intro-text">
+          Statistics is broadly divided into two branches, each serving distinct
+          but interconnected purposes in data analysis. Understanding this
+          distinction is crucial for proper application of statistical methods.
+        </div>
+
+        <div class="visual-comparison">
+          <div class="visual-item">
+            <div class="visual-icon"><i class="fas fa-chart-bar"></i></div>
+            <h3>Descriptive Statistics</h3>
+            <p>Summarizing what IS</p>
+          </div>
+          <div class="vs-divider">VS</div>
+          <div class="visual-item">
+            <div class="visual-icon"><i class="fas fa-brain"></i></div>
+            <h3>Inferential Statistics</h3>
+            <p>Predicting what COULD BE</p>
+          </div>
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h4><i class="fas fa-chart-bar"></i> Descriptive Statistics</h4>
+
+            <p>
+              <strong>Definition:</strong> Methods for organizing, summarizing,
+              and presenting data in an informative way.
+            </p>
+
+            <p><strong>Key Tools:</strong></p>
+            <ul>
+              <li>
+                <strong>Measures of Central Tendency:</strong> Mean, Median,
+                Mode
+              </li>
+              <li>
+                <strong>Measures of Dispersion:</strong> Range, Variance,
+                Standard Deviation, IQR
+              </li>
+              <li>
+                <strong>Visual Representations:</strong> Histograms, Box plots,
+                Scatter plots, Pie charts
+              </li>
+              <li><strong>Distribution Shape:</strong> Skewness, Kurtosis</li>
             </ul>
 
-            <div class="example-box">
-                <h4>Case Study: IPL Cricket Analytics</h4>
-                <p><strong>Context:</strong> The Indian Premier League (IPL) represents one of the most data-driven sports leagues globally, where teams invest heavily in statistical analysis.</p>
-                
-                <p><strong>Application:</strong> Data scientists analyze comprehensive player statistics including:</p>
-                <ul>
-                    <li>Batting metrics: strike rate, average runs, boundary percentage</li>
-                    <li>Bowling metrics: economy rate, wickets per match, bowling average</li>
-                    <li>Fielding statistics: catches taken, run-out success rate</li>
-                    <li>Situational performance: pressure situations, specific opposition analysis</li>
-                </ul>
-                
-                <p><strong>Impact:</strong> Teams use these insights for strategic decisions including player auctions (valuing players at ₹15+ crores), match tactics, and training focus areas. Statistical analysis has become the difference between winning and losing championships.</p>
-            </div>
+            <p><strong>Example Applications:</strong></p>
+            <ul>
+              <li>Average test score in a class: 75/100</li>
+              <li>Standard deviation: 12 points</li>
+              <li>Median household income: ₹6,00,000/year</li>
+              <li>Distribution of ages in a company</li>
+            </ul>
 
-            <div class="chart-container">
-                <canvas id="statsApplicationChart"></canvas>
-            </div>
-
-            <div class="quote">
-                "In God we trust. All others must bring data." — W. Edwards Deming
-            </div>
-        </div>
-
-        <!-- Section 2: Experimental Design -->
-        <div class="section" id="section2">
-            <h2>2. Designing Experiments: The Foundation of Reliable Data</h2>
-            
-            <div class="intro-text">
-                The quality of your conclusions is directly determined by the quality of your data. Poor experimental design leads to biased results, wasted resources, and potentially harmful decisions based on flawed information.
-            </div>
-
-            <h3>Core Principles of Experimental Design</h3>
-
-            <table>
-                <tr>
-                    <th>Principle</th>
-                    <th>Description</th>
-                    <th>Purpose</th>
-                </tr>
-                <tr>
-                    <td><strong>Control Group</strong></td>
-                    <td>A group that receives no treatment or a standard treatment for comparison</td>
-                    <td>Establishes baseline to measure treatment effect</td>
-                </tr>
-                <tr>
-                    <td><strong>Randomization</strong></td>
-                    <td>Random assignment of subjects to different groups</td>
-                    <td>Eliminates selection bias and confounding variables</td>
-                </tr>
-                <tr>
-                    <td><strong>Replication</strong></td>
-                    <td>Repeating the experiment with multiple subjects</td>
-                    <td>Ensures results are not due to chance</td>
-                </tr>
-                <tr>
-                    <td><strong>Blinding</strong></td>
-                    <td>Concealing treatment assignment from participants/researchers</td>
-                    <td>Prevents bias in behavior and measurement</td>
-                </tr>
-            </table>
-
-            <h3>The Teacher's Teaching Method Experiment</h3>
-            
-            <div class="info-box">
-                <h4>Scenario:</h4>
-                <p>A teacher wants to determine whether a new interactive teaching method is more effective than traditional lecture-based teaching.</p>
-                
-                <h4>Proper Experimental Design:</h4>
-                <ol style="line-height: 2; padding-left: 20px;">
-                    <li><strong>Population:</strong> All students in the school (e.g., 500 students)</li>
-                    <li><strong>Randomization:</strong> Randomly select 100 students and randomly assign 50 to each teaching method</li>
-                    <li><strong>Control Variables:</strong> Same teacher, same content, same duration, same assessment</li>
-                    <li><strong>Blinding:</strong> Use independent assessors who don't know which group received which method</li>
-                    <li><strong>Measurement:</strong> Standardized test scores, engagement metrics, retention tests after 3 months</li>
-                    <li><strong>Analysis:</strong> Compare mean scores, standard deviations, and statistical significance</li>
-                </ol>
-            </div>
-
-            <div class="warning-box">
-                <h4>What NOT to Do:</h4>
-                <ul style="line-height: 2;">
-                    <li>❌ Test new method only on high-achieving students (selection bias)</li>
-                    <li>❌ Let students choose which group they want (self-selection bias)</li>
-                    <li>❌ Use different teachers for different methods (confounding variable)</li>
-                    <li>❌ Have unequal sample sizes without justification</li>
-                    <li>❌ Change the experiment midway through data collection</li>
-                </ul>
-            </div>
-
-            <div class="success-box">
-                <h4>Indian Context: COVID-19 Vaccine Clinical Trials</h4>
-                <p><strong>Covaxin Development by Bharat Biotech:</strong></p>
-                <p>The Phase 3 clinical trial involved 25,800 participants across 25 Indian cities, demonstrating rigorous experimental design:</p>
-                <ul style="line-height: 2;">
-                    <li><strong>Randomization:</strong> Participants randomly assigned to vaccine or placebo groups</li>
-                    <li><strong>Double-blinding:</strong> Neither participants nor administrators knew who received vaccine vs. placebo</li>
-                    <li><strong>Control group:</strong> Placebo group for comparison</li>
-                    <li><strong>Diverse sample:</strong> Multiple age groups, geographic locations, and demographics</li>
-                    <li><strong>Result:</strong> 77.8% efficacy against symptomatic COVID-19 established through proper statistical analysis</li>
-                </ul>
-            </div>
-
-            <div class="chart-container">
-                <canvas id="experimentalDesignChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Section 3: Types of Statistics -->
-        <div class="section" id="section3">
-            <h2>3. Descriptive & Inferential Statistics: Two Complementary Approaches</h2>
-            
-            <div class="intro-text">
-                Statistics is broadly divided into two branches, each serving distinct but interconnected purposes in data analysis. Understanding this distinction is crucial for proper application of statistical methods.
-            </div>
-
-            <div class="visual-comparison">
-                <div class="visual-item">
-                    <div class="visual-icon"><i class="fas fa-chart-bar"></i></div>
-                    <h3>Descriptive Statistics</h3>
-                    <p>Summarizing what IS</p>
-                </div>
-                <div class="vs-divider">VS</div>
-                <div class="visual-item">
-                    <div class="visual-icon"><i class="fas fa-brain"></i></div>
-                    <h3>Inferential Statistics</h3>
-                    <p>Predicting what COULD BE</p>
-                </div>
-            </div>
-
-            <div class="comparison-grid">
-                <div class="comparison-card">
-                    <h4><i class="fas fa-chart-bar"></i> Descriptive Statistics</h4>
-                    
-                    <p><strong>Definition:</strong> Methods for organizing, summarizing, and presenting data in an informative way.</p>
-                    
-                    <p><strong>Key Tools:</strong></p>
-                    <ul>
-                        <li><strong>Measures of Central Tendency:</strong> Mean, Median, Mode</li>
-                        <li><strong>Measures of Dispersion:</strong> Range, Variance, Standard Deviation, IQR</li>
-                        <li><strong>Visual Representations:</strong> Histograms, Box plots, Scatter plots, Pie charts</li>
-                        <li><strong>Distribution Shape:</strong> Skewness, Kurtosis</li>
-                    </ul>
-                    
-                    <p><strong>Example Applications:</strong></p>
-                    <ul>
-                        <li>Average test score in a class: 75/100</li>
-                        <li>Standard deviation: 12 points</li>
-                        <li>Median household income: ₹6,00,000/year</li>
-                        <li>Distribution of ages in a company</li>
-                    </ul>
-                    
-                    <p><strong>Goal:</strong> Understand and communicate the characteristics of your dataset clearly and accurately.</p>
-                </div>
-                
-                <div class="comparison-card">
-                    <h4><i class="fas fa-brain"></i> Inferential Statistics</h4>
-                    
-                    <p><strong>Definition:</strong> Methods for making predictions, inferences, and generalizations about a population based on sample data.</p>
-                    
-                    <p><strong>Key Tools:</strong></p>
-                    <ul>
-                        <li><strong>Hypothesis Testing:</strong> t-tests, Chi-square, ANOVA</li>
-                        <li><strong>Confidence Intervals:</strong> Estimating population parameters</li>
-                        <li><strong>Regression Analysis:</strong> Predicting relationships</li>
-                        <li><strong>Probability Distributions:</strong> Normal, Binomial, Poisson</li>
-                    </ul>
-                    
-                    <p><strong>Example Applications:</strong></p>
-                    <ul>
-                        <li>Is the new drug more effective? (p < 0.05)</li>
-                        <li>95% confidence interval for population mean</li>
-                        <li>Predicting election outcomes from polls</li>
-                        <li>A/B testing for website design</li>
-                    </ul>
-                    
-                    <p><strong>Goal:</strong> Make informed predictions and decisions about populations based on limited sample data.</p>
-                </div>
-            </div>
-
-            <h3>Detailed Comparison Table</h3>
-            
-            <table>
-                <tr>
-                    <th>Aspect</th>
-                    <th>Descriptive Statistics</th>
-                    <th>Inferential Statistics</th>
-                </tr>
-                <tr>
-                    <td>Primary Purpose</td>
-                    <td>Describe and summarize data</td>
-                    <td>Make predictions and generalizations</td>
-                </tr>
-                <tr>
-                    <td>Data Scope</td>
-                    <td>Entire dataset at hand</td>
-                    <td>Sample to infer about population</td>
-                </tr>
-                <tr>
-                    <td>Uses Probability</td>
-                    <td>No</td>
-                    <td>Yes, extensively</td>
-                </tr>
-                <tr>
-                    <td>Complexity</td>
-                    <td>Relatively straightforward</td>
-                    <td>More complex, requires assumptions</td>
-                </tr>
-                <tr>
-                    <td>Uncertainty</td>
-                    <td>Minimal (descriptive accuracy)</td>
-                    <td>Quantified (confidence levels, p-values)</td>
-                </tr>
-                <tr>
-                    <td>Final Output</td>
-                    <td>Summary statistics and visualizations</td>
-                    <td>Conclusions, predictions, hypotheses tests</td>
-                </tr>
-            </table>
-
-            <div class="example-box">
-                <h4>Integrated Example: Student Performance Analysis</h4>
-                
-                <p><strong>Scenario:</strong> Analyzing performance of 10,000 students across India who took a standardized test.</p>
-                
-                <p><strong>Descriptive Statistics Application:</strong></p>
-                <ul style="line-height: 2;">
-                    <li>Mean score: 68.5 marks</li>
-                    <li>Median score: 70 marks (half scored above, half below)</li>
-                    <li>Standard deviation: 15 marks (measure of spread)</li>
-                    <li>Highest score: 99 marks</li>
-                    <li>Lowest score: 22 marks</li>
-                    <li>Create histogram showing score distribution</li>
-                </ul>
-                
-                <p><strong>Inferential Statistics Application:</strong></p>
-                <ul style="line-height: 2;">
-                    <li>Is there a significant difference between urban and rural student scores?</li>
-                    <li>Can we predict next year's average score?</li>
-                    <li>What is the confidence interval for the true population mean?</li>
-                    <li>Does gender significantly affect test scores?</li>
-                    <li>How well does study time predict test performance?</li>
-                </ul>
-            </div>
-
-            <div class="chart-container">
-                <canvas id="statsTypeChart"></canvas>
-            </div>
-
-            <div class="chart-container">
-                <canvas id="distributionChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Section 4: Population vs Sample -->
-        <div class="section" id="section4">
-            <h2>4. Population vs. Sample: Understanding Scope and Scale</h2>
-            
-            <div class="intro-text">
-                One of the most fundamental concepts in statistics is the distinction between a population and a sample. This distinction forms the basis for all inferential statistics and determines how we collect data and draw conclusions.
-            </div>
-
-            <div class="comparison-grid">
-                <div class="comparison-card" style="background: #000; color: #fff;">
-                    <h4 style="color: #fff; border-bottom-color: #fff;"><i class="fas fa-globe"></i> POPULATION</h4>
-                    
-                    <p><strong>Definition:</strong> The complete set of all individuals, items, or data points that are of interest in a particular study.</p>
-                    
-                    <p><strong>Characteristics:</strong></p>
-                    <ul style="color: #fff;">
-                        <li>Includes EVERY member of the group</li>
-                        <li>Often very large or infinite</li>
-                        <li>Usually impossible or impractical to study completely</li>
-                        <li>Denoted by parameters (μ, σ, N)</li>
-                    </ul>
-                    
-                    <p><strong>Examples:</strong></p>
-                    <ul style="color: #fff;">
-                        <li>All 1.4 billion Indian citizens</li>
-                        <li>Every student enrolled in Indian universities (42+ million)</li>
-                        <li>All trees in the Amazon rainforest</li>
-                        <li>Every transaction on a payment platform</li>
-                    </ul>
-                </div>
-                
-                <div class="comparison-card">
-                    <h4><i class="fas fa-map-pin"></i> SAMPLE</h4>
-                    
-                    <p><strong>Definition:</strong> A subset of the population selected for actual observation and data collection.</p>
-                    
-                    <p><strong>Characteristics:</strong></p>
-                    <ul>
-                        <li>Represents only PART of the population</li>
-                        <li>Manageable size for practical study</li>
-                        <li>Should be representative of the population</li>
-                        <li>Denoted by statistics (x̄, s, n)</li>
-                    </ul>
-                    
-                    <p><strong>Examples:</strong></p>
-                    <ul>
-                        <li>2,000 randomly selected Indian citizens</li>
-                        <li>500 students from select universities</li>
-                        <li>1,000 trees from designated forest areas</li>
-                        <li>100,000 transactions from last month</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3>Why We Use Samples: The Practical Necessity</h3>
-            
-            <div class="comparison-grid">
-                <div class="info-box">
-                    <h4>Practical Constraints</h4>
-                    <ul style="line-height: 2;">
-                        <li><strong>Cost:</strong> Surveying 1.4 billion people would cost trillions of rupees</li>
-                        <li><strong>Time:</strong> Complete census takes years to conduct and analyze</li>
-                        <li><strong>Resources:</strong> Requires massive human resources and infrastructure</li>
-                        <li><strong>Accessibility:</strong> Some population members may be unreachable</li>
-                    </ul>
-                </div>
-                
-                <div class="info-box">
-                    <h4>Advantages of Sampling</h4>
-                    <ul style="line-height: 2;">
-                        <li><strong>Speed:</strong> Results available in days or weeks vs. years</li>
-                        <li><strong>Efficiency:</strong> Focuses resources on representative subset</li>
-                        <li><strong>Feasibility:</strong> Makes impossible studies possible</li>
-                        <li><strong>Accuracy:</strong> Better quality control with smaller dataset</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3>Key Statistical Notation</h3>
-            
-            <table>
-                <tr>
-                    <th>Concept</th>
-                    <th>Population</th>
-                    <th>Sample</th>
-                </tr>
-                <tr>
-                    <td>Size</td>
-                    <td>N (Population size)</td>
-                    <td>n (Sample size)</td>
-                </tr>
-                <tr>
-                    <td>Mean</td>
-                    <td>μ (mu) - Population mean</td>
-                    <td>x̄ (x-bar) - Sample mean</td>
-                </tr>
-                <tr>
-                    <td>Standard Deviation</td>
-                    <td>σ (sigma) - Population SD</td>
-                    <td>s - Sample SD</td>
-                </tr>
-                <tr>
-                    <td>Proportion</td>
-                    <td>P - Population proportion</td>
-                    <td>p̂ (p-hat) - Sample proportion</td>
-                </tr>
-                <tr>
-                    <td>Values Called</td>
-                    <td>Parameters (fixed, unknown)</td>
-                    <td>Statistics (variable, calculated)</td>
-                </tr>
-            </table>
-
-            <div class="chart-container">
-                <canvas id="popSampleChart"></canvas>
-            </div>
-
-            <div class="example-box">
-                <h4>Case Study: Indian Census vs. Sample Surveys</h4>
-                
-                <p><strong>Indian Census (Population Study):</strong></p>
-                <ul style="line-height: 2;">
-                    <li>Conducted every 10 years</li>
-                    <li>Attempts to count every single person in India</li>
-                    <li>Cost: ₹12,000+ crores (2011 Census)</li>
-                    <li>Time: Several years for complete data collection and processing</li>
-                    <li>Personnel: 2.7+ million people involved</li>
-                    <li>Result: Comprehensive but expensive and time-consuming</li>
-                </ul>
-                
-                <p><strong>National Sample Survey (NSSO):</strong></p>
-                <ul style="line-height: 2;">
-                    <li>Conducted regularly throughout the year</li>
-                    <li>Uses stratified random sampling of ~100,000 households</li>
-                    <li>Cost: Fraction of census cost</li>
-                    <li>Time: Months instead of years</li>
-                    <li>Result: Quick, reliable estimates of population parameters</li>
-                    <li>Topics: Employment, consumer expenditure, health, education</li>
-                </ul>
-                
-                <p><strong>Conclusion:</strong> Sample surveys provide 95%+ accuracy at 1% of the cost and time!</p>
-            </div>
-
-            <div class="quote">
-                "A good sample is representative of the population from which it is drawn. The art of sampling is to get a small group that accurately reflects the whole."
-            </div>
-        </div>
-
-        <!-- Section 5: Sampling Techniques -->
-        <div class="section" id="section5">
-            <h2>5. Sampling Techniques: Methods and Their Applications</h2>
-            
-            <div class="intro-text">
-                The method you use to select your sample can make or break your study. Different sampling techniques have different strengths, weaknesses, and appropriate use cases. Understanding these is crucial for reliable research.
-            </div>
-
-            <h3>Comprehensive Overview of Sampling Methods</h3>
-            
-            <div class="sampling-grid">
-                <div class="sampling-card">
-                    <h4><i class="fas fa-dice"></i> Random Sampling (Simple Random Sampling)</h4>
-                    <p><strong>Method:</strong> Every member of the population has an equal and independent chance of being selected.</p>
-                    <p><strong>How it works:</strong> Use random number generators, lottery method, or random selection software.</p>
-                    <p><strong>Advantages:</strong></p>
-                    <ul>
-                        <li>Eliminates selection bias</li>
-                        <li>Simple to understand and implement</li>
-                        <li>Statistical theory well-developed</li>
-                    </ul>
-                    <p><strong>Disadvantages:</strong></p>
-                    <ul>
-                        <li>Requires complete list of population</li>
-                        <li>May not capture all subgroups</li>
-                        <li>Can be expensive for large populations</li>
-                    </ul>
-                    <p><strong>Best for:</strong> Homogeneous populations, when complete list available</p>
-                </div>
-                
-                <div class="sampling-card">
-                    <h4><i class="fas fa-chart-bar"></i> Stratified Sampling</h4>
-                    <p><strong>Method:</strong> Divide population into homogeneous subgroups (strata), then randomly sample from each stratum.</p>
-                    <p><strong>How it works:</strong> Identify strata (age, gender, income), determine sample size per stratum, randomly select within each.</p>
-                    <p><strong>Advantages:</strong></p>
-                    <ul>
-                        <li>Ensures representation of all subgroups</li>
-                        <li>More precise estimates than simple random</li>
-                        <li>Can compare between strata</li>
-                    </ul>
-                    <p><strong>Disadvantages:</strong></p>
-                    <ul>
-                        <li>Requires knowledge of population structure</li>
-                        <li>More complex to implement</li>
-                        <li>Needs clear stratification criteria</li>
-                    </ul>
-                    <p><strong>Best for:</strong> Diverse populations with distinct subgroups</p>
-                </div>
-                
-                <div class="sampling-card">
-                    <h4><i class="fas fa-map"></i> Cluster Sampling</h4>
-                    <p><strong>Method:</strong> Divide population into clusters (usually geographic), randomly select clusters, sample all or randomly within clusters.</p>
-                    <p><strong>How it works:</strong> Define clusters (villages, schools), randomly select clusters, survey all members or subsample.</p>
-                    <p><strong>Advantages:</strong></p>
-                    <ul>
-                        <li>Cost-effective for large geographic areas</li>
-                        <li>Doesn't require complete population list</li>
-                        <li>Easier logistics and administration</li>
-                    </ul>
-                    <p><strong>Disadvantages:</strong></p>
-                    <ul>
-                        <li>Higher sampling error than stratified</li>
-                        <li>Clusters may not be representative</li>
-                        <li>Within-cluster homogeneity issues</li>
-                    </ul>
-                    <p><strong>Best for:</strong> Geographically dispersed populations, cost constraints</p>
-                </div>
-                
-                <div class="sampling-card">
-                    <h4><i class="fas fa-ruler"></i> Systematic Sampling</h4>
-                    <p><strong>Method:</strong> Select every kth member from a list after random start.</p>
-                    <p><strong>How it works:</strong> If N=1000, n=100, then k=10. Randomly start (e.g., 7th person), then select every 10th.</p>
-                    <p><strong>Advantages:</strong></p>
-                    <ul>
-                        <li>Easy to implement and explain</li>
-                        <li>Spreads sample across population</li>
-                        <li>Less random than simple random but practical</li>
-                    </ul>
-                    <p><strong>Disadvantages:</strong></p>
-                    <ul>
-                        <li>Risk of periodic patterns in list</li>
-                        <li>Not truly random</li>
-                        <li>Difficult to estimate sampling error</li>
-                    </ul>
-                    <p><strong>Best for:</strong> Ordered lists, quality control, assembly line sampling</p>
-                </div>
-                
-                <div class="sampling-card" style="border-color: #666;">
-                    <h4><i class="fas fa-walking"></i> Convenience Sampling</h4>
-                    <p><strong>Method:</strong> Select individuals who are easily accessible or volunteer.</p>
-                    <p><strong>How it works:</strong> Survey people at mall, use volunteer respondents, sample friends/colleagues.</p>
-                    <p><strong>Advantages:</strong></p>
-                    <ul>
-                        <li>Quick and inexpensive</li>
-                        <li>Easy to gather data</li>
-                        <li>Useful for preliminary studies</li>
-                    </ul>
-                    <p><strong>Disadvantages:</strong></p>
-                    <ul>
-                        <li>High risk of bias</li>
-                        <li>Not representative</li>
-                        <li>Cannot generalize to population</li>
-                        <li>Lacks statistical validity</li>
-                    </ul>
-                    <p><strong>Best for:</strong> Pilot studies, exploratory research (NOT for conclusive studies)</p>
-                </div>
-                
-                <div class="sampling-card">
-                    <h4><i class="fas fa-snowflake"></i> Snowball Sampling</h4>
-                    <p><strong>Method:</strong> Existing study subjects recruit future subjects from their acquaintances.</p>
-                    <p><strong>How it works:</strong> Start with few participants, ask them to refer others, chain continues.</p>
-                    <p><strong>Advantages:</strong></p>
-                    <ul>
-                        <li>Reaches hidden or hard-to-find populations</li>
-                        <li>Builds trust through referrals</li>
-                        <li>Cost-effective for rare populations</li>
-                    </ul>
-                    <p><strong>Disadvantages:</strong></p>
-                    <ul>
-                        <li>Significant selection bias</li>
-                        <li>Limited diversity</li>
-                        <li>Not statistically representative</li>
-                    </ul>
-                    <p><strong>Best for:</strong> Rare populations (specific diseases, minority groups)</p>
-                </div>
-            </div>
-
-            <h3>Comparative Analysis: Sampling Method Selection</h3>
-            
-            <table>
-                <tr>
-                    <th>Method</th>
-                    <th>Bias Level</th>
-                    <th>Cost</th>
-                    <th>Complexity</th>
-                    <th>Generalizability</th>
-                </tr>
-                <tr>
-                    <td>Simple Random</td>
-                    <td>Very Low</td>
-                    <td>Medium-High</td>
-                    <td>Low</td>
-                    <td>Excellent</td>
-                </tr>
-                <tr>
-                    <td>Stratified</td>
-                    <td>Very Low</td>
-                    <td>Medium-High</td>
-                    <td>Medium</td>
-                    <td>Excellent</td>
-                </tr>
-                <tr>
-                    <td>Cluster</td>
-                    <td>Low-Medium</td>
-                    <td>Low</td>
-                    <td>Medium</td>
-                    <td>Good</td>
-                </tr>
-                <tr>
-                    <td>Systematic</td>
-                    <td>Low</td>
-                    <td>Low</td>
-                    <td>Low</td>
-                    <td>Good</td>
-                </tr>
-                <tr>
-                    <td>Convenience</td>
-                    <td>Very High</td>
-                    <td>Very Low</td>
-                    <td>Very Low</td>
-                    <td>Poor</td>
-                </tr>
-                <tr>
-                    <td>Snowball</td>
-                    <td>High</td>
-                    <td>Low</td>
-                    <td>Low</td>
-                    <td>Poor</td>
-                </tr>
-            </table>
-
-            <div class="warning-box">
-                <h4>The 1936 Literary Digest Election Poll Disaster</h4>
-                
-                <p><strong>Background:</strong> The Literary Digest magazine had successfully predicted U.S. presidential elections using mail surveys since 1916.</p>
-                
-                <p><strong>The 1936 Prediction:</strong></p>
-                <ul style="line-height: 2;">
-                    <li>Predicted Alf Landon would win with 57% of votes</li>
-                    <li>Based on 2.4 million responses (massive sample size!)</li>
-                    <li>Sample drawn from: telephone directories, automobile registrations, magazine subscriptions</li>
-                </ul>
-                
-                <p><strong>Actual Result:</strong></p>
-                <ul style="line-height: 2;">
-                    <li>Franklin D. Roosevelt won with 62% of votes</li>
-                    <li>One of the largest landslides in U.S. history</li>
-                    <li>Literary Digest's prediction was off by 19 percentage points!</li>
-                </ul>
-                
-                <p><strong>What Went Wrong:</strong></p>
-                <ul style="line-height: 2;">
-                    <li><strong>Selection Bias:</strong> During the Great Depression, only wealthy people owned phones, cars, and magazine subscriptions</li>
-                    <li><strong>Non-Representative Sample:</strong> Wealthy Americans tended to vote Republican, but they were only a small fraction of voters</li>
-                    <li><strong>Response Bias:</strong> Only 24% response rate; those who responded were systematically different</li>
-                    <li><strong>Ignored Demographics:</strong> Failed to account for the vast majority of working-class and poor voters</li>
-                </ul>
-                
-                <p><strong>The Lesson:</strong> Sample size doesn't matter if the sample is biased. A sample of 2.4 million biased responses is worse than 2,000 properly selected ones!</p>
-                
-                <p><strong>Aftermath:</strong> The Literary Digest went bankrupt in 1938. Meanwhile, George Gallup correctly predicted Roosevelt's victory using just 50,000 carefully selected respondents.</p>
-            </div>
-
-            <div class="chart-container">
-                <canvas id="biasChart"></canvas>
-            </div>
-
-            <div class="example-box">
-                <h4>Modern Application: Election Opinion Polls in India</h4>
-                
-                <p><strong>Challenge:</strong> India has 900+ million eligible voters across 28 states and 8 union territories with diverse demographics.</p>
-                
-                <p><strong>Proper Approach (CSDS-Lokniti, CVoter, etc.):</strong></p>
-                <ul style="line-height: 2;">
-                    <li><strong>Stratified Multi-Stage Sampling:</strong> Divide by state, then urban/rural, then by demographics</li>
-                    <li><strong>Sample Size:</strong> Typically 10,000-20,000 respondents</li>
-                    <li><strong>Weighting:</strong> Adjust for demographic representation</li>
-                    <li><strong>Margin of Error:</strong> ±3-4% at 95% confidence level</li>
-                    <li><strong>Results:</strong> Generally accurate predictions with transparent methodology</li>
-                </ul>
-                
-                <p><strong>Improper Approach (Some media polls):</strong></p>
-                <ul style="line-height: 2;">
-                    <li>Online polls (excludes 60%+ population without internet)</li>
-                    <li>Urban-only sampling (ignores rural 65% of population)</li>
-                    <li>Social media polls (self-selected, non-representative)</li>
-                    <li>Results: Often wildly inaccurate</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Section 6: Representative Samples -->
-        <div class="section" id="section6">
-            <h2>6. The Importance of Representative Samples</h2>
-            
-            <div class="intro-text">
-                A representative sample is the cornerstone of valid statistical inference. It accurately mirrors the characteristics of the population, allowing us to draw reliable conclusions from a manageable subset of data.
-            </div>
-
-            <h3>What Makes a Sample Representative?</h3>
-            
-            <div class="comparison-grid">
-                <div class="info-box">
-                    <h4>Key Characteristics:</h4>
-                    <ul style="line-height: 2;">
-                        <li><strong>Demographic Match:</strong> Age, gender, income, education proportions match population</li>
-                        <li><strong>Geographic Coverage:</strong> All regions represented proportionally</li>
-                        <li><strong>Diversity:</strong> Captures full range of variation in population</li>
-                        <li><strong>Adequate Size:</strong> Large enough to be statistically reliable</li>
-                        <li><strong>Random Selection:</strong> Each member had equal chance of inclusion</li>
-                    </ul>
-                </div>
-                
-                <div class="info-box">
-                    <h4>How to Achieve Representativeness:</h4>
-                    <ul style="line-height: 2;">
-                        <li><strong>Use Probability Sampling:</strong> Random, stratified, or cluster methods</li>
-                        <li><strong>Sufficient Sample Size:</strong> Larger samples reduce random error</li>
-                        <li><strong>High Response Rate:</strong> Minimize non-response bias</li>
-                        <li><strong>Weighting:</strong> Adjust for over/under-represented groups</li>
-                        <li><strong>Validation:</strong> Compare sample characteristics with known population parameters</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3>Sample Size Determination</h3>
-            
-            <div class="definition-box">
-                <strong>Formula for Sample Size (Simple Random Sampling):</strong><br><br>
-                n = (Z² × p × (1-p)) / E²<br><br>
-                Where:<br>
-                • n = required sample size<br>
-                • Z = Z-score for confidence level (1.96 for 95%)<br>
-                • p = estimated proportion (0.5 if unknown - most conservative)<br>
-                • E = margin of error (e.g., 0.05 for ±5%)<br><br>
-                Example: For 95% confidence and ±5% margin of error:<br>
-                n = (1.96² × 0.5 × 0.5) / 0.05² = 384 respondents needed
-            </div>
-
-            <table>
-                <tr>
-                    <th>Population Size</th>
-                    <th>Sample Size (95% CI, ±5% error)</th>
-                    <th>Sample %</th>
-                </tr>
-                <tr>
-                    <td>1,000</td>
-                    <td>278</td>
-                    <td>27.8%</td>
-                </tr>
-                <tr>
-                    <td>10,000</td>
-                    <td>370</td>
-                    <td>3.7%</td>
-                </tr>
-                <tr>
-                    <td>100,000</td>
-                    <td>383</td>
-                    <td>0.38%</td>
-                </tr>
-                <tr>
-                    <td>1,000,000</td>
-                    <td>384</td>
-                    <td>0.038%</td>
-                </tr>
-                <tr>
-                    <td>1,400,000,000 (India)</td>
-                    <td>385</td>
-                    <td>0.000027%</td>
-                </tr>
-            </table>
-
-            <div class="info-box">
-                <h4>Key Insight: Surprising Truth About Sample Size</h4>
-                <p>Notice how the required sample size barely increases beyond populations of 100,000! This is why national polls of countries with 100 million or 1 billion people can use similar sample sizes (1,000-2,000) and achieve similar accuracy.</p>
-                <p><strong>What matters more than population size:</strong></p>
-                <ul>
-                    <li>Desired confidence level (90%, 95%, 99%)</li>
-                    <li>Acceptable margin of error (±3%, ±5%, ±10%)</li>
-                    <li>Population variability (more diverse = larger sample needed)</li>
-                    <li>Sampling method quality (proper randomization)</li>
-                </ul>
-            </div>
-
-            <div class="success-box">
-                <h4>Case Study: National Sample Survey Office (NSSO), India</h4>
-                
-                <p><strong>Organization:</strong> Premier statistical organization conducting nationwide socio-economic surveys since 1950.</p>
-                
-                <p><strong>Methodology:</strong></p>
-                <ul style="line-height: 2;">
-                    <li><strong>Sampling Design:</strong> Stratified multi-stage sampling</li>
-                    <li><strong>Stage 1:</strong> Districts stratified by population density, proportion of SC/ST</li>
-                    <li><strong>Stage 2:</strong> Villages (rural) and blocks (urban) selected</li>
-                    <li><strong>Stage 3:</strong> Households randomly selected within selected areas</li>
-                    <li><strong>Sample Size:</strong> ~100,000-150,000 households per major survey</li>
-                    <li><strong>Coverage:</strong> All states, urban and rural areas</li>
-                </ul>
-                
-                <p><strong>Survey Topics:</strong></p>
-                <ul style="line-height: 2;">
-                    <li>Employment and unemployment</li>
-                    <li>Consumer expenditure patterns</li>
-                    <li>Healthcare utilization</li>
-                    <li>Education levels</li>
-                    <li>Social consumption</li>
-                </ul>
-                
-                <p><strong>Impact:</strong> NSSO data forms the basis for government policy decisions, poverty estimation, GDP calculations, and academic research. The stratified approach ensures even small states and marginalized communities are adequately represented.</p>
-                
-                <p><strong>Validation:</strong> NSSO results closely match census data on key parameters, validating the representativeness of their sampling methods.</p>
-            </div>
-
-            <div class="chart-container">
-                <canvas id="sampleSizeChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Section 7: Interactive Demo -->
-        <div class="section" id="section7">
-            <h2>7. Interactive Sampling Demonstration</h2>
-            
-            <div class="intro-text">
-                Experience firsthand how sampling methods affect results. This interactive demonstration simulates the difference between proper random sampling and biased sampling.
-            </div>
-
-            <div class="interactive-demo">
-                <h3>Simulation: Population Mean = 50</h3>
-                <p><strong>Scenario:</strong> We have a population with a true mean of 50 (e.g., average test score). Let's see how different sampling methods estimate this parameter.</p>
-                
-                <div style="margin: 30px 0; text-align: center;">
-                    <button onclick="generateRandomSample()"><i class="fas fa-dice"></i> RANDOM SAMPLE</button>
-                    <button onclick="generateBiasedSample()"><i class="fas fa-exclamation-triangle"></i> BIASED SAMPLE</button>
-                    <button onclick="generateMultipleSamples()"><i class="fas fa-chart-bar"></i> MULTIPLE SAMPLES</button>
-                    <button onclick="resetDemo()"><i class="fas fa-redo"></i> RESET</button>
-                </div>
-
-                <div class="stats-display">
-                    <div class="stat-card">
-                        <div class="stat-value" id="sampleSize">0</div>
-                        <div class="stat-label">SAMPLE SIZE</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="sampleMean">0.0</div>
-                        <div class="stat-label">SAMPLE MEAN</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">50.0</div>
-                        <div class="stat-label">TRUE POP. MEAN</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="bias">0.0%</div>
-                        <div class="stat-label">BIAS %</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="stdDev">0.0</div>
-                        <div class="stat-label">STD DEVIATION</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="errorMargin">0.0</div>
-                        <div class="stat-label">MARGIN OF ERROR</div>
-                    </div>
-                </div>
-
-                <div class="chart-container">
-                    <canvas id="demoChart"></canvas>
-                </div>
-
-                <div id="interpretation" style="margin-top: 30px; padding: 20px; background: #f5f5f5; border-left: 4px solid #000; display: none;">
-                    <h4>Interpretation:</h4>
-                    <p id="interpretationText"></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Section 8: Real-World Applications -->
-        <div class="section" id="section8">
-            <h2>8. Real-World Applications of Statistics</h2>
-            
-            <div class="intro-text">
-                Statistics isn't just theoretical—it's the engine behind countless technologies and services we use daily. From search engines to streaming platforms, statistical methods drive decision-making and innovation.
-            </div>
-
-            <div class="sampling-grid">
-                <div class="sampling-card">
-                    <h4><i class="fab fa-google"></i> Google Search</h4>
-                    <p><strong>Application Areas:</strong></p>
-                    <ul>
-                        <li><strong>PageRank Algorithm:</strong> Statistical analysis of website links and importance</li>
-                        <li><strong>Search Personalization:</strong> Analyzing user behavior patterns</li>
-                        <li><strong>Ad Targeting:</strong> Predicting click-through rates using regression models</li>
-                        <li><strong>Spam Detection:</strong> Bayesian classification of websites</li>
-                        <li><strong>Query Suggestions:</strong> Time series analysis of search trends</li>
-                    </ul>
-                    <p><strong>Impact:</strong> Processes 8.5 billion searches per day with 92%+ relevance</p>
-                </div>
-                
-                <div class="sampling-card">
-                    <h4><i class="fas fa-film"></i> Netflix Recommendations</h4>
-                    <p><strong>Application Areas:</strong></p>
-                    <ul>
-                        <li><strong>Recommendation Engine:</strong> Collaborative filtering using 300+ million user ratings</li>
-                        <li><strong>Content Decisions:</strong> A/B testing to determine which shows to produce</li>
-                        <li><strong>Thumbnail Optimization:</strong> Multivariate testing of 1000+ image combinations</li>
-                        <li><strong>Viewing Predictions:</strong> Machine learning on viewing patterns</li>
-                        <li><strong>Churn Prediction:</strong> Identifying users likely to cancel subscriptions</li>
-                    </ul>
-                    <p><strong>Impact:</strong> 80% of watched content comes from recommendations</p>
-                </div>
-                
-                <div class="sampling-card">
-                    <h4><i class="fas fa-envelope"></i> Email Spam Filters</h4>
-                    <p><strong>Statistical Process:</strong></p>
-                    <ul>
-                        <li><strong>Training Data:</strong> Millions of labeled emails (spam/not spam)</li>
-                        <li><strong>Feature Extraction:</strong> Word frequency, sender reputation, link count</li>
-                        <li><strong>Naive Bayes Classification:</strong> Probability-based classification</li>
-                        <li><strong>Continuous Learning:</strong> Updating model with user feedback</li>
-                        <li><strong>Threshold Optimization:</strong> Balancing false positives vs false negatives</li>
-                    </ul>
-                    <p><strong>Impact:</strong> Blocks 99.9%+ of spam while keeping false positives <0.1%</p>
-                </div>
-                
-                <div class="sampling-card">
-                    <h4><i class="fas fa-hospital"></i> Medical Diagnosis</h4>
-                    <p><strong>Statistical Methods:</strong></p>
-                    <ul>
-                        <li><strong>Clinical Trials:</strong> Randomized controlled trials with statistical significance testing</li>
-                        <li><strong>Diagnostic Accuracy:</strong> Sensitivity, specificity, ROC curves</li>
-                        <li><strong>Risk Assessment:</strong> Logistic regression for disease prediction</li>
-                        <li><strong>Treatment Efficacy:</strong> Survival analysis and hazard ratios</li>
-                        <li><strong>Epidemic Modeling:</strong> Statistical forecasting of disease spread</li>
-                    </ul>
-                    <p><strong>Impact:</strong> Enables evidence-based medicine and personalized treatment</p>
-                </div>
-                
-                <div class="sampling-card">
-                    <h4><i class="fas fa-baseball-ball"></i> Sports Analytics (Cricket)</h4>
-                    <p><strong>IPL Team Strategy:</strong></p>
-                    <ul>
-                        <li><strong>Player Valuation:</strong> Regression models predicting player worth</li>
-                        <li><strong>Match Outcome Prediction:</strong> Historical data analysis and machine learning</li>
-                        <li><strong>Opposition Analysis:</strong> Pattern recognition in batting/bowling strategies</li>
-                        <li><strong>DRS Probability:</strong> Statistical likelihood of successful reviews</li>
-                        <li><strong>Performance Metrics:</strong> Advanced stats beyond averages (strike rates, impact index)</li>
-                    </ul>
-                    <p><strong>Impact:</strong> Data-driven decisions worth crores in auctions and match strategies</p>
-                </div>
-                
-                <div class="sampling-card">
-                    <h4><i class="fas fa-coins"></i> Financial Markets</h4>
-                    <p><strong>Applications:</strong></p>
-                    <ul>
-                        <li><strong>Risk Management:</strong> Value at Risk (VaR) calculations</li>
-                        <li><strong>Portfolio Optimization:</strong> Mean-variance analysis</li>
-                        <li><strong>Algorithmic Trading:</strong> Statistical arbitrage and pattern recognition</li>
-                        <li><strong>Credit Scoring:</strong> Logistic regression for loan approval</li>
-                        <li><strong>Fraud Detection:</strong> Anomaly detection in transactions</li>
-                    </ul>
-                    <p><strong>Impact:</strong> Manages trillions in assets and prevents billions in fraud</p>
-                </div>
-                
-                <div class="sampling-card">
-                    <h4><i class="fas fa-car"></i> Autonomous Vehicles</h4>
-                    <p><strong>Statistical Components:</strong></p>
-                    <ul>
-                        <li><strong>Sensor Fusion:</strong> Bayesian filtering combining multiple data sources</li>
-                        <li><strong>Object Detection:</strong> Computer vision with statistical confidence</li>
-                        <li><strong>Path Planning:</strong> Probabilistic roadmaps</li>
-                        <li><strong>Risk Assessment:</strong> Real-time probability of collision</li>
-                        <li><strong>Machine Learning:</strong> Training on millions of driving hours</li>
-                    </ul>
-                    <p><strong>Impact:</strong> Enables safer transportation with 90%+ reduction in accidents</p>
-                </div>
-                
-                <div class="sampling-card">
-                    <h4><i class="fas fa-seedling"></i> Agriculture & Farming</h4>
-                    <p><strong>Precision Farming:</strong></p>
-                    <ul>
-                        <li><strong>Yield Prediction:</strong> Regression analysis on soil, weather, and crop data</li>
-                        <li><strong>Optimal Planting:</strong> Statistical models for timing decisions</li>
-                        <li><strong>Pest Control:</strong> Probability models for infestation risk</li>
-                        <li><strong>Weather Forecasting:</strong> Time series analysis for planning</li>
-                        <li><strong>Resource Optimization:</strong> Minimizing water/fertilizer use</li>
-                    </ul>
-                    <p><strong>Impact:</strong> Increases crop yields by 20-30% while reducing resource waste</p>
-                </div>
-            </div>
-
-            <div class="quote">
-                "Statistical thinking will one day be as necessary for efficient citizenship as the ability to read and write." — H.G. Wells
-            </div>
-        </div>
-
-        <!-- Section 9: Key Takeaways -->
-        <div class="section" id="section9">
-            <h2><i class="fas fa-book"></i> Week 1: Key Takeaways</h2>
-            
-            <div class="intro-text">
-                Let's consolidate what we've learned this week. These fundamental concepts form the foundation for all statistical thinking and analysis.
-            </div>
-
-            <div class="key-takeaway">
-                Statistics is the science of learning from data, enabling evidence-based decision making in the face of uncertainty.
-            </div>
-
-            <div class="key-takeaway">
-                Good experimental design (control, randomization, replication, blinding) is essential for reliable results—no amount of analysis can fix bad data.
-            </div>
-
-            <div class="key-takeaway">
-                Descriptive statistics summarize what IS in your data; Inferential statistics predict what COULD BE in the broader population.
-            </div>
-
-            <div class="key-takeaway">
-                A sample is representative only if every member of the population has equal chance of selection—convenience sampling introduces fatal bias.
-            </div>
-
-            <div class="key-takeaway">
-                Sample size matters less than sample quality: A biased sample of millions is worse than a properly selected sample of hundreds.
-            </div>
-
-            <div class="key-takeaway">
-                Different sampling methods (random, stratified, cluster, systematic) have different strengths—choose based on your population structure and constraints.
-            </div>
-
-            <div class="key-takeaway">
-                For large populations (>100,000), sample size needed is relatively constant (~400 for ±5% error at 95% confidence)—population size has minimal effect.
-            </div>
-
-            <div class="key-takeaway">
-                Statistics powers the modern world: from search engines to medical diagnoses, from election forecasts to sports analytics.
-            </div>
-
-            <h3>Looking Ahead: Week 2</h3>
-            <div class="info-box">
-                <p><strong>Next week, we'll dive deeper into Descriptive Statistics:</strong></p>
-                <ul style="line-height: 2;">
-                    <li>Measures of Central Tendency (Mean, Median, Mode)</li>
-                    <li>Measures of Dispersion (Range, Variance, Standard Deviation, IQR)</li>
-                    <li>Data Visualization Techniques</li>
-                    <li>Distribution Shapes and Their Meaning</li>
-                    <li>Box Plots, Histograms, and Scatter Plots</li>
-                </ul>
-            </div>
-
-            <div class="quote">
-                "Statistical literacy is the ability to understand and reason with statistics and data. It is a critical skill for informed citizenship and effective decision-making."
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="section" style="background: #000000; color: #ffffff; text-align: center; margin-bottom: 0;">
-            <h3 style="color: #ffffff; border: none;">Continue Your Learning Journey</h3>
-            <p>You've completed Week 1! Ready to dive into Descriptive Statistics?</p>
-            <div style="margin-top: 2rem;">
-                <a href="../Week2/FSPWeekTwoA.html" style="display: inline-block; background: #ffffff; color: #000000; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 10px;">
-                    <i class="fas fa-arrow-right"></i> Next: Week 2A
-                </a>
-                <a href="../index.html" style="display: inline-block; border: 2px solid #ffffff; color: #ffffff; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 10px;">
-                    <i class="fas fa-home"></i> Back to Index
-                </a>
-            </div>
-            <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; color: #888;">
-                <a href="../../index.html" style="color: #888; text-decoration: none; margin: 0 10px;">Home</a> |
-                <a href="../index.html" style="color: #888; text-decoration: none; margin: 0 10px;">FSP Notes</a> |
-                <a href="../../ATA/index.html" style="color: #888; text-decoration: none; margin: 0 10px;">ATA</a> |
-                <a href="../../BDA/index.html" style="color: #888; text-decoration: none; margin: 0 10px;">BDA</a>
-            </div>
-            <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
-                Foundations of Statistics & Probability | Visual Learning Companion
+            <p>
+              <strong>Goal:</strong> Understand and communicate the
+              characteristics of your dataset clearly and accurately.
             </p>
+          </div>
+
+          <div class="comparison-card">
+            <h4><i class="fas fa-brain"></i> Inferential Statistics</h4>
+
+            <p>
+              <strong>Definition:</strong> Methods for making predictions,
+              inferences, and generalizations about a population based on sample
+              data.
+            </p>
+
+            <p><strong>Key Tools:</strong></p>
+            <ul>
+              <li>
+                <strong>Hypothesis Testing:</strong> t-tests, Chi-square, ANOVA
+              </li>
+              <li>
+                <strong>Confidence Intervals:</strong> Estimating population
+                parameters
+              </li>
+              <li>
+                <strong>Regression Analysis:</strong> Predicting relationships
+              </li>
+              <li>
+                <strong>Probability Distributions:</strong> Normal, Binomial,
+                Poisson
+              </li>
+            </ul>
+
+            <p><strong>Example Applications:</strong></p>
+            <ul>
+              <li>Is the new drug more effective? (p < 0.05)</li>
+              <li>95% confidence interval for population mean</li>
+              <li>Predicting election outcomes from polls</li>
+              <li>A/B testing for website design</li>
+            </ul>
+
+            <p>
+              <strong>Goal:</strong> Make informed predictions and decisions
+              about populations based on limited sample data.
+            </p>
+          </div>
         </div>
+
+        <h3>Detailed Comparison Table</h3>
+
+        <table>
+          <tr>
+            <th>Aspect</th>
+            <th>Descriptive Statistics</th>
+            <th>Inferential Statistics</th>
+          </tr>
+          <tr>
+            <td>Primary Purpose</td>
+            <td>Describe and summarize data</td>
+            <td>Make predictions and generalizations</td>
+          </tr>
+          <tr>
+            <td>Data Scope</td>
+            <td>Entire dataset at hand</td>
+            <td>Sample to infer about population</td>
+          </tr>
+          <tr>
+            <td>Uses Probability</td>
+            <td>No</td>
+            <td>Yes, extensively</td>
+          </tr>
+          <tr>
+            <td>Complexity</td>
+            <td>Relatively straightforward</td>
+            <td>More complex, requires assumptions</td>
+          </tr>
+          <tr>
+            <td>Uncertainty</td>
+            <td>Minimal (descriptive accuracy)</td>
+            <td>Quantified (confidence levels, p-values)</td>
+          </tr>
+          <tr>
+            <td>Final Output</td>
+            <td>Summary statistics and visualizations</td>
+            <td>Conclusions, predictions, hypotheses tests</td>
+          </tr>
+        </table>
+
+        <div class="example-box">
+          <h4>Integrated Example: Student Performance Analysis</h4>
+
+          <p>
+            <strong>Scenario:</strong> Analyzing performance of 10,000 students
+            across India who took a standardized test.
+          </p>
+
+          <p><strong>Descriptive Statistics Application:</strong></p>
+          <ul style="line-height: 2">
+            <li>Mean score: 68.5 marks</li>
+            <li>Median score: 70 marks (half scored above, half below)</li>
+            <li>Standard deviation: 15 marks (measure of spread)</li>
+            <li>Highest score: 99 marks</li>
+            <li>Lowest score: 22 marks</li>
+            <li>Create histogram showing score distribution</li>
+          </ul>
+
+          <p><strong>Inferential Statistics Application:</strong></p>
+          <ul style="line-height: 2">
+            <li>
+              Is there a significant difference between urban and rural student
+              scores?
+            </li>
+            <li>Can we predict next year's average score?</li>
+            <li>
+              What is the confidence interval for the true population mean?
+            </li>
+            <li>Does gender significantly affect test scores?</li>
+            <li>How well does study time predict test performance?</li>
+          </ul>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="statsTypeChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="distributionChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Section 4: Population vs Sample -->
+      <div class="section" id="section4">
+        <h2>4. Population vs. Sample: Understanding Scope and Scale</h2>
+
+        <div class="intro-text">
+          One of the most fundamental concepts in statistics is the distinction
+          between a population and a sample. This distinction forms the basis
+          for all inferential statistics and determines how we collect data and
+          draw conclusions.
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-card" style="background: #000; color: #fff">
+            <h4 style="color: #fff; border-bottom-color: #fff">
+              <i class="fas fa-globe"></i> POPULATION
+            </h4>
+
+            <p>
+              <strong>Definition:</strong> The complete set of all individuals,
+              items, or data points that are of interest in a particular study.
+            </p>
+
+            <p><strong>Characteristics:</strong></p>
+            <ul style="color: #fff">
+              <li>Includes EVERY member of the group</li>
+              <li>Often very large or infinite</li>
+              <li>Usually impossible or impractical to study completely</li>
+              <li>Denoted by parameters (μ, σ, N)</li>
+            </ul>
+
+            <p><strong>Examples:</strong></p>
+            <ul style="color: #fff">
+              <li>All 1.4 billion Indian citizens</li>
+              <li>
+                Every student enrolled in Indian universities (42+ million)
+              </li>
+              <li>All trees in the Amazon rainforest</li>
+              <li>Every transaction on a payment platform</li>
+            </ul>
+          </div>
+
+          <div class="comparison-card">
+            <h4><i class="fas fa-map-pin"></i> SAMPLE</h4>
+
+            <p>
+              <strong>Definition:</strong> A subset of the population selected
+              for actual observation and data collection.
+            </p>
+
+            <p><strong>Characteristics:</strong></p>
+            <ul>
+              <li>Represents only PART of the population</li>
+              <li>Manageable size for practical study</li>
+              <li>Should be representative of the population</li>
+              <li>Denoted by statistics (x̄, s, n)</li>
+            </ul>
+
+            <p><strong>Examples:</strong></p>
+            <ul>
+              <li>2,000 randomly selected Indian citizens</li>
+              <li>500 students from select universities</li>
+              <li>1,000 trees from designated forest areas</li>
+              <li>100,000 transactions from last month</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Why We Use Samples: The Practical Necessity</h3>
+
+        <div class="comparison-grid">
+          <div class="info-box">
+            <h4>Practical Constraints</h4>
+            <ul style="line-height: 2">
+              <li>
+                <strong>Cost:</strong> Surveying 1.4 billion people would cost
+                trillions of rupees
+              </li>
+              <li>
+                <strong>Time:</strong> Complete census takes years to conduct
+                and analyze
+              </li>
+              <li>
+                <strong>Resources:</strong> Requires massive human resources and
+                infrastructure
+              </li>
+              <li>
+                <strong>Accessibility:</strong> Some population members may be
+                unreachable
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <h4>Advantages of Sampling</h4>
+            <ul style="line-height: 2">
+              <li>
+                <strong>Speed:</strong> Results available in days or weeks vs.
+                years
+              </li>
+              <li>
+                <strong>Efficiency:</strong> Focuses resources on representative
+                subset
+              </li>
+              <li>
+                <strong>Feasibility:</strong> Makes impossible studies possible
+              </li>
+              <li>
+                <strong>Accuracy:</strong> Better quality control with smaller
+                dataset
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Key Statistical Notation</h3>
+
+        <table>
+          <tr>
+            <th>Concept</th>
+            <th>Population</th>
+            <th>Sample</th>
+          </tr>
+          <tr>
+            <td>Size</td>
+            <td>N (Population size)</td>
+            <td>n (Sample size)</td>
+          </tr>
+          <tr>
+            <td>Mean</td>
+            <td>μ (mu) - Population mean</td>
+            <td>x̄ (x-bar) - Sample mean</td>
+          </tr>
+          <tr>
+            <td>Standard Deviation</td>
+            <td>σ (sigma) - Population SD</td>
+            <td>s - Sample SD</td>
+          </tr>
+          <tr>
+            <td>Proportion</td>
+            <td>P - Population proportion</td>
+            <td>p̂ (p-hat) - Sample proportion</td>
+          </tr>
+          <tr>
+            <td>Values Called</td>
+            <td>Parameters (fixed, unknown)</td>
+            <td>Statistics (variable, calculated)</td>
+          </tr>
+        </table>
+
+        <div class="chart-container">
+          <canvas id="popSampleChart"></canvas>
+        </div>
+
+        <div class="example-box">
+          <h4>Case Study: Indian Census vs. Sample Surveys</h4>
+
+          <p><strong>Indian Census (Population Study):</strong></p>
+          <ul style="line-height: 2">
+            <li>Conducted every 10 years</li>
+            <li>Attempts to count every single person in India</li>
+            <li>Cost: ₹12,000+ crores (2011 Census)</li>
+            <li>
+              Time: Several years for complete data collection and processing
+            </li>
+            <li>Personnel: 2.7+ million people involved</li>
+            <li>Result: Comprehensive but expensive and time-consuming</li>
+          </ul>
+
+          <p><strong>National Sample Survey (NSSO):</strong></p>
+          <ul style="line-height: 2">
+            <li>Conducted regularly throughout the year</li>
+            <li>Uses stratified random sampling of ~100,000 households</li>
+            <li>Cost: Fraction of census cost</li>
+            <li>Time: Months instead of years</li>
+            <li>Result: Quick, reliable estimates of population parameters</li>
+            <li>Topics: Employment, consumer expenditure, health, education</li>
+          </ul>
+
+          <p>
+            <strong>Conclusion:</strong> Sample surveys provide 95%+ accuracy at
+            1% of the cost and time!
+          </p>
+        </div>
+
+        <div class="quote">
+          "A good sample is representative of the population from which it is
+          drawn. The art of sampling is to get a small group that accurately
+          reflects the whole."
+        </div>
+      </div>
+
+      <!-- Section 5: Sampling Techniques -->
+      <div class="section" id="section5">
+        <h2>5. Sampling Techniques: Methods and Their Applications</h2>
+
+        <div class="intro-text">
+          The method you use to select your sample can make or break your study.
+          Different sampling techniques have different strengths, weaknesses,
+          and appropriate use cases. Understanding these is crucial for reliable
+          research.
+        </div>
+
+        <h3>Comprehensive Overview of Sampling Methods</h3>
+
+        <div class="sampling-grid">
+          <div class="sampling-card">
+            <h4>
+              <i class="fas fa-dice"></i> Random Sampling (Simple Random
+              Sampling)
+            </h4>
+            <p>
+              <strong>Method:</strong> Every member of the population has an
+              equal and independent chance of being selected.
+            </p>
+            <p>
+              <strong>How it works:</strong> Use random number generators,
+              lottery method, or random selection software.
+            </p>
+            <p><strong>Advantages:</strong></p>
+            <ul>
+              <li>Eliminates selection bias</li>
+              <li>Simple to understand and implement</li>
+              <li>Statistical theory well-developed</li>
+            </ul>
+            <p><strong>Disadvantages:</strong></p>
+            <ul>
+              <li>Requires complete list of population</li>
+              <li>May not capture all subgroups</li>
+              <li>Can be expensive for large populations</li>
+            </ul>
+            <p>
+              <strong>Best for:</strong> Homogeneous populations, when complete
+              list available
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-chart-bar"></i> Stratified Sampling</h4>
+            <p>
+              <strong>Method:</strong> Divide population into homogeneous
+              subgroups (strata), then randomly sample from each stratum.
+            </p>
+            <p>
+              <strong>How it works:</strong> Identify strata (age, gender,
+              income), determine sample size per stratum, randomly select within
+              each.
+            </p>
+            <p><strong>Advantages:</strong></p>
+            <ul>
+              <li>Ensures representation of all subgroups</li>
+              <li>More precise estimates than simple random</li>
+              <li>Can compare between strata</li>
+            </ul>
+            <p><strong>Disadvantages:</strong></p>
+            <ul>
+              <li>Requires knowledge of population structure</li>
+              <li>More complex to implement</li>
+              <li>Needs clear stratification criteria</li>
+            </ul>
+            <p>
+              <strong>Best for:</strong> Diverse populations with distinct
+              subgroups
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-map"></i> Cluster Sampling</h4>
+            <p>
+              <strong>Method:</strong> Divide population into clusters (usually
+              geographic), randomly select clusters, sample all or randomly
+              within clusters.
+            </p>
+            <p>
+              <strong>How it works:</strong> Define clusters (villages,
+              schools), randomly select clusters, survey all members or
+              subsample.
+            </p>
+            <p><strong>Advantages:</strong></p>
+            <ul>
+              <li>Cost-effective for large geographic areas</li>
+              <li>Doesn't require complete population list</li>
+              <li>Easier logistics and administration</li>
+            </ul>
+            <p><strong>Disadvantages:</strong></p>
+            <ul>
+              <li>Higher sampling error than stratified</li>
+              <li>Clusters may not be representative</li>
+              <li>Within-cluster homogeneity issues</li>
+            </ul>
+            <p>
+              <strong>Best for:</strong> Geographically dispersed populations,
+              cost constraints
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-ruler"></i> Systematic Sampling</h4>
+            <p>
+              <strong>Method:</strong> Select every kth member from a list after
+              random start.
+            </p>
+            <p>
+              <strong>How it works:</strong> If N=1000, n=100, then k=10.
+              Randomly start (e.g., 7th person), then select every 10th.
+            </p>
+            <p><strong>Advantages:</strong></p>
+            <ul>
+              <li>Easy to implement and explain</li>
+              <li>Spreads sample across population</li>
+              <li>Less random than simple random but practical</li>
+            </ul>
+            <p><strong>Disadvantages:</strong></p>
+            <ul>
+              <li>Risk of periodic patterns in list</li>
+              <li>Not truly random</li>
+              <li>Difficult to estimate sampling error</li>
+            </ul>
+            <p>
+              <strong>Best for:</strong> Ordered lists, quality control,
+              assembly line sampling
+            </p>
+          </div>
+
+          <div class="sampling-card" style="border-color: #666">
+            <h4><i class="fas fa-walking"></i> Convenience Sampling</h4>
+            <p>
+              <strong>Method:</strong> Select individuals who are easily
+              accessible or volunteer.
+            </p>
+            <p>
+              <strong>How it works:</strong> Survey people at mall, use
+              volunteer respondents, sample friends/colleagues.
+            </p>
+            <p><strong>Advantages:</strong></p>
+            <ul>
+              <li>Quick and inexpensive</li>
+              <li>Easy to gather data</li>
+              <li>Useful for preliminary studies</li>
+            </ul>
+            <p><strong>Disadvantages:</strong></p>
+            <ul>
+              <li>High risk of bias</li>
+              <li>Not representative</li>
+              <li>Cannot generalize to population</li>
+              <li>Lacks statistical validity</li>
+            </ul>
+            <p>
+              <strong>Best for:</strong> Pilot studies, exploratory research
+              (NOT for conclusive studies)
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-snowflake"></i> Snowball Sampling</h4>
+            <p>
+              <strong>Method:</strong> Existing study subjects recruit future
+              subjects from their acquaintances.
+            </p>
+            <p>
+              <strong>How it works:</strong> Start with few participants, ask
+              them to refer others, chain continues.
+            </p>
+            <p><strong>Advantages:</strong></p>
+            <ul>
+              <li>Reaches hidden or hard-to-find populations</li>
+              <li>Builds trust through referrals</li>
+              <li>Cost-effective for rare populations</li>
+            </ul>
+            <p><strong>Disadvantages:</strong></p>
+            <ul>
+              <li>Significant selection bias</li>
+              <li>Limited diversity</li>
+              <li>Not statistically representative</li>
+            </ul>
+            <p>
+              <strong>Best for:</strong> Rare populations (specific diseases,
+              minority groups)
+            </p>
+          </div>
+        </div>
+
+        <h3>Comparative Analysis: Sampling Method Selection</h3>
+
+        <table>
+          <tr>
+            <th>Method</th>
+            <th>Bias Level</th>
+            <th>Cost</th>
+            <th>Complexity</th>
+            <th>Generalizability</th>
+          </tr>
+          <tr>
+            <td>Simple Random</td>
+            <td>Very Low</td>
+            <td>Medium-High</td>
+            <td>Low</td>
+            <td>Excellent</td>
+          </tr>
+          <tr>
+            <td>Stratified</td>
+            <td>Very Low</td>
+            <td>Medium-High</td>
+            <td>Medium</td>
+            <td>Excellent</td>
+          </tr>
+          <tr>
+            <td>Cluster</td>
+            <td>Low-Medium</td>
+            <td>Low</td>
+            <td>Medium</td>
+            <td>Good</td>
+          </tr>
+          <tr>
+            <td>Systematic</td>
+            <td>Low</td>
+            <td>Low</td>
+            <td>Low</td>
+            <td>Good</td>
+          </tr>
+          <tr>
+            <td>Convenience</td>
+            <td>Very High</td>
+            <td>Very Low</td>
+            <td>Very Low</td>
+            <td>Poor</td>
+          </tr>
+          <tr>
+            <td>Snowball</td>
+            <td>High</td>
+            <td>Low</td>
+            <td>Low</td>
+            <td>Poor</td>
+          </tr>
+        </table>
+
+        <div class="warning-box">
+          <h4>The 1936 Literary Digest Election Poll Disaster</h4>
+
+          <p>
+            <strong>Background:</strong> The Literary Digest magazine had
+            successfully predicted U.S. presidential elections using mail
+            surveys since 1916.
+          </p>
+
+          <p><strong>The 1936 Prediction:</strong></p>
+          <ul style="line-height: 2">
+            <li>Predicted Alf Landon would win with 57% of votes</li>
+            <li>Based on 2.4 million responses (massive sample size!)</li>
+            <li>
+              Sample drawn from: telephone directories, automobile
+              registrations, magazine subscriptions
+            </li>
+          </ul>
+
+          <p><strong>Actual Result:</strong></p>
+          <ul style="line-height: 2">
+            <li>Franklin D. Roosevelt won with 62% of votes</li>
+            <li>One of the largest landslides in U.S. history</li>
+            <li>
+              Literary Digest's prediction was off by 19 percentage points!
+            </li>
+          </ul>
+
+          <p><strong>What Went Wrong:</strong></p>
+          <ul style="line-height: 2">
+            <li>
+              <strong>Selection Bias:</strong> During the Great Depression, only
+              wealthy people owned phones, cars, and magazine subscriptions
+            </li>
+            <li>
+              <strong>Non-Representative Sample:</strong> Wealthy Americans
+              tended to vote Republican, but they were only a small fraction of
+              voters
+            </li>
+            <li>
+              <strong>Response Bias:</strong> Only 24% response rate; those who
+              responded were systematically different
+            </li>
+            <li>
+              <strong>Ignored Demographics:</strong> Failed to account for the
+              vast majority of working-class and poor voters
+            </li>
+          </ul>
+
+          <p>
+            <strong>The Lesson:</strong> Sample size doesn't matter if the
+            sample is biased. A sample of 2.4 million biased responses is worse
+            than 2,000 properly selected ones!
+          </p>
+
+          <p>
+            <strong>Aftermath:</strong> The Literary Digest went bankrupt in
+            1938. Meanwhile, George Gallup correctly predicted Roosevelt's
+            victory using just 50,000 carefully selected respondents.
+          </p>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="biasChart"></canvas>
+        </div>
+
+        <div class="example-box">
+          <h4>Modern Application: Election Opinion Polls in India</h4>
+
+          <p>
+            <strong>Challenge:</strong> India has 900+ million eligible voters
+            across 28 states and 8 union territories with diverse demographics.
+          </p>
+
+          <p><strong>Proper Approach (CSDS-Lokniti, CVoter, etc.):</strong></p>
+          <ul style="line-height: 2">
+            <li>
+              <strong>Stratified Multi-Stage Sampling:</strong> Divide by state,
+              then urban/rural, then by demographics
+            </li>
+            <li>
+              <strong>Sample Size:</strong> Typically 10,000-20,000 respondents
+            </li>
+            <li>
+              <strong>Weighting:</strong> Adjust for demographic representation
+            </li>
+            <li>
+              <strong>Margin of Error:</strong> ±3-4% at 95% confidence level
+            </li>
+            <li>
+              <strong>Results:</strong> Generally accurate predictions with
+              transparent methodology
+            </li>
+          </ul>
+
+          <p><strong>Improper Approach (Some media polls):</strong></p>
+          <ul style="line-height: 2">
+            <li>Online polls (excludes 60%+ population without internet)</li>
+            <li>Urban-only sampling (ignores rural 65% of population)</li>
+            <li>Social media polls (self-selected, non-representative)</li>
+            <li>Results: Often wildly inaccurate</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Section 6: Representative Samples -->
+      <div class="section" id="section6">
+        <h2>6. The Importance of Representative Samples</h2>
+
+        <div class="intro-text">
+          A representative sample is the cornerstone of valid statistical
+          inference. It accurately mirrors the characteristics of the
+          population, allowing us to draw reliable conclusions from a manageable
+          subset of data.
+        </div>
+
+        <h3>What Makes a Sample Representative?</h3>
+
+        <div class="comparison-grid">
+          <div class="info-box">
+            <h4>Key Characteristics:</h4>
+            <ul style="line-height: 2">
+              <li>
+                <strong>Demographic Match:</strong> Age, gender, income,
+                education proportions match population
+              </li>
+              <li>
+                <strong>Geographic Coverage:</strong> All regions represented
+                proportionally
+              </li>
+              <li>
+                <strong>Diversity:</strong> Captures full range of variation in
+                population
+              </li>
+              <li>
+                <strong>Adequate Size:</strong> Large enough to be statistically
+                reliable
+              </li>
+              <li>
+                <strong>Random Selection:</strong> Each member had equal chance
+                of inclusion
+              </li>
+            </ul>
+          </div>
+
+          <div class="info-box">
+            <h4>How to Achieve Representativeness:</h4>
+            <ul style="line-height: 2">
+              <li>
+                <strong>Use Probability Sampling:</strong> Random, stratified,
+                or cluster methods
+              </li>
+              <li>
+                <strong>Sufficient Sample Size:</strong> Larger samples reduce
+                random error
+              </li>
+              <li>
+                <strong>High Response Rate:</strong> Minimize non-response bias
+              </li>
+              <li>
+                <strong>Weighting:</strong> Adjust for over/under-represented
+                groups
+              </li>
+              <li>
+                <strong>Validation:</strong> Compare sample characteristics with
+                known population parameters
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Sample Size Determination</h3>
+
+        <div class="definition-box">
+          <strong>Formula for Sample Size (Simple Random Sampling):</strong
+          ><br /><br />
+          n = (Z² × p × (1-p)) / E²<br /><br />
+          Where:<br />
+          • n = required sample size<br />
+          • Z = Z-score for confidence level (1.96 for 95%)<br />
+          • p = estimated proportion (0.5 if unknown - most conservative)<br />
+          • E = margin of error (e.g., 0.05 for ±5%)<br /><br />
+          Example: For 95% confidence and ±5% margin of error:<br />
+          n = (1.96² × 0.5 × 0.5) / 0.05² = 384 respondents needed
+        </div>
+
+        <table>
+          <tr>
+            <th>Population Size</th>
+            <th>Sample Size (95% CI, ±5% error)</th>
+            <th>Sample %</th>
+          </tr>
+          <tr>
+            <td>1,000</td>
+            <td>278</td>
+            <td>27.8%</td>
+          </tr>
+          <tr>
+            <td>10,000</td>
+            <td>370</td>
+            <td>3.7%</td>
+          </tr>
+          <tr>
+            <td>100,000</td>
+            <td>383</td>
+            <td>0.38%</td>
+          </tr>
+          <tr>
+            <td>1,000,000</td>
+            <td>384</td>
+            <td>0.038%</td>
+          </tr>
+          <tr>
+            <td>1,400,000,000 (India)</td>
+            <td>385</td>
+            <td>0.000027%</td>
+          </tr>
+        </table>
+
+        <div class="info-box">
+          <h4>Key Insight: Surprising Truth About Sample Size</h4>
+          <p>
+            Notice how the required sample size barely increases beyond
+            populations of 100,000! This is why national polls of countries with
+            100 million or 1 billion people can use similar sample sizes
+            (1,000-2,000) and achieve similar accuracy.
+          </p>
+          <p><strong>What matters more than population size:</strong></p>
+          <ul>
+            <li>Desired confidence level (90%, 95%, 99%)</li>
+            <li>Acceptable margin of error (±3%, ±5%, ±10%)</li>
+            <li>
+              Population variability (more diverse = larger sample needed)
+            </li>
+            <li>Sampling method quality (proper randomization)</li>
+          </ul>
+        </div>
+
+        <div class="success-box">
+          <h4>Case Study: National Sample Survey Office (NSSO), India</h4>
+
+          <p>
+            <strong>Organization:</strong> Premier statistical organization
+            conducting nationwide socio-economic surveys since 1950.
+          </p>
+
+          <p><strong>Methodology:</strong></p>
+          <ul style="line-height: 2">
+            <li>
+              <strong>Sampling Design:</strong> Stratified multi-stage sampling
+            </li>
+            <li>
+              <strong>Stage 1:</strong> Districts stratified by population
+              density, proportion of SC/ST
+            </li>
+            <li>
+              <strong>Stage 2:</strong> Villages (rural) and blocks (urban)
+              selected
+            </li>
+            <li>
+              <strong>Stage 3:</strong> Households randomly selected within
+              selected areas
+            </li>
+            <li>
+              <strong>Sample Size:</strong> ~100,000-150,000 households per
+              major survey
+            </li>
+            <li>
+              <strong>Coverage:</strong> All states, urban and rural areas
+            </li>
+          </ul>
+
+          <p><strong>Survey Topics:</strong></p>
+          <ul style="line-height: 2">
+            <li>Employment and unemployment</li>
+            <li>Consumer expenditure patterns</li>
+            <li>Healthcare utilization</li>
+            <li>Education levels</li>
+            <li>Social consumption</li>
+          </ul>
+
+          <p>
+            <strong>Impact:</strong> NSSO data forms the basis for government
+            policy decisions, poverty estimation, GDP calculations, and academic
+            research. The stratified approach ensures even small states and
+            marginalized communities are adequately represented.
+          </p>
+
+          <p>
+            <strong>Validation:</strong> NSSO results closely match census data
+            on key parameters, validating the representativeness of their
+            sampling methods.
+          </p>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="sampleSizeChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Section 7: Interactive Demo -->
+      <div class="section" id="section7">
+        <h2>7. Interactive Sampling Demonstration</h2>
+
+        <div class="intro-text">
+          Experience firsthand how sampling methods affect results. This
+          interactive demonstration simulates the difference between proper
+          random sampling and biased sampling.
+        </div>
+
+        <div class="interactive-demo">
+          <h3>Simulation: Population Mean = 50</h3>
+          <p>
+            <strong>Scenario:</strong> We have a population with a true mean of
+            50 (e.g., average test score). Let's see how different sampling
+            methods estimate this parameter.
+          </p>
+
+          <div style="margin: 30px 0; text-align: center">
+            <button onclick="generateRandomSample()">
+              <i class="fas fa-dice"></i> RANDOM SAMPLE
+            </button>
+            <button onclick="generateBiasedSample()">
+              <i class="fas fa-exclamation-triangle"></i> BIASED SAMPLE
+            </button>
+            <button onclick="generateMultipleSamples()">
+              <i class="fas fa-chart-bar"></i> MULTIPLE SAMPLES
+            </button>
+            <button onclick="resetDemo()">
+              <i class="fas fa-redo"></i> RESET
+            </button>
+          </div>
+
+          <div class="stats-display">
+            <div class="stat-card">
+              <div class="stat-value" id="sampleSize">0</div>
+              <div class="stat-label">SAMPLE SIZE</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="sampleMean">0.0</div>
+              <div class="stat-label">SAMPLE MEAN</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">50.0</div>
+              <div class="stat-label">TRUE POP. MEAN</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="bias">0.0%</div>
+              <div class="stat-label">BIAS %</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="stdDev">0.0</div>
+              <div class="stat-label">STD DEVIATION</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="errorMargin">0.0</div>
+              <div class="stat-label">MARGIN OF ERROR</div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="demoChart"></canvas>
+          </div>
+
+          <div
+            id="interpretation"
+            style="
+              margin-top: 30px;
+              padding: 20px;
+              background: #f5f5f5;
+              border-left: 4px solid #000;
+              display: none;
+            "
+          >
+            <h4>Interpretation:</h4>
+            <p id="interpretationText"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 8: Real-World Applications -->
+      <div class="section" id="section8">
+        <h2>8. Real-World Applications of Statistics</h2>
+
+        <div class="intro-text">
+          Statistics isn't just theoretical—it's the engine behind countless
+          technologies and services we use daily. From search engines to
+          streaming platforms, statistical methods drive decision-making and
+          innovation.
+        </div>
+
+        <div class="sampling-grid">
+          <div class="sampling-card">
+            <h4><i class="fab fa-google"></i> Google Search</h4>
+            <p><strong>Application Areas:</strong></p>
+            <ul>
+              <li>
+                <strong>PageRank Algorithm:</strong> Statistical analysis of
+                website links and importance
+              </li>
+              <li>
+                <strong>Search Personalization:</strong> Analyzing user behavior
+                patterns
+              </li>
+              <li>
+                <strong>Ad Targeting:</strong> Predicting click-through rates
+                using regression models
+              </li>
+              <li>
+                <strong>Spam Detection:</strong> Bayesian classification of
+                websites
+              </li>
+              <li>
+                <strong>Query Suggestions:</strong> Time series analysis of
+                search trends
+              </li>
+            </ul>
+            <p>
+              <strong>Impact:</strong> Processes 8.5 billion searches per day
+              with 92%+ relevance
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-film"></i> Netflix Recommendations</h4>
+            <p><strong>Application Areas:</strong></p>
+            <ul>
+              <li>
+                <strong>Recommendation Engine:</strong> Collaborative filtering
+                using 300+ million user ratings
+              </li>
+              <li>
+                <strong>Content Decisions:</strong> A/B testing to determine
+                which shows to produce
+              </li>
+              <li>
+                <strong>Thumbnail Optimization:</strong> Multivariate testing of
+                1000+ image combinations
+              </li>
+              <li>
+                <strong>Viewing Predictions:</strong> Machine learning on
+                viewing patterns
+              </li>
+              <li>
+                <strong>Churn Prediction:</strong> Identifying users likely to
+                cancel subscriptions
+              </li>
+            </ul>
+            <p>
+              <strong>Impact:</strong> 80% of watched content comes from
+              recommendations
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-envelope"></i> Email Spam Filters</h4>
+            <p><strong>Statistical Process:</strong></p>
+            <ul>
+              <li>
+                <strong>Training Data:</strong> Millions of labeled emails
+                (spam/not spam)
+              </li>
+              <li>
+                <strong>Feature Extraction:</strong> Word frequency, sender
+                reputation, link count
+              </li>
+              <li>
+                <strong>Naive Bayes Classification:</strong> Probability-based
+                classification
+              </li>
+              <li>
+                <strong>Continuous Learning:</strong> Updating model with user
+                feedback
+              </li>
+              <li>
+                <strong>Threshold Optimization:</strong> Balancing false
+                positives vs false negatives
+              </li>
+            </ul>
+            <p>
+              <strong>Impact:</strong> Blocks 99.9%+ of spam while keeping false
+              positives <0.1%
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-hospital"></i> Medical Diagnosis</h4>
+            <p><strong>Statistical Methods:</strong></p>
+            <ul>
+              <li>
+                <strong>Clinical Trials:</strong> Randomized controlled trials
+                with statistical significance testing
+              </li>
+              <li>
+                <strong>Diagnostic Accuracy:</strong> Sensitivity, specificity,
+                ROC curves
+              </li>
+              <li>
+                <strong>Risk Assessment:</strong> Logistic regression for
+                disease prediction
+              </li>
+              <li>
+                <strong>Treatment Efficacy:</strong> Survival analysis and
+                hazard ratios
+              </li>
+              <li>
+                <strong>Epidemic Modeling:</strong> Statistical forecasting of
+                disease spread
+              </li>
+            </ul>
+            <p>
+              <strong>Impact:</strong> Enables evidence-based medicine and
+              personalized treatment
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4>
+              <i class="fas fa-baseball-ball"></i> Sports Analytics (Cricket)
+            </h4>
+            <p><strong>IPL Team Strategy:</strong></p>
+            <ul>
+              <li>
+                <strong>Player Valuation:</strong> Regression models predicting
+                player worth
+              </li>
+              <li>
+                <strong>Match Outcome Prediction:</strong> Historical data
+                analysis and machine learning
+              </li>
+              <li>
+                <strong>Opposition Analysis:</strong> Pattern recognition in
+                batting/bowling strategies
+              </li>
+              <li>
+                <strong>DRS Probability:</strong> Statistical likelihood of
+                successful reviews
+              </li>
+              <li>
+                <strong>Performance Metrics:</strong> Advanced stats beyond
+                averages (strike rates, impact index)
+              </li>
+            </ul>
+            <p>
+              <strong>Impact:</strong> Data-driven decisions worth crores in
+              auctions and match strategies
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-coins"></i> Financial Markets</h4>
+            <p><strong>Applications:</strong></p>
+            <ul>
+              <li>
+                <strong>Risk Management:</strong> Value at Risk (VaR)
+                calculations
+              </li>
+              <li>
+                <strong>Portfolio Optimization:</strong> Mean-variance analysis
+              </li>
+              <li>
+                <strong>Algorithmic Trading:</strong> Statistical arbitrage and
+                pattern recognition
+              </li>
+              <li>
+                <strong>Credit Scoring:</strong> Logistic regression for loan
+                approval
+              </li>
+              <li>
+                <strong>Fraud Detection:</strong> Anomaly detection in
+                transactions
+              </li>
+            </ul>
+            <p>
+              <strong>Impact:</strong> Manages trillions in assets and prevents
+              billions in fraud
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-car"></i> Autonomous Vehicles</h4>
+            <p><strong>Statistical Components:</strong></p>
+            <ul>
+              <li>
+                <strong>Sensor Fusion:</strong> Bayesian filtering combining
+                multiple data sources
+              </li>
+              <li>
+                <strong>Object Detection:</strong> Computer vision with
+                statistical confidence
+              </li>
+              <li><strong>Path Planning:</strong> Probabilistic roadmaps</li>
+              <li>
+                <strong>Risk Assessment:</strong> Real-time probability of
+                collision
+              </li>
+              <li>
+                <strong>Machine Learning:</strong> Training on millions of
+                driving hours
+              </li>
+            </ul>
+            <p>
+              <strong>Impact:</strong> Enables safer transportation with 90%+
+              reduction in accidents
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-seedling"></i> Agriculture & Farming</h4>
+            <p><strong>Precision Farming:</strong></p>
+            <ul>
+              <li>
+                <strong>Yield Prediction:</strong> Regression analysis on soil,
+                weather, and crop data
+              </li>
+              <li>
+                <strong>Optimal Planting:</strong> Statistical models for timing
+                decisions
+              </li>
+              <li>
+                <strong>Pest Control:</strong> Probability models for
+                infestation risk
+              </li>
+              <li>
+                <strong>Weather Forecasting:</strong> Time series analysis for
+                planning
+              </li>
+              <li>
+                <strong>Resource Optimization:</strong> Minimizing
+                water/fertilizer use
+              </li>
+            </ul>
+            <p>
+              <strong>Impact:</strong> Increases crop yields by 20-30% while
+              reducing resource waste
+            </p>
+          </div>
+        </div>
+
+        <div class="quote">
+          "Statistical thinking will one day be as necessary for efficient
+          citizenship as the ability to read and write." — H.G. Wells
+        </div>
+      </div>
+
+      <!-- Section 9: Key Takeaways -->
+      <div class="section" id="section9">
+        <h2><i class="fas fa-book"></i> Week 1: Key Takeaways</h2>
+
+        <div class="intro-text">
+          Let's consolidate what we've learned this week. These fundamental
+          concepts form the foundation for all statistical thinking and
+          analysis.
+        </div>
+
+        <div class="key-takeaway">
+          Statistics is the science of learning from data, enabling
+          evidence-based decision making in the face of uncertainty.
+        </div>
+
+        <div class="key-takeaway">
+          Good experimental design (control, randomization, replication,
+          blinding) is essential for reliable results—no amount of analysis can
+          fix bad data.
+        </div>
+
+        <div class="key-takeaway">
+          Descriptive statistics summarize what IS in your data; Inferential
+          statistics predict what COULD BE in the broader population.
+        </div>
+
+        <div class="key-takeaway">
+          A sample is representative only if every member of the population has
+          equal chance of selection—convenience sampling introduces fatal bias.
+        </div>
+
+        <div class="key-takeaway">
+          Sample size matters less than sample quality: A biased sample of
+          millions is worse than a properly selected sample of hundreds.
+        </div>
+
+        <div class="key-takeaway">
+          Different sampling methods (random, stratified, cluster, systematic)
+          have different strengths—choose based on your population structure and
+          constraints.
+        </div>
+
+        <div class="key-takeaway">
+          For large populations (>100,000), sample size needed is relatively
+          constant (~400 for ±5% error at 95% confidence)—population size has
+          minimal effect.
+        </div>
+
+        <div class="key-takeaway">
+          Statistics powers the modern world: from search engines to medical
+          diagnoses, from election forecasts to sports analytics.
+        </div>
+
+        <h3>Looking Ahead: Week 2</h3>
+        <div class="info-box">
+          <p>
+            <strong
+              >Next week, we'll dive deeper into Descriptive Statistics:</strong
+            >
+          </p>
+          <ul style="line-height: 2">
+            <li>Measures of Central Tendency (Mean, Median, Mode)</li>
+            <li>
+              Measures of Dispersion (Range, Variance, Standard Deviation, IQR)
+            </li>
+            <li>Data Visualization Techniques</li>
+            <li>Distribution Shapes and Their Meaning</li>
+            <li>Box Plots, Histograms, and Scatter Plots</li>
+          </ul>
+        </div>
+
+        <div class="quote">
+          "Statistical literacy is the ability to understand and reason with
+          statistics and data. It is a critical skill for informed citizenship
+          and effective decision-making."
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="section"
+        style="
+          background: #000000;
+          color: #ffffff;
+          text-align: center;
+          margin-bottom: 0;
+        "
+      >
+        <h3 style="color: #ffffff; border: none">
+          Continue Your Learning Journey
+        </h3>
+        <p>
+          You've completed Week 1! Ready to dive into Descriptive Statistics?
+        </p>
+        <div style="margin-top: 2rem">
+          <a
+            href="../Week2/FSPWeekTwoA.html"
+            style="
+              display: inline-block;
+              background: #ffffff;
+              color: #000000;
+              padding: 15px 30px;
+              text-decoration: none;
+              font-weight: bold;
+              margin: 10px;
+            "
+          >
+            <i class="fas fa-arrow-right"></i> Next: Week 2A
+          </a>
+          <a
+            href="../index.html"
+            style="
+              display: inline-block;
+              border: 2px solid #ffffff;
+              color: #ffffff;
+              padding: 15px 30px;
+              text-decoration: none;
+              font-weight: bold;
+              margin: 10px;
+            "
+          >
+            <i class="fas fa-home"></i> Back to Index
+          </a>
+        </div>
+        <div
+          style="
+            margin-top: 30px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            color: #888;
+          "
+        >
+          <a
+            href="../../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >Home</a
+          >
+          |
+          <a
+            href="../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >FSP Notes</a
+          >
+          |
+          <a
+            href="../../ATA/index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >ATA</a
+          >
+          |
+          <a
+            href="../../BDA/index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >BDA</a
+          >
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9em; color: #666">
+          Foundations of Statistics & Probability | Visual Learning Companion
+        </p>
+      </div>
     </div>
 
     <script>
-        // Chart 1: Statistics Application Areas
-        const ctx1 = document.getElementById('statsApplicationChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: ['Healthcare', 'Business', 'Sports', 'Technology', 'Government', 'Science'],
-                datasets: [{
-                    label: 'Statistical Usage Intensity (0-100)',
-                    data: [95, 90, 85, 98, 88, 92],
-                    backgroundColor: '#000000',
-                    borderColor: '#000000',
-                    borderWidth: 2
-                }]
+      // Chart 1: Statistics Application Areas
+      const ctx1 = document
+        .getElementById("statsApplicationChart")
+        .getContext("2d");
+      new Chart(ctx1, {
+        type: "bar",
+        data: {
+          labels: [
+            "Healthcare",
+            "Business",
+            "Sports",
+            "Technology",
+            "Government",
+            "Science",
+          ],
+          datasets: [
+            {
+              label: "Statistical Usage Intensity (0-100)",
+              data: [95, 90, 85, 98, 88, 92],
+              backgroundColor: "#000000",
+              borderColor: "#000000",
+              borderWidth: 2,
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: true },
-                    title: {
-                        display: true,
-                        text: 'Statistical Methods Usage Across Industries',
-                        font: { size: 18, family: 'Georgia' }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        title: { display: true, text: 'Usage Intensity' }
-                    }
-                }
-            }
-        });
-
-        // Chart 2: Experimental Design Effectiveness
-        const ctx2 = document.getElementById('experimentalDesignChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'radar',
-            data: {
-                labels: ['Control Group', 'Randomization', 'Replication', 'Blinding', 'Sample Size', 'Measurement Quality'],
-                datasets: [{
-                    label: 'Well-Designed Experiment',
-                    data: [95, 98, 90, 85, 88, 92],
-                    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                    borderColor: '#000000',
-                    borderWidth: 2
-                }, {
-                    label: 'Poor Design',
-                    data: [45, 30, 40, 20, 50, 35],
-                    backgroundColor: 'rgba(200, 200, 200, 0.2)',
-                    borderColor: '#999999',
-                    borderWidth: 2
-                }]
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true },
+            title: {
+              display: true,
+              text: "Statistical Methods Usage Across Industries",
+              font: { size: 18, family: "Georgia" },
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Experimental Design Quality Comparison',
-                        font: { size: 18, family: 'Georgia' }
-                    }
-                },
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100
-                    }
-                }
-            }
-        });
-
-        // Chart 3: Descriptive vs Inferential Split
-        const ctx3 = document.getElementById('statsTypeChart').getContext('2d');
-        new Chart(ctx3, {
-            type: 'doughnut',
-            data: {
-                labels: ['Descriptive Statistics', 'Inferential Statistics'],
-                datasets: [{
-                    data: [40, 60],
-                    backgroundColor: ['#000000', '#666666'],
-                    borderColor: '#ffffff',
-                    borderWidth: 3
-                }]
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              title: { display: true, text: "Usage Intensity" },
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom' },
-                    title: {
-                        display: true,
-                        text: 'Statistical Analysis Type Distribution in Research',
-                        font: { size: 18, family: 'Georgia' }
-                    }
-                }
-            }
-        });
+          },
+        },
+      });
 
-        // Chart 4: Sample Distribution Visualization
-        const ctx4 = document.getElementById('distributionChart').getContext('2d');
-        // Generate normal distribution data
-        const distributionData = [];
-        const distributionLabels = [];
-        for (let i = 22; i <= 99; i++) {
-            distributionLabels.push(i);
-            // Approximate normal distribution centered at 68.5
-            const x = i;
-            const mean = 68.5;
-            const stdDev = 15;
-            const y = Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2)) / (stdDev * Math.sqrt(2 * Math.PI));
-            distributionData.push(y * 1000); // Scale for visibility
-        }
-        
-        new Chart(ctx4, {
-            type: 'line',
-            data: {
-                labels: distributionLabels,
-                datasets: [{
-                    label: 'Test Score Distribution',
-                    data: distributionData,
-                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                    borderColor: '#000000',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4
-                }]
+      // Chart 2: Experimental Design Effectiveness
+      const ctx2 = document
+        .getElementById("experimentalDesignChart")
+        .getContext("2d");
+      new Chart(ctx2, {
+        type: "radar",
+        data: {
+          labels: [
+            "Control Group",
+            "Randomization",
+            "Replication",
+            "Blinding",
+            "Sample Size",
+            "Measurement Quality",
+          ],
+          datasets: [
+            {
+              label: "Well-Designed Experiment",
+              data: [95, 98, 90, 85, 88, 92],
+              backgroundColor: "rgba(0, 0, 0, 0.2)",
+              borderColor: "#000000",
+              borderWidth: 2,
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Normal Distribution of Student Test Scores (Mean=68.5, SD=15)',
-                        font: { size: 18, family: 'Georgia' }
-                    }
-                },
-                scales: {
-                    x: { title: { display: true, text: 'Test Score' } },
-                    y: { title: { display: true, text: 'Frequency' } }
-                }
-            }
-        });
-
-        // Chart 5: Population vs Sample Visualization
-        const ctx5 = document.getElementById('popSampleChart').getContext('2d');
-        new Chart(ctx5, {
-            type: 'bar',
-            data: {
-                labels: ['Population Size (N)', 'Sample Size (n)', 'Sample %'],
-                datasets: [{
-                    label: 'India Census',
-                    data: [1400000000, 1400000000, 100],
-                    backgroundColor: '#000000'
-                }, {
-                    label: 'NSSO Survey',
-                    data: [1400000000, 100000, 0.007],
-                    backgroundColor: '#666666'
-                }]
+            {
+              label: "Poor Design",
+              data: [45, 30, 40, 20, 50, 35],
+              backgroundColor: "rgba(200, 200, 200, 0.2)",
+              borderColor: "#999999",
+              borderWidth: 2,
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Census vs Sample Survey: Coverage Comparison',
-                        font: { size: 18, family: 'Georgia' }
-                    }
-                },
-                scales: {
-                    y: {
-                        type: 'logarithmic',
-                        title: { display: true, text: 'Scale (Logarithmic)' }
-                    }
-                }
-            }
-        });
-
-        // Chart 6: Sampling Bias Impact
-        const ctx6 = document.getElementById('biasChart').getContext('2d');
-        new Chart(ctx6, {
-            type: 'bar',
-            data: {
-                labels: ['Random Sample', 'Stratified Sample', 'Convenience Sample', 'Biased Sample (1936 Poll)'],
-                datasets: [{
-                    label: 'Prediction Accuracy %',
-                    data: [94, 96, 65, 38],
-                    backgroundColor: ['#000000', '#111111', '#888888', '#cc0000'],
-                    borderColor: '#000000',
-                    borderWidth: 2
-                }]
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Experimental Design Quality Comparison",
+              font: { size: 18, family: "Georgia" },
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Sampling Method Impact on Prediction Accuracy',
-                        font: { size: 18, family: 'Georgia' }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        title: { display: true, text: 'Accuracy %' }
-                    }
-                }
-            }
-        });
-
-        // Chart 7: Sample Size Requirements
-        const ctx7 = document.getElementById('sampleSizeChart').getContext('2d');
-        new Chart(ctx7, {
-            type: 'line',
-            data: {
-                labels: ['1K', '10K', '100K', '1M', '10M', '100M', '1B'],
-                datasets: [{
-                    label: 'Required Sample Size (95% CI, ±5% error)',
-                    data: [278, 370, 383, 384, 384, 385, 385],
-                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                    borderColor: '#000000',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.1
-                }]
+          },
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 100,
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Sample Size vs Population Size: The Surprising Relationship',
-                        font: { size: 18, family: 'Georgia' }
-                    }
-                },
-                scales: {
-                    x: { title: { display: true, text: 'Population Size' } },
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Required Sample Size' }
-                    }
-                }
-            }
-        });
+          },
+        },
+      });
 
-        // Interactive Demo Variables
-        let demoChart = null;
-        const TRUE_MEAN = 50;
-        const TRUE_SD = 10;
+      // Chart 3: Descriptive vs Inferential Split
+      const ctx3 = document.getElementById("statsTypeChart").getContext("2d");
+      new Chart(ctx3, {
+        type: "doughnut",
+        data: {
+          labels: ["Descriptive Statistics", "Inferential Statistics"],
+          datasets: [
+            {
+              data: [40, 60],
+              backgroundColor: ["#000000", "#666666"],
+              borderColor: "#ffffff",
+              borderWidth: 3,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: "bottom" },
+            title: {
+              display: true,
+              text: "Statistical Analysis Type Distribution in Research",
+              font: { size: 18, family: "Georgia" },
+            },
+          },
+        },
+      });
 
-        function generateRandomSample() {
-            const sampleSize = 100;
-            const sample = [];
-            
-            // Generate random sample from normal distribution
-            for (let i = 0; i < sampleSize; i++) {
-                // Box-Muller transform for normal distribution
-                const u1 = Math.random();
-                const u2 = Math.random();
-                const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-                sample.push(TRUE_MEAN + z * TRUE_SD);
-            }
-            
-            updateDemo(sample, 'random');
-        }
+      // Chart 4: Sample Distribution Visualization
+      const ctx4 = document
+        .getElementById("distributionChart")
+        .getContext("2d");
+      // Generate normal distribution data
+      const distributionData = [];
+      const distributionLabels = [];
+      for (let i = 22; i <= 99; i++) {
+        distributionLabels.push(i);
+        // Approximate normal distribution centered at 68.5
+        const x = i;
+        const mean = 68.5;
+        const stdDev = 15;
+        const y =
+          Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2)) /
+          (stdDev * Math.sqrt(2 * Math.PI));
+        distributionData.push(y * 1000); // Scale for visibility
+      }
 
-        function generateBiasedSample() {
-            const sampleSize = 100;
-            const sample = [];
-            const BIAS = 10; // Biased towards higher values
-            
-            // Generate biased sample (selecting from upper tail)
-            for (let i = 0; i < sampleSize; i++) {
-                const u1 = Math.random();
-                const u2 = Math.random();
-                const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-                sample.push(TRUE_MEAN + BIAS + z * TRUE_SD);
-            }
-            
-            updateDemo(sample, 'biased');
-        }
+      new Chart(ctx4, {
+        type: "line",
+        data: {
+          labels: distributionLabels,
+          datasets: [
+            {
+              label: "Test Score Distribution",
+              data: distributionData,
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              borderColor: "#000000",
+              borderWidth: 2,
+              fill: true,
+              tension: 0.4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Normal Distribution of Student Test Scores (Mean=68.5, SD=15)",
+              font: { size: 18, family: "Georgia" },
+            },
+          },
+          scales: {
+            x: { title: { display: true, text: "Test Score" } },
+            y: { title: { display: true, text: "Frequency" } },
+          },
+        },
+      });
 
-        function generateMultipleSamples() {
-            const numSamples = 50;
-            const sampleSize = 100;
-            const sampleMeans = [];
-            
-            for (let s = 0; s < numSamples; s++) {
-                let sum = 0;
-                for (let i = 0; i < sampleSize; i++) {
-                    const u1 = Math.random();
-                    const u2 = Math.random();
-                    const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-                    sum += TRUE_MEAN + z * TRUE_SD;
-                }
-                sampleMeans.push(sum / sampleSize);
-            }
-            
-            updateDemo(sampleMeans, 'multiple');
-        }
+      // Chart 5: Population vs Sample Visualization
+      const ctx5 = document.getElementById("popSampleChart").getContext("2d");
+      new Chart(ctx5, {
+        type: "bar",
+        data: {
+          labels: ["Population Size (N)", "Sample Size (n)", "Sample %"],
+          datasets: [
+            {
+              label: "India Census",
+              data: [1400000000, 1400000000, 100],
+              backgroundColor: "#000000",
+            },
+            {
+              label: "NSSO Survey",
+              data: [1400000000, 100000, 0.007],
+              backgroundColor: "#666666",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Census vs Sample Survey: Coverage Comparison",
+              font: { size: 18, family: "Georgia" },
+            },
+          },
+          scales: {
+            y: {
+              type: "logarithmic",
+              title: { display: true, text: "Scale (Logarithmic)" },
+            },
+          },
+        },
+      });
 
-        function updateDemo(data, type) {
-            const mean = data.reduce((a, b) => a + b, 0) / data.length;
-            const variance = data.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / data.length;
-            const stdDev = Math.sqrt(variance);
-            const bias = ((mean - TRUE_MEAN) / TRUE_MEAN) * 100;
-            const marginOfError = 1.96 * (stdDev / Math.sqrt(data.length));
-            
-            // Update stats display
-            document.getElementById('sampleSize').textContent = data.length;
-            document.getElementById('sampleMean').textContent = mean.toFixed(2);
-            document.getElementById('bias').textContent = bias.toFixed(2) + '%';
-            document.getElementById('stdDev').textContent = stdDev.toFixed(2);
-            document.getElementById('errorMargin').textContent = '±' + marginOfError.toFixed(2);
-            
-            // Update interpretation
-            const interpDiv = document.getElementById('interpretation');
-            const interpText = document.getElementById('interpretationText');
-            interpDiv.style.display = 'block';
-            
-            if (type === 'random') {
-                interpText.innerHTML = `<strong>Random Sampling:</strong> Your sample mean (${mean.toFixed(2)}) is very close to the true population mean (${TRUE_MEAN}), with only ${Math.abs(bias).toFixed(2)}% bias. This demonstrates the power of proper random sampling—even with just ${data.length} observations, we get reliable estimates!`;
-            } else if (type === 'biased') {
-                interpText.innerHTML = `<strong>Biased Sampling:</strong> Your sample mean (${mean.toFixed(2)}) is significantly different from the true population mean (${TRUE_MEAN}), showing ${Math.abs(bias).toFixed(2)}% bias. This illustrates how selection bias systematically distorts results, similar to the 1936 Literary Digest poll disaster!`;
-            } else {
-                interpText.innerHTML = `<strong>Multiple Samples (Central Limit Theorem):</strong> The distribution of ${data.length} sample means centers around ${mean.toFixed(2)}, very close to the true mean of ${TRUE_MEAN}. The standard deviation of ${stdDev.toFixed(2)} shows the precision of our estimates. This is the foundation of inferential statistics!`;
-            }
-            
-            // Create/update chart
-            const ctx = document.getElementById('demoChart').getContext('2d');
-            if (demoChart) {
-                demoChart.destroy();
-            }
-            
-            // Create histogram bins
-            const bins = 20;
-            const min = Math.min(...data);
-            const max = Math.max(...data);
-            const binWidth = (max - min) / bins;
-            const histogram = new Array(bins).fill(0);
-            const binLabels = [];
-            
-            for (let i = 0; i < bins; i++) {
-                binLabels.push((min + i * binWidth).toFixed(1));
-            }
-            
-            data.forEach(value => {
-                const binIndex = Math.min(Math.floor((value - min) / binWidth), bins - 1);
-                histogram[binIndex]++;
-            });
-            
-            demoChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: binLabels,
-                    datasets: [{
-                        label: 'Frequency',
-                        data: histogram,
-                        backgroundColor: type === 'biased' ? '#cc0000' : '#000000',
-                        borderColor: '#000000',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: type === 'multiple' ? 'Distribution of Sample Means' : 'Sample Data Distribution',
-                            font: { size: 16, family: 'Georgia' }
-                        },
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: { title: { display: true, text: 'Value' } },
-                        y: { title: { display: true, text: 'Frequency' }, beginAtZero: true }
-                    }
-                }
-            });
+      // Chart 6: Sampling Bias Impact
+      const ctx6 = document.getElementById("biasChart").getContext("2d");
+      new Chart(ctx6, {
+        type: "bar",
+        data: {
+          labels: [
+            "Random Sample",
+            "Stratified Sample",
+            "Convenience Sample",
+            "Biased Sample (1936 Poll)",
+          ],
+          datasets: [
+            {
+              label: "Prediction Accuracy %",
+              data: [94, 96, 65, 38],
+              backgroundColor: ["#000000", "#111111", "#888888", "#cc0000"],
+              borderColor: "#000000",
+              borderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Sampling Method Impact on Prediction Accuracy",
+              font: { size: 18, family: "Georgia" },
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              title: { display: true, text: "Accuracy %" },
+            },
+          },
+        },
+      });
+
+      // Chart 7: Sample Size Requirements
+      const ctx7 = document.getElementById("sampleSizeChart").getContext("2d");
+      new Chart(ctx7, {
+        type: "line",
+        data: {
+          labels: ["1K", "10K", "100K", "1M", "10M", "100M", "1B"],
+          datasets: [
+            {
+              label: "Required Sample Size (95% CI, ±5% error)",
+              data: [278, 370, 383, 384, 384, 385, 385],
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              borderColor: "#000000",
+              borderWidth: 3,
+              fill: true,
+              tension: 0.1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Sample Size vs Population Size: The Surprising Relationship",
+              font: { size: 18, family: "Georgia" },
+            },
+          },
+          scales: {
+            x: { title: { display: true, text: "Population Size" } },
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: "Required Sample Size" },
+            },
+          },
+        },
+      });
+
+      // Interactive Demo Variables
+      let demoChart = null;
+      const TRUE_MEAN = 50;
+      const TRUE_SD = 10;
+
+      function generateRandomSample() {
+        const sampleSize = 100;
+        const sample = [];
+
+        // Generate random sample from normal distribution
+        for (let i = 0; i < sampleSize; i++) {
+          // Box-Muller transform for normal distribution
+          const u1 = Math.random();
+          const u2 = Math.random();
+          const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+          sample.push(TRUE_MEAN + z * TRUE_SD);
         }
 
-        function resetDemo() {
-            document.getElementById('sampleSize').textContent = '0';
-            document.getElementById('sampleMean').textContent = '0.0';
-            document.getElementById('bias').textContent = '0.0%';
-            document.getElementById('stdDev').textContent = '0.0';
-            document.getElementById('errorMargin').textContent = '0.0';
-            document.getElementById('interpretation').style.display = 'none';
-            
-            if (demoChart) {
-                demoChart.destroy();
-                demoChart = null;
-            }
-            
-            const ctx = document.getElementById('demoChart').getContext('2d');
-            demoChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Frequency',
-                        data: [],
-                        backgroundColor: '#000000'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Click a button above to generate sample data',
-                            font: { size: 16, family: 'Georgia' }
-                        }
-                    }
-                }
-            });
+        updateDemo(sample, "random");
+      }
+
+      function generateBiasedSample() {
+        const sampleSize = 100;
+        const sample = [];
+        const BIAS = 10; // Biased towards higher values
+
+        // Generate biased sample (selecting from upper tail)
+        for (let i = 0; i < sampleSize; i++) {
+          const u1 = Math.random();
+          const u2 = Math.random();
+          const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+          sample.push(TRUE_MEAN + BIAS + z * TRUE_SD);
         }
 
-        // Mobile Navigation Toggle
-        const navToggle = document.getElementById('navToggle');
-        const navMenu = document.getElementById('navMenu');
+        updateDemo(sample, "biased");
+      }
 
-        if (navToggle) {
-            navToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-            });
+      function generateMultipleSamples() {
+        const numSamples = 50;
+        const sampleSize = 100;
+        const sampleMeans = [];
 
-            // Close menu when clicking on a link
-            const navLinks = document.querySelectorAll('.nav-menu li a');
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('active');
-                });
-            });
+        for (let s = 0; s < numSamples; s++) {
+          let sum = 0;
+          for (let i = 0; i < sampleSize; i++) {
+            const u1 = Math.random();
+            const u2 = Math.random();
+            const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+            sum += TRUE_MEAN + z * TRUE_SD;
+          }
+          sampleMeans.push(sum / sampleSize);
         }
 
-        // Initialize demo on page load
-        window.addEventListener('load', resetDemo);
+        updateDemo(sampleMeans, "multiple");
+      }
+
+      function updateDemo(data, type) {
+        const mean = data.reduce((a, b) => a + b, 0) / data.length;
+        const variance =
+          data.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / data.length;
+        const stdDev = Math.sqrt(variance);
+        const bias = ((mean - TRUE_MEAN) / TRUE_MEAN) * 100;
+        const marginOfError = 1.96 * (stdDev / Math.sqrt(data.length));
+
+        // Update stats display
+        document.getElementById("sampleSize").textContent = data.length;
+        document.getElementById("sampleMean").textContent = mean.toFixed(2);
+        document.getElementById("bias").textContent = bias.toFixed(2) + "%";
+        document.getElementById("stdDev").textContent = stdDev.toFixed(2);
+        document.getElementById("errorMargin").textContent =
+          "±" + marginOfError.toFixed(2);
+
+        // Update interpretation
+        const interpDiv = document.getElementById("interpretation");
+        const interpText = document.getElementById("interpretationText");
+        interpDiv.style.display = "block";
+
+        if (type === "random") {
+          interpText.innerHTML = `<strong>Random Sampling:</strong> Your sample mean (${mean.toFixed(
+            2
+          )}) is very close to the true population mean (${TRUE_MEAN}), with only ${Math.abs(
+            bias
+          ).toFixed(
+            2
+          )}% bias. This demonstrates the power of proper random sampling—even with just ${
+            data.length
+          } observations, we get reliable estimates!`;
+        } else if (type === "biased") {
+          interpText.innerHTML = `<strong>Biased Sampling:</strong> Your sample mean (${mean.toFixed(
+            2
+          )}) is significantly different from the true population mean (${TRUE_MEAN}), showing ${Math.abs(
+            bias
+          ).toFixed(
+            2
+          )}% bias. This illustrates how selection bias systematically distorts results, similar to the 1936 Literary Digest poll disaster!`;
+        } else {
+          interpText.innerHTML = `<strong>Multiple Samples (Central Limit Theorem):</strong> The distribution of ${
+            data.length
+          } sample means centers around ${mean.toFixed(
+            2
+          )}, very close to the true mean of ${TRUE_MEAN}. The standard deviation of ${stdDev.toFixed(
+            2
+          )} shows the precision of our estimates. This is the foundation of inferential statistics!`;
+        }
+
+        // Create/update chart
+        const ctx = document.getElementById("demoChart").getContext("2d");
+        if (demoChart) {
+          demoChart.destroy();
+        }
+
+        // Create histogram bins
+        const bins = 20;
+        const min = Math.min(...data);
+        const max = Math.max(...data);
+        const binWidth = (max - min) / bins;
+        const histogram = new Array(bins).fill(0);
+        const binLabels = [];
+
+        for (let i = 0; i < bins; i++) {
+          binLabels.push((min + i * binWidth).toFixed(1));
+        }
+
+        data.forEach((value) => {
+          const binIndex = Math.min(
+            Math.floor((value - min) / binWidth),
+            bins - 1
+          );
+          histogram[binIndex]++;
+        });
+
+        demoChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: binLabels,
+            datasets: [
+              {
+                label: "Frequency",
+                data: histogram,
+                backgroundColor: type === "biased" ? "#cc0000" : "#000000",
+                borderColor: "#000000",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text:
+                  type === "multiple"
+                    ? "Distribution of Sample Means"
+                    : "Sample Data Distribution",
+                font: { size: 16, family: "Georgia" },
+              },
+              legend: { display: false },
+            },
+            scales: {
+              x: { title: { display: true, text: "Value" } },
+              y: {
+                title: { display: true, text: "Frequency" },
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+
+      function resetDemo() {
+        document.getElementById("sampleSize").textContent = "0";
+        document.getElementById("sampleMean").textContent = "0.0";
+        document.getElementById("bias").textContent = "0.0%";
+        document.getElementById("stdDev").textContent = "0.0";
+        document.getElementById("errorMargin").textContent = "0.0";
+        document.getElementById("interpretation").style.display = "none";
+
+        if (demoChart) {
+          demoChart.destroy();
+          demoChart = null;
+        }
+
+        const ctx = document.getElementById("demoChart").getContext("2d");
+        demoChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: [],
+            datasets: [
+              {
+                label: "Frequency",
+                data: [],
+                backgroundColor: "#000000",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Click a button above to generate sample data",
+                font: { size: 16, family: "Georgia" },
+              },
+            },
+          },
+        });
+      }
+
+      // Mobile Navigation Toggle
+
+      // Initialize demo on page load
+      window.addEventListener("load", resetDemo);
     </script>
-</body>
+  </body>
 </html>

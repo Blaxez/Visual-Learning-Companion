@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descriptive Statistics - Week 2 Visual Notebook</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="../../styles/navbar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -23,72 +24,13 @@
             scroll-behavior: smooth;
         }
 
-        /* Navigation Bar */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: #000000;
-            color: #ffffff;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-        }
-
-        .nav-logo {
-            font-size: 1.3em;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: #ffffff;
-            text-decoration: none;
-        }
-
-        .nav-logo i {
-            margin-right: 8px;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 5px;
-        }
-
-        .nav-menu li a {
-            color: #ffffff;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            transition: all 0.3s;
-            font-size: 0.95em;
-            display: block;
-        }
-
-        .nav-menu li a:hover {
-            background: #ffffff;
-            color: #000000;
-        }
-
-        .nav-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: #ffffff;
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 5px 10px;
-        }
-
-        .nav-toggle:hover {
-            color: #cccccc;
+        /* Navigation Bar Overrides */
+        :root {
+            --nav-bg-glass: rgba(0, 0, 0, 0.9);
+            --nav-border-glass: rgba(255, 255, 255, 0.1);
+            --nav-text-color: #ffffff;
+            --nav-active-color: #3b82f6;
+            --nav-hover-bg: rgba(255, 255, 255, 0.1);
         }
 
         .container {
@@ -620,15 +562,6 @@
                 padding: 70px 15px 15px;
             }
 
-            .nav-menu {
-                gap: 3px;
-            }
-
-            .nav-menu li a {
-                padding: 6px 12px;
-                font-size: 0.9em;
-            }
-
             .section {
                 padding: 40px 30px;
             }
@@ -646,37 +579,6 @@
         @media (max-width: 768px) {
             body {
                 padding: 70px 10px 10px;
-            }
-
-            /* Mobile Navigation */
-            .nav-toggle {
-                display: block;
-            }
-
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 60px;
-                flex-direction: column;
-                background-color: #000000;
-                width: 100%;
-                text-align: left;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-                gap: 0;
-            }
-
-            .nav-menu.active {
-                left: 0;
-            }
-
-            .nav-menu li {
-                border-bottom: 1px solid #333;
-            }
-
-            .nav-menu li a {
-                padding: 15px 20px;
-                font-size: 1em;
             }
 
             /* Layout Adjustments */
@@ -829,23 +731,34 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="../index.html" class="nav-logo">
-                <i class="fas fa-chart-line"></i>
-                FSP Week 2A
+    <nav class="modern-nav">
+        <div class="nav-inner">
+            <a href="../../index.html" class="nav-brand">
+                <i class="fas fa-layer-group"></i>
+                <span>Notes App</span>
             </a>
-            <button class="nav-toggle" id="navToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#overview">Data Org</a></li>
-                <li><a href="#visualization">Visualization</a></li>
-                <li><a href="#relative-freq">Relative Freq</a></li>
-                <li><a href="#histograms">Histograms</a></li>
-                <li><a href="#cumulative">Cumulative</a></li>
-                <li><a href="#applications">Applications</a></li>
-            </ul>
+            <div class="nav-links">
+                <a href="../../index.html" class="nav-item">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="../index.html" class="nav-item active">
+                    <i class="fas fa-chart-line"></i>
+                    <span>FSP</span>
+                </a>
+                <a href="../../ATA/index.html" class="nav-item">
+                    <i class="fas fa-code-branch"></i>
+                    <span>ATA</span>
+                </a>
+                <a href="../../BDA/index.html" class="nav-item">
+                    <i class="fas fa-database"></i>
+                    <span>BDA</span>
+                </a>
+                <a href="../../LANA/index.html" class="nav-item">
+                    <i class="fas fa-square-root-alt"></i>
+                    <span>LANA</span>
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -1204,24 +1117,6 @@
     </div>
 
     <script>
-        // Mobile Navigation Toggle
-        const navToggle = document.getElementById('navToggle');
-        const navMenu = document.getElementById('navMenu');
-
-        if (navToggle) {
-            navToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-            });
-
-            // Close menu when clicking on a link
-            const navLinks = document.querySelectorAll('.nav-menu li a');
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    navMenu.classList.remove('active');
-                });
-            });
-        }
-
         // --- Chart 1: Streaming Platforms (Bar/Pie/Doughnut) ---
         const ctx1 = document.getElementById('mainChart').getContext('2d');
         let mainChart = new Chart(ctx1, {

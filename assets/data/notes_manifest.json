@@ -1,0 +1,55 @@
+{
+  "FSP": [
+    {
+      "id": "1",
+      "title": "FOUNDATIONS OF STATISTICS & PROBABILITY",
+      "description": "Statistics is not merely a collection of mathematical formulas—it is the art and science of transforming raw data into meaningful insights that dri...",
+      "week": "Week 1",
+      "topics": [
+        "Statistics",
+        "Probability"
+      ],
+      "url": "Week1/FSPWeekOne.html",
+      "status": "Complete"
+    },
+    {
+      "id": "2A",
+      "title": "Descriptive Statistics",
+      "description": "Welcome to Week 2A! We explore Descriptive Statistics, learning how to organize, visualize, and interpret data to uncover hidden patterns and stories.",
+      "week": "Week 2A",
+      "topics": [
+        "Statistics",
+        "Probability"
+      ],
+      "url": "Week2/FSPWeekTwoA.html",
+      "status": "Complete"
+    },
+    {
+      "id": "2B",
+      "title": "Measures of Central Tendency",
+      "description": "Welcome to Week 2B! We dive into the \"Heart of Data\" by exploring Measures of Central Tendency. We will learn how to find the single value that bes...",
+      "week": "Week 2B",
+      "topics": [
+        "Statistics",
+        "Probability"
+      ],
+      "url": "Week2/FSPWeekTwoB.html",
+      "status": "Complete"
+    },
+    {
+      "id": "2C",
+      "title": "Descriptive Statistics",
+      "description": "Descriptive statistics helps us summarize and understand our data. While the Mean gives us the central value, Measures of Dispersion (Variance and ...",
+      "week": "Week 2C",
+      "topics": [
+        "Statistics",
+        "Probability"
+      ],
+      "url": "Week2/FSPWeekTwoC.html",
+      "status": "Complete"
+    }
+  ],
+  "ATA": [],
+  "BDA": [],
+  "LANA": []
+}

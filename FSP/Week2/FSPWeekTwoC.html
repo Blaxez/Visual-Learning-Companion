@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Measures of Dispersion - Week 2C Visual Notebook</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="../../styles/navbar.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Georgia", "Times New Roman", serif;
+        background: #ffffff;
+        color: #1a1a1a;
+        line-height: 1.8;
+        padding: 20px;
+        padding-top: 80px; /* Space for fixed nav */
+        scroll-behavior: smooth;
+      }
+
+      /* Navigation Bar Overrides */
+      :root {
+        --nav-bg-glass: rgba(0, 0, 0, 0.9);
+        --nav-border-glass: rgba(255, 255, 255, 0.1);
+        --nav-text-color: #ffffff;
+        --nav-active-color: #3b82f6;
+        --nav-hover-bg: rgba(255, 255, 255, 0.1);
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: #000000;
+        color: #ffffff;
+        padding: 60px 40px;
+        margin-bottom: 40px;
+        border: 3px solid #000000;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 3em;
+        margin-bottom: 15px;
+        font-weight: 300;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .header p {
+        font-size: 1.3em;
+        font-weight: 300;
+        margin: 10px 0;
+      }
+
+      .section {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 50px;
+        margin-bottom: 40px;
+        position: relative;
+      }
+
+      .section::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: -10px;
+        bottom: -10px;
+        background: #f5f5f5;
+        z-index: -1;
+      }
+
+      .section h2 {
+        color: #000000;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        border-bottom: 4px solid #000000;
+        padding-bottom: 15px;
+        font-weight: 400;
+        letter-spacing: 1px;
+      }
+
+      .section h3 {
+        color: #000000;
+        font-size: 1.8em;
+        margin: 35px 0 20px 0;
+        font-weight: 400;
+        border-left: 6px solid #000000;
+        padding-left: 20px;
+      }
+
+      .section h4 {
+        color: #000000;
+        font-size: 1.4em;
+        margin: 25px 0 15px 0;
+        font-weight: 500;
+      }
+
+      .intro-text {
+        font-size: 1.2em;
+        line-height: 2;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-left: 4px solid #000000;
+      }
+
+      .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin: 30px 0;
+      }
+
+      .comparison-card {
+        background: #ffffff;
+        padding: 30px;
+        border: 3px solid #000000;
+        position: relative;
+        transition: all 0.3s;
+      }
+
+      .comparison-card::before {
+        content: "";
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        right: -8px;
+        bottom: -8px;
+        background: #f0f0f0;
+        z-index: -1;
+      }
+
+      .comparison-card:hover {
+        transform: translate(-5px, -5px);
+      }
+
+      .comparison-card h4 {
+        color: #000000;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        border-bottom: 2px solid #000000;
+        padding-bottom: 10px;
+      }
+
+      .example-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .example-box::before {
+        content: "EXAMPLE";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .interactive-demo {
+        background: #fafafa;
+        padding: 40px;
+        border: 3px solid #000000;
+        margin: 30px 0;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 400px;
+        margin: 40px 0;
+        padding: 30px;
+        background: #fafafa;
+        border: 2px solid #e0e0e0;
+      }
+
+      .definition-box {
+        background: #f5f5f5;
+        border-left: 8px solid #000000;
+        padding: 25px;
+        margin: 25px 0;
+        font-style: italic;
+      }
+
+      .formula-box {
+        background: #000000;
+        color: #ffffff;
+        padding: 20px;
+        margin: 20px 0;
+        font-family: "Courier New", monospace;
+        font-size: 1.2em;
+        text-align: center;
+        border-radius: 4px;
+      }
+
+      .step-list {
+        list-style: none;
+        counter-reset: step-counter;
+      }
+
+      .step-list li {
+        counter-increment: step-counter;
+        margin-bottom: 20px;
+        padding-left: 50px;
+        position: relative;
+      }
+
+      .step-list li::before {
+        content: counter(step-counter);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 35px;
+        height: 35px;
+        background: #000000;
+        color: #ffffff;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 35px;
+        font-weight: bold;
+      }
+
+      /* Simulator Styles */
+      .simulator-controls {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .simulator-btn {
+        background: #000000;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: all 0.3s;
+      }
+
+      .simulator-btn:hover {
+        background: #333;
+      }
+
+      .stat-display {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+
+      /* Mobile Styles */
+      @media (max-width: 768px) {
+        body {
+          padding: 70px 10px 10px;
+        }
+        .header h1 {
+          font-size: 1.8em;
+        }
+        .section {
+          padding: 30px 15px;
+        }
+        .comparison-grid {
+          grid-template-columns: 1fr;
+        }
+        .chart-container {
+          height: 300px;
+          padding: 10px;
+        }
+        .stat-display {
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="modern-nav">
+      <div class="nav-inner">
+        <a href="../../index.html" class="nav-brand">
+          <i class="fas fa-layer-group"></i>
+          <span>Notes App</span>
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+          </a>
+          <a href="../index.html" class="nav-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>FSP</span>
+          </a>
+          <a href="../../ATA/index.html" class="nav-item">
+            <i class="fas fa-code-branch"></i>
+            <span>ATA</span>
+          </a>
+          <a href="../../BDA/index.html" class="nav-item">
+            <i class="fas fa-database"></i>
+            <span>BDA</span>
+          </a>
+          <a href="../../LANA/index.html" class="nav-item">
+            <i class="fas fa-square-root-alt"></i>
+            <span>LANA</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <h1>Descriptive Statistics</h1>
+        <p>Week 2C: Measures of Dispersion & Variance</p>
+        <p style="font-style: italic; margin-top: 20px">
+          "The mean tells you the story, but the variance tells you how true it
+          is."
+        </p>
+      </div>
+
+      <!-- Overview Section -->
+      <div class="section">
+        <h2>Overview: Painting with Numbers</h2>
+        <div class="intro-text">
+          Descriptive statistics helps us summarize and understand our data.
+          While the <strong>Mean</strong> gives us the central value,
+          <strong>Measures of Dispersion</strong> (Variance and Standard
+          Deviation) tell us how spread out that data is. Together, they paint a
+          complete picture.
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h4><i class="fas fa-bullseye"></i> Central Tendency</h4>
+            <p>Where is the center?</p>
+            <ul>
+              <li>Mean (Average)</li>
+              <li>Median (Middle)</li>
+              <li>Mode (Frequent)</li>
+            </ul>
+          </div>
+          <div class="comparison-card">
+            <h4><i class="fas fa-arrows-left-right"></i> Dispersion</h4>
+            <p>How spread out is it?</p>
+            <ul>
+              <li>Range</li>
+              <li>Variance</li>
+              <li>Standard Deviation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- The Mean Recap -->
+      <div class="section">
+        <h2>1. The Mean: A Quick Recap</h2>
+        <div class="definition-box">
+          <strong>Definition:</strong> The sum of all values divided by the
+          total number of values. It represents the "balancing point" of the
+          data.
+        </div>
+        <div class="formula-box">μ = Σx / N</div>
+        <p>
+          Imagine a seesaw. The mean is the fulcrum where the board balances
+          perfectly.
+        </p>
+      </div>
+
+      <!-- Frequency Distribution -->
+      <div class="section">
+        <h2>2. Frequency Distribution & Visualization</h2>
+        <div class="intro-text">
+          A frequency distribution shows how often each value (or range of
+          values) appears in a dataset. We visualize this using a
+          <strong>Histogram</strong>.
+        </div>
+
+        <div class="example-box">
+          <h4>Example: Student Marks</h4>
+          <p>Marks: 60, 70, 80, 90, 100</p>
+          <div class="chart-container">
+            <canvas id="freqChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Measures of Dispersion -->
+      <div class="section">
+        <h2>3. Measures of Dispersion: Variance & SD</h2>
+        <div class="intro-text">
+          Why do we need dispersion? Consider two classes with the same average
+          score of 80. Class A has scores {80, 80, 80}, while Class B has {60,
+          80, 100}. The mean is the same, but the <strong>spread</strong> is
+          very different!
+        </div>
+
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h4><i class="fas fa-shield-alt"></i> Variance (σ²)</h4>
+            <p>
+              The average of the <strong>squared</strong> differences from the
+              Mean.
+            </p>
+            <p>
+              <em>Why squared?</em> To make negative differences positive so
+              they don't cancel out.
+            </p>
+          </div>
+          <div class="comparison-card">
+            <h4>
+              <i class="fas fa-ruler-combined"></i> Standard Deviation (σ)
+            </h4>
+            <p>The square root of the Variance.</p>
+            <p>
+              <em>Why square root?</em> To bring the unit back to the original
+              data unit (e.g., from "marks squared" back to "marks").
+            </p>
+          </div>
+        </div>
+
+        <h3>Population vs. Sample</h3>
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h4>Population (N)</h4>
+            <p>When you have data for the <strong>entire</strong> group.</p>
+            <div class="formula-box" style="font-size: 0.9em">
+              σ² = Σ(x - μ)² / N
+            </div>
+          </div>
+          <div class="comparison-card">
+            <h4>Sample (n-1)</h4>
+            <p>When you have a <strong>subset</strong> of the data.</p>
+            <div class="formula-box" style="font-size: 0.9em">
+              s² = Σ(x - x̄)² / (n - 1)
+            </div>
+            <p style="font-size: 0.8em; color: #666">
+              *Dividing by n-1 (Bessel's Correction) corrects for bias.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step-by-Step Calculation -->
+      <div class="section">
+        <h2>4. Step-by-Step Calculation</h2>
+        <div class="example-box">
+          <h4>Calculate Sample Variance for: {70, 75, 80, 85, 90}</h4>
+          <ul class="step-list">
+            <li>
+              <strong>Calculate Mean (x̄):</strong><br />
+              (70 + 75 + 80 + 85 + 90) / 5 = <strong>80</strong>
+            </li>
+            <li>
+              <strong>Calculate Deviations (x - x̄):</strong><br />
+              -10, -5, 0, 5, 10
+            </li>
+            <li>
+              <strong>Square Deviations (x - x̄)²:</strong><br />
+              100, 25, 0, 25, 100
+            </li>
+            <li>
+              <strong>Sum of Squares:</strong><br />
+              100 + 25 + 0 + 25 + 100 = <strong>250</strong>
+            </li>
+            <li>
+              <strong>Divide by (n-1):</strong><br />
+              250 / (5 - 1) = 250 / 4 = <strong>62.5</strong> (Variance)
+            </li>
+            <li>
+              <strong>Square Root:</strong><br />
+              √62.5 ≈ <strong>7.91</strong> (Standard Deviation)
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Interactive Simulator -->
+      <div class="section">
+        <h2>Interactive Spread Simulator</h2>
+        <div class="intro-text">
+          See how changing data points affects the Mean and Standard Deviation.
+          Notice how "outliers" (values far from the center) pull the mean and
+          drastically increase the SD.
+        </div>
+
+        <div class="interactive-demo">
+          <div class="chart-container" style="height: 300px">
+            <canvas id="simChart"></canvas>
+          </div>
+
+          <div class="stat-display">
+            <span>Mean: <span id="simMean">0</span></span>
+            <span>Std Dev: <span id="simSD">0</span></span>
+          </div>
+
+          <div class="simulator-controls" style="margin-top: 20px">
+            <button class="simulator-btn" onclick="updateSim('tight')">
+              Tight Cluster
+            </button>
+            <button class="simulator-btn" onclick="updateSim('spread')">
+              Wide Spread
+            </button>
+            <button class="simulator-btn" onclick="updateSim('outlier')">
+              Add Outlier
+            </button>
+            <button class="simulator-btn" onclick="updateSim('random')">
+              Randomize
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real World Applications -->
+      <div class="section">
+        <h2>Real-World Applications</h2>
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h4><i class="fas fa-envelope-open-text"></i> Spam Detection</h4>
+            <p>
+              Email filters calculate the mean frequency of words. If a new
+              email deviates significantly (high SD) from normal patterns, it's
+              flagged as spam.
+            </p>
+          </div>
+          <div class="comparison-card">
+            <h4><i class="fas fa-chart-line"></i> Stock Market</h4>
+            <p>
+              <strong>Volatility</strong> is just Standard Deviation! High SD
+              means high risk (price swings wildly), while low SD means a stable
+              stock.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="section"
+        style="
+          background: #000000;
+          color: #ffffff;
+          text-align: center;
+          margin-bottom: 0;
+        "
+      >
+        <h3 style="color: #ffffff; border: none">
+          Continue Your Learning Journey
+        </h3>
+        <p>You've mastered the basics of Dispersion! Next up: Probability.</p>
+        <div style="margin-top: 2rem">
+          <a
+            href="#"
+            style="
+              display: inline-block;
+              background: #333;
+              color: #888;
+              padding: 15px 30px;
+              text-decoration: none;
+              font-weight: bold;
+              margin: 10px;
+              cursor: not-allowed;
+            "
+          >
+            <i class="fas fa-lock"></i> Next: Week 3 (Coming Soon)
+          </a>
+          <a
+            href="FSPWeekTwoB.html"
+            style="
+              display: inline-block;
+              border: 2px solid #ffffff;
+              color: #ffffff;
+              padding: 15px 30px;
+              text-decoration: none;
+              font-weight: bold;
+              margin: 10px;
+            "
+          >
+            <i class="fas fa-arrow-left"></i> Previous: Week 2B
+          </a>
+        </div>
+        <div
+          style="
+            margin-top: 30px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            color: #888;
+          "
+        >
+          <a
+            href="../../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >Home</a
+          >
+          |
+          <a
+            href="../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >FSP Notes</a
+          >
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9em; color: #666">
+          Foundations of Statistics & Probability | Visual Learning Companion
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // --- Chart 1: Frequency Distribution ---
+      const ctx1 = document.getElementById("freqChart").getContext("2d");
+      new Chart(ctx1, {
+        type: "bar",
+        data: {
+          labels: ["60-69", "70-79", "80-89", "90-99", "100-109"],
+          datasets: [
+            {
+              label: "Frequency",
+              data: [1, 1, 1, 1, 1],
+              backgroundColor: "rgba(0, 0, 0, 0.8)",
+              barPercentage: 1.0,
+              categoryPercentage: 1.0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: "Uniform Distribution of Marks" },
+          },
+          scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1 } },
+          },
+        },
+      });
+
+      // --- Simulator Logic ---
+      const simCtx = document.getElementById("simChart").getContext("2d");
+      let simData = [45, 48, 50, 52, 55]; // Initial tight cluster
+
+      let simChart = new Chart(simCtx, {
+        type: "scatter",
+        data: {
+          datasets: [
+            {
+              label: "Data Points",
+              data: simData.map((v, i) => ({ x: v, y: 0 })), // Plot on line
+              backgroundColor: "rgba(59, 130, 246, 1)",
+              pointRadius: 8,
+              pointHoverRadius: 10,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return `Value: ${context.raw.x}`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              min: 0,
+              max: 100,
+              title: { display: true, text: "Value" },
+            },
+            y: {
+              display: false,
+              min: -1,
+              max: 1,
+            },
+          },
+        },
+      });
+
+      function calculateStats(data) {
+        const n = data.length;
+        const mean = data.reduce((a, b) => a + b, 0) / n;
+        const variance =
+          data.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / (n - 1);
+        const sd = Math.sqrt(variance);
+        return { mean, sd };
+      }
+
+      function updateDisplay(data) {
+        const stats = calculateStats(data);
+        document.getElementById("simMean").innerText = stats.mean.toFixed(2);
+        document.getElementById("simSD").innerText = stats.sd.toFixed(2);
+
+        simChart.data.datasets[0].data = data.map((v, i) => ({ x: v, y: 0 }));
+        simChart.update();
+      }
+
+      function updateSim(mode) {
+        let newData = [];
+        if (mode === "tight") {
+          newData = [48, 49, 50, 51, 52];
+        } else if (mode === "spread") {
+          newData = [10, 30, 50, 70, 90];
+        } else if (mode === "outlier") {
+          newData = [48, 49, 50, 51, 95]; // 95 is the outlier
+        } else if (mode === "random") {
+          for (let i = 0; i < 5; i++)
+            newData.push(Math.floor(Math.random() * 100));
+        }
+        simData = newData;
+        updateDisplay(simData);
+      }
+
+      // Initial calculation
+      updateDisplay(simData);
+    </script>
+  </body>
+</html>
