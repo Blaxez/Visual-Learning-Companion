@@ -1095,21 +1095,169 @@
         </div>
       </div>
 
+      <script>
+        // Scatterplot: Positive Correlation
+        const ctx1 = document
+          .getElementById("positiveCorrelation")
+          .getContext("2d");
+        new Chart(ctx1, {
+          type: "scatter",
+          data: {
+            datasets: [
+              {
+                label: "Study Hours vs Exam Scores",
+                data: [
+                  { x: 1, y: 55 },
+                  { x: 2, y: 60 },
+                  { x: 3, y: 65 },
+                  { x: 4, y: 72 },
+                  { x: 5, y: 78 },
+                  { x: 6, y: 82 },
+                  { x: 7, y: 88 },
+                  { x: 8, y: 92 },
+                  { x: 9, y: 95 },
+                ],
+                backgroundColor: "#000000",
+                pointRadius: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Positive Correlation Example",
+                font: { size: 18, family: "Georgia" },
+              },
+            },
+            scales: {
+              x: { title: { display: true, text: "Study Hours" } },
+              y: { title: { display: true, text: "Exam Score (%)" } },
+            },
+          },
+        });
+
+        // Scatterplot: Negative Correlation
+        const ctx2 = document
+          .getElementById("negativeCorrelation")
+          .getContext("2d");
+        new Chart(ctx2, {
+          type: "scatter",
+          data: {
+            datasets: [
+              {
+                label: "Social Media (hrs) vs Sleep (hrs)",
+                data: [
+                  { x: 1, y: 8.5 },
+                  { x: 2, y: 8 },
+                  { x: 3, y: 7.5 },
+                  { x: 4, y: 7 },
+                  { x: 5, y: 6.5 },
+                  { x: 6, y: 6 },
+                  { x: 7, y: 5.5 },
+                  { x: 8, y: 5 },
+                ],
+                backgroundColor: "#d32f2f",
+                pointRadius: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Negative Correlation Example",
+                font: { size: 18, family: "Georgia" },
+              },
+            },
+            scales: {
+              x: { title: { display: true, text: "Social Media Hours" } },
+              y: { title: { display: true, text: "Sleep Hours" } },
+            },
+          },
+        });
+
+        // Scatterplot: No Correlation
+        const ctx3 = document.getElementById("noCorrelation").getContext("2d");
+        new Chart(ctx3, {
+          type: "scatter",
+          data: {
+            datasets: [
+              {
+                label: "Shoe Size vs IQ",
+                data: [
+                  { x: 7, y: 105 },
+                  { x: 8, y: 98 },
+                  { x: 9, y: 112 },
+                  { x: 7.5, y: 95 },
+                  { x: 10, y: 108 },
+                  { x: 8.5, y: 102 },
+                  { x: 9.5, y: 99 },
+                  { x: 11, y: 110 },
+                ],
+                backgroundColor: "#666",
+                pointRadius: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "No Correlation Example",
+                font: { size: 18, family: "Georgia" },
+              },
+            },
+            scales: {
+              x: { title: { display: true, text: "Shoe Size" } },
+              y: { title: { display: true, text: "IQ Score" } },
+            },
+          },
+        });
+
+        // Answer reveal function
+        function showAnswer(num) {
+          const answer = document.getElementById(`answer${num}`);
+          answer.style.display =
+            answer.style.display === "none" ? "block" : "none";
+        }
+      </script>
+
       <!-- Footer -->
       <div
+        class="section"
         style="
-          background: #000;
-          color: #fff;
-          padding: 40px;
+          background: #000000;
+          color: #ffffff;
           text-align: center;
-          margin-top: 50px;
+          margin-bottom: 0;
         "
       >
-        <h3 style="margin-bottom: 20px; color: #ffffff">
-          📚 Continue Your Learning Journey
+        <h3 style="color: #ffffff; border: none">
+          Continue Your Learning Journey
         </h3>
-        <p>You've mastered Paired Datasets and Correlation! Keep going!</p>
+        <p>You've mastered Paired Datasets & Correlation! Ready for more?</p>
         <div style="margin-top: 2rem">
+          <a
+            href="FSPWeekThreeB.html"
+            style="
+              display: inline-block;
+              border: 2px solid #ffffff;
+              color: #ffffff;
+              padding: 15px 30px;
+              text-decoration: none;
+              font-weight: bold;
+              margin: 10px;
+            "
+          >
+            <i class="fas fa-arrow-right"></i> Next: Week 3B
+          </a>
           <a
             href="../Week2/FSPWeekTwoC.html"
             style="
@@ -1144,228 +1292,11 @@
             style="color: #888; text-decoration: none; margin: 0 10px"
             >FSP Notes</a
           >
-          |
-          <a
-            href="../../ATA/index.html"
-            style="color: #888; text-decoration: none; margin: 0 10px"
-            >ATA</a
-          >
-          |
-          <a
-            href="../../BDA/index.html"
-            style="color: #888; text-decoration: none; margin: 0 10px"
-            >BDA</a
-          >
         </div>
         <p style="margin-top: 20px; font-size: 0.9em; color: #666">
           Foundations of Statistics & Probability | Visual Learning Companion
         </p>
       </div>
     </div>
-
-    <script>
-      // Scatterplot: Positive Correlation
-      const ctx1 = document
-        .getElementById("positiveCorrelation")
-        .getContext("2d");
-      new Chart(ctx1, {
-        type: "scatter",
-        data: {
-          datasets: [
-            {
-              label: "Study Hours vs Exam Scores",
-              data: [
-                { x: 1, y: 55 },
-                { x: 2, y: 60 },
-                { x: 3, y: 65 },
-                { x: 4, y: 72 },
-                { x: 5, y: 78 },
-                { x: 6, y: 82 },
-                { x: 7, y: 88 },
-                { x: 8, y: 92 },
-                { x: 9, y: 95 },
-              ],
-              backgroundColor: "#000000",
-              pointRadius: 6,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            title: {
-              display: true,
-              text: "Positive Correlation Example",
-              font: { size: 18, family: "Georgia" },
-            },
-          },
-          scales: {
-            x: { title: { display: true, text: "Study Hours" } },
-            y: { title: { display: true, text: "Exam Score (%)" } },
-          },
-        },
-      });
-
-      // Scatterplot: Negative Correlation
-      const ctx2 = document
-        .getElementById("negativeCorrelation")
-        .getContext("2d");
-      new Chart(ctx2, {
-        type: "scatter",
-        data: {
-          datasets: [
-            {
-              label: "Social Media (hrs) vs Sleep (hrs)",
-              data: [
-                { x: 1, y: 8.5 },
-                { x: 2, y: 8 },
-                { x: 3, y: 7.5 },
-                { x: 4, y: 7 },
-                { x: 5, y: 6.5 },
-                { x: 6, y: 6 },
-                { x: 7, y: 5.5 },
-                { x: 8, y: 5 },
-              ],
-              backgroundColor: "#d32f2f",
-              pointRadius: 6,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            title: {
-              display: true,
-              text: "Negative Correlation Example",
-              font: { size: 18, family: "Georgia" },
-            },
-          },
-          scales: {
-            x: { title: { display: true, text: "Social Media Hours" } },
-            y: { title: { display: true, text: "Sleep Hours" } },
-          },
-        },
-      });
-
-      // Scatterplot: No Correlation
-      const ctx3 = document.getElementById("noCorrelation").getContext("2d");
-      new Chart(ctx3, {
-        type: "scatter",
-        data: {
-          datasets: [
-            {
-              label: "Shoe Size vs IQ",
-              data: [
-                { x: 7, y: 105 },
-                { x: 8, y: 98 },
-                { x: 9, y: 112 },
-                { x: 7.5, y: 95 },
-                { x: 10, y: 108 },
-                { x: 8.5, y: 102 },
-                { x: 9.5, y: 99 },
-                { x: 11, y: 110 },
-              ],
-              backgroundColor: "#666",
-              pointRadius: 6,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            title: {
-              display: true,
-              text: "No Correlation Example",
-              font: { size: 18, family: "Georgia" },
-            },
-          },
-          scales: {
-            x: { title: { display: true, text: "Shoe Size" } },
-            y: { title: { display: true, text: "IQ Score" } },
-          },
-        },
-      });
-
-      // Answer reveal function
-      function showAnswer(num) {
-        const answer = document.getElementById(`answer${num}`);
-        answer.style.display =
-          answer.style.display === "none" ? "block" : "none";
-      }
-    </script>
-
-    <!-- Footer -->
-    <div
-      class="section"
-      style="
-        background: #000000;
-        color: #ffffff;
-        text-align: center;
-        margin-bottom: 0;
-      "
-    >
-      <h3 style="color: #ffffff; border: none">
-        Continue Your Learning Journey
-      </h3>
-      <p>You've mastered Paired Datasets & Correlation! Ready for more?</p>
-      <div style="margin-top: 2rem">
-        <a
-          href="FSPWeekThreeB.html"
-          style="
-            display: inline-block;
-            border: 2px solid #ffffff;
-            color: #ffffff;
-            padding: 15px 30px;
-            text-decoration: none;
-            font-weight: bold;
-            margin: 10px;
-          "
-        >
-          <i class="fas fa-arrow-right"></i> Next: Week 3B
-        </a>
-        <a
-          href="../Week2/FSPWeekTwoC.html"
-          style="
-            display: inline-block;
-            border: 2px solid #ffffff;
-            color: #ffffff;
-            padding: 15px 30px;
-            text-decoration: none;
-            font-weight: bold;
-            margin: 10px;
-          "
-        >
-          <i class="fas fa-arrow-left"></i> Previous: Week 2C
-        </a>
-      </div>
-      <div
-        style="
-          margin-top: 30px;
-          border-top: 1px solid #333;
-          padding-top: 20px;
-          color: #888;
-        "
-      >
-        <a
-          href="../../index.html"
-          style="color: #888; text-decoration: none; margin: 0 10px"
-          >Home</a
-        >
-        |
-        <a
-          href="../index.html"
-          style="color: #888; text-decoration: none; margin: 0 10px"
-          >FSP Notes</a
-        >
-      </div>
-      <p style="margin-top: 20px; font-size: 0.9em; color: #666">
-        Foundations of Statistics & Probability | Visual Learning Companion
-      </p>
-    </div>
-  </div>
   </body>
 </html>
-
