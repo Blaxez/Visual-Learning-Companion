@@ -220,6 +220,110 @@
         gap: var(--space-3);
       }
 
+      /* Week Section Styles */
+      .week-section {
+        margin-bottom: var(--space-8);
+      }
+
+      .week-header {
+        background: linear-gradient(
+          135deg,
+          var(--color-blue-50) 0%,
+          var(--color-blue-100) 100%
+        );
+        padding: var(--space-6);
+        border-radius: var(--radius-xl);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all var(--transition-base);
+        border: 2px solid var(--color-blue-200);
+        margin-bottom: var(--space-4);
+      }
+
+      .week-header:hover {
+        background: linear-gradient(
+          135deg,
+          var(--color-blue-100) 0%,
+          var(--color-blue-200) 100%
+        );
+        border-color: var(--color-blue-300);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .week-header-content {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+      }
+
+      .week-icon {
+        width: 48px;
+        height: 48px;
+        background: var(--color-blue-600);
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: var(--text-lg);
+      }
+
+      .week-info h3 {
+        color: var(--color-black);
+        margin-bottom: var(--space-1);
+        font-size: var(--text-xl);
+        font-weight: 700;
+      }
+
+      .week-info p {
+        color: var(--color-gray-600);
+        font-size: var(--text-sm);
+        margin: 0;
+      }
+
+      .week-toggle {
+        width: 36px;
+        height: 36px;
+        background: white;
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-blue-600);
+        transition: all var(--transition-base);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .week-toggle i {
+        transition: transform var(--transition-base);
+      }
+
+      .week-header.collapsed .week-toggle i {
+        transform: rotate(-90deg);
+      }
+
+      .week-content {
+        max-height: 5000px;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+        opacity: 1;
+      }
+
+      .week-content.collapsed {
+        max-height: 0;
+        opacity: 0;
+      }
+
+      .week-notes {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+      }
+
       /* Mobile Responsive Styles */
       @media (max-width: 768px) {
         .subject-header {
@@ -362,178 +466,326 @@
           </p>
         </div>
 
-        <div class="grid grid-cols-1" style="gap: var(--space-8)">
-          <!-- Week 1 Note -->
-          <div
-            class="note-card"
-            onclick="window.location.href='Week1/FSPWeekOne.html'"
-          >
-            <div class="note-header">
-              <div class="note-week">Week 1</div>
-              <div class="note-status">
-                <i class="fas fa-check-circle" style="color: #10b981"></i>
-                <span>Complete</span>
-              </div>
-            </div>
-            <h3 class="note-title">Introduction to Statistics</h3>
-            <p class="note-description">
-              Discover the essence of statistics, learn about experimental
-              design principles, and understand the difference between
-              descriptive and inferential statistics. Includes real-world
-              examples from IPL cricket analytics and COVID-19 vaccine trials.
-            </p>
-            <div class="note-topics">
-              <span class="topic-tag">What is Statistics</span>
-              <span class="topic-tag">Experimental Design</span>
-              <span class="topic-tag">Descriptive vs Inferential</span>
-              <span class="topic-tag">Population & Sample</span>
-              <span class="topic-tag">Sampling Methods</span>
-            </div>
-            <div class="note-footer">
-              <div class="note-meta">
-                <div class="note-meta-item">
-                  <i class="fas fa-book-open"></i>
-                  <span>Comprehensive Guide</span>
-                </div>
-                <div class="note-meta-item">
-                  <i class="fas fa-chart-bar"></i>
-                  <span>Interactive Charts</span>
+        <!-- Week Sections -->
+        <div class="weeks-container">
+          <!-- Week 1 Section -->
+          <div class="week-section">
+            <div class="week-header" onclick="toggleWeek(1)">
+              <div class="week-header-content">
+                <div class="week-icon">W1</div>
+                <div class="week-info">
+                  <h3>Week 1</h3>
+                  <p>1 notebook available</p>
                 </div>
               </div>
-              <span class="view-link" style="color: #3b82f6">
-                Open Notebook
-                <i class="fas fa-arrow-right"></i>
-              </span>
+              <div class="week-toggle">
+                <i class="fas fa-chevron-down"></i>
+              </div>
+            </div>
+            <div class="week-content" id="week-1">
+              <div class="week-notes">
+                <!-- Week 1 Note -->
+                <div
+                  class="note-card"
+                  onclick="window.location.href='Week1/FSPWeekOne.html'"
+                >
+                  <div class="note-header">
+                    <div class="note-week">Week 1</div>
+                    <div class="note-status">
+                      <i class="fas fa-check-circle" style="color: #10b981"></i>
+                      <span>Complete</span>
+                    </div>
+                  </div>
+                  <h3 class="note-title">Introduction to Statistics</h3>
+                  <p class="note-description">
+                    Discover the essence of statistics, learn about experimental
+                    design principles, and understand the difference between
+                    descriptive and inferential statistics. Includes real-world
+                    examples from IPL cricket analytics and COVID-19 vaccine
+                    trials.
+                  </p>
+                  <div class="note-topics">
+                    <span class="topic-tag">What is Statistics</span>
+                    <span class="topic-tag">Experimental Design</span>
+                    <span class="topic-tag">Descriptive vs Inferential</span>
+                    <span class="topic-tag">Population & Sample</span>
+                    <span class="topic-tag">Sampling Methods</span>
+                  </div>
+                  <div class="note-footer">
+                    <div class="note-meta">
+                      <div class="note-meta-item">
+                        <i class="fas fa-book-open"></i>
+                        <span>Comprehensive Guide</span>
+                      </div>
+                      <div class="note-meta-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Interactive Charts</span>
+                      </div>
+                    </div>
+                    <span class="view-link" style="color: #3b82f6">
+                      Open Notebook
+                      <i class="fas fa-arrow-right"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Week 2A Note -->
-          <div
-            class="note-card"
-            onclick="window.location.href='Week2/FSPWeekTwoA.html'"
-          >
-            <div class="note-header">
-              <div class="note-week">Week 2A</div>
-              <div class="note-status">
-                <i class="fas fa-check-circle" style="color: #10b981"></i>
-                <span>Complete</span>
-              </div>
-            </div>
-            <h3 class="note-title">Descriptive Statistics</h3>
-            <p class="note-description">
-              Transform raw data into meaningful insights through organization,
-              visualization, and summarization. Learn about frequency tables,
-              histograms, and cumulative frequency with interactive examples and
-              real-world applications.
-            </p>
-            <div class="note-topics">
-              <span class="topic-tag">Data Organization</span>
-              <span class="topic-tag">Frequency Tables</span>
-              <span class="topic-tag">Data Visualization</span>
-              <span class="topic-tag">Histograms</span>
-              <span class="topic-tag">Cumulative Frequency</span>
-              <span class="topic-tag">Relative Frequency</span>
-            </div>
-            <div class="note-footer">
-              <div class="note-meta">
-                <div class="note-meta-item">
-                  <i class="fas fa-book-open"></i>
-                  <span>Visual Guide</span>
-                </div>
-                <div class="note-meta-item">
-                  <i class="fas fa-chart-bar"></i>
-                  <span>Interactive Demos</span>
+          <!-- Week 2 Section -->
+          <div class="week-section">
+            <div class="week-header" onclick="toggleWeek(2)">
+              <div class="week-header-content">
+                <div class="week-icon">W2</div>
+                <div class="week-info">
+                  <h3>Week 2</h3>
+                  <p>3 notebooks available</p>
                 </div>
               </div>
-              <span class="view-link" style="color: #3b82f6">
-                Open Notebook
-                <i class="fas fa-arrow-right"></i>
-              </span>
+              <div class="week-toggle">
+                <i class="fas fa-chevron-down"></i>
+              </div>
+            </div>
+            <div class="week-content" id="week-2">
+              <div class="week-notes">
+                <!-- Week 2A Note -->
+                <div
+                  class="note-card"
+                  onclick="window.location.href='Week2/FSPWeekTwoA.html'"
+                >
+                  <div class="note-header">
+                    <div class="note-week">Week 2A</div>
+                    <div class="note-status">
+                      <i class="fas fa-check-circle" style="color: #10b981"></i>
+                      <span>Complete</span>
+                    </div>
+                  </div>
+                  <h3 class="note-title">Descriptive Statistics</h3>
+                  <p class="note-description">
+                    Transform raw data into meaningful insights through
+                    organization, visualization, and summarization. Learn about
+                    frequency tables, histograms, and cumulative frequency with
+                    interactive examples and real-world applications.
+                  </p>
+                  <div class="note-topics">
+                    <span class="topic-tag">Data Organization</span>
+                    <span class="topic-tag">Frequency Tables</span>
+                    <span class="topic-tag">Data Visualization</span>
+                    <span class="topic-tag">Histograms</span>
+                    <span class="topic-tag">Cumulative Frequency</span>
+                    <span class="topic-tag">Relative Frequency</span>
+                  </div>
+                  <div class="note-footer">
+                    <div class="note-meta">
+                      <div class="note-meta-item">
+                        <i class="fas fa-book-open"></i>
+                        <span>Visual Guide</span>
+                      </div>
+                      <div class="note-meta-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Interactive Demos</span>
+                      </div>
+                    </div>
+                    <span class="view-link" style="color: #3b82f6">
+                      Open Notebook
+                      <i class="fas fa-arrow-right"></i>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Week 2B Note -->
+                <div
+                  class="note-card"
+                  onclick="window.location.href='Week2/FSPWeekTwoB.html'"
+                >
+                  <div class="note-header">
+                    <div class="note-week">Week 2B</div>
+                    <div class="note-status">
+                      <i class="fas fa-check-circle" style="color: #10b981"></i>
+                      <span>Complete</span>
+                    </div>
+                  </div>
+                  <h3 class="note-title">Measures of Central Tendency</h3>
+                  <p class="note-description">
+                    Discover the "Heart of Data"! Master Mean, Median, and Mode
+                    through interactive calculators and real-world case studies
+                    like Spam Detection and Netflix Algorithms.
+                  </p>
+                  <div class="note-topics">
+                    <span class="topic-tag">Mean, Median, Mode</span>
+                    <span class="topic-tag">Outliers</span>
+                    <span class="topic-tag">Interactive Lab</span>
+                    <span class="topic-tag">Real-World Apps</span>
+                  </div>
+                  <div class="note-footer">
+                    <div class="note-meta">
+                      <div class="note-meta-item">
+                        <i class="fas fa-robot"></i>
+                        <span>Visual Guide</span>
+                      </div>
+                      <div class="note-meta-item">
+                        <i class="fas fa-calculator"></i>
+                        <span>Interactive Tools</span>
+                      </div>
+                    </div>
+                    <span class="view-link" style="color: #3b82f6">
+                      Open Notebook
+                      <i class="fas fa-arrow-right"></i>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Week 2C Note -->
+                <div
+                  class="note-card"
+                  onclick="window.location.href='Week2/FSPWeekTwoC.html'"
+                >
+                  <div class="note-header">
+                    <div class="note-week">Week 2C</div>
+                    <div class="note-status">
+                      <i class="fas fa-check-circle" style="color: #10b981"></i>
+                      <span>Complete</span>
+                    </div>
+                  </div>
+                  <h3 class="note-title">Measures of Dispersion</h3>
+                  <p class="note-description">
+                    Understand the spread of data with Variance and Standard
+                    Deviation. Visualize how data clusters or spreads out using
+                    histograms and interactive simulators. Learn why the mean
+                    isn't enough.
+                  </p>
+                  <div class="note-topics">
+                    <span class="topic-tag">Variance</span>
+                    <span class="topic-tag">Standard Deviation</span>
+                    <span class="topic-tag">Range</span>
+                    <span class="topic-tag">Population vs Sample</span>
+                  </div>
+                  <div class="note-footer">
+                    <div class="note-meta">
+                      <div class="note-meta-item">
+                        <i class="fas fa-chart-area"></i>
+                        <span>Visual Simulators</span>
+                      </div>
+                      <div class="note-meta-item">
+                        <i class="fas fa-ruler-combined"></i>
+                        <span>Step-by-Step Calc</span>
+                      </div>
+                    </div>
+                    <span class="view-link" style="color: #3b82f6">
+                      Open Notebook
+                      <i class="fas fa-arrow-right"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Week 2B Note -->
-          <div
-            class="note-card"
-            onclick="window.location.href='Week2/FSPWeekTwoB.html'"
-          >
-            <div class="note-header">
-              <div class="note-week">Week 2B</div>
-              <div class="note-status">
-                <i class="fas fa-check-circle" style="color: #10b981"></i>
-                <span>Complete</span>
-              </div>
-            </div>
-            <h3 class="note-title">Measures of Central Tendency</h3>
-            <p class="note-description">
-              Discover the "Heart of Data"! Master Mean, Median, and Mode
-              through interactive calculators and real-world case studies like
-              Spam Detection and Netflix Algorithms.
-            </p>
-            <div class="note-topics">
-              <span class="topic-tag">Mean, Median, Mode</span>
-              <span class="topic-tag">Outliers</span>
-              <span class="topic-tag">Interactive Lab</span>
-              <span class="topic-tag">Real-World Apps</span>
-            </div>
-            <div class="note-footer">
-              <div class="note-meta">
-                <div class="note-meta-item">
-                  <i class="fas fa-robot"></i>
-                  <span>Visual Guide</span>
-                </div>
-                <div class="note-meta-item">
-                  <i class="fas fa-calculator"></i>
-                  <span>Interactive Tools</span>
+          <!-- Week 3 Section -->
+          <div class="week-section">
+            <div class="week-header" onclick="toggleWeek(3)">
+              <div class="week-header-content">
+                <div class="week-icon">W3</div>
+                <div class="week-info">
+                  <h3>Week 3</h3>
+                  <p>1 notebook available</p>
                 </div>
               </div>
-              <span class="view-link" style="color: #3b82f6">
-                Open Notebook
-                <i class="fas fa-arrow-right"></i>
-              </span>
+              <div class="week-toggle">
+                <i class="fas fa-chevron-down"></i>
+              </div>
             </div>
-          </div>
+            <div class="week-content" id="week-3">
+              <div class="week-notes">
+                <!-- Week 3 Note -->
+                <div
+                  class="note-card"
+                  onclick="window.location.href='Week3/FSPWeekThreeA.html'"
+                >
+                  <div class="note-header">
+                    <div class="note-week">Week 3</div>
+                    <div class="note-status">
+                      <i class="fas fa-check-circle" style="color: #10b981"></i>
+                      <span>Complete</span>
+                    </div>
+                  </div>
+                  <h3 class="note-title">Paired Datasets & Correlation</h3>
+                  <p class="note-description">
+                    Explore relationships between variables through paired
+                    datasets and scatterplots. Master the critical distinction
+                    between correlation and causation, and learn to quantify
+                    relationships using the correlation coefficient (R).
+                  </p>
+                  <div class="note-topics">
+                    <span class="topic-tag">Paired Datasets</span>
+                    <span class="topic-tag">Scatterplots</span>
+                    <span class="topic-tag">Correlation vs Causation</span>
+                    <span class="topic-tag">Correlation Coefficient</span>
+                  </div>
+                  <div class="note-footer">
+                    <div class="note-meta">
+                      <div class="note-meta-item">
+                        <i class="fas fa-chart-scatter"></i>
+                        <span>Interactive Charts</span>
+                      </div>
+                      <div class="note-meta-item">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Real Examples</span>
+                      </div>
+                    </div>
+                    <span class="view-link" style="color: #3b82f6">
+                      Open Notebook
+                      <i class="fas fa-arrow-right"></i>
+                    </span>
+                  </div>
+                </div>
 
-          <!-- Week 2C Note -->
-          <div
-            class="note-card"
-            onclick="window.location.href='Week2/FSPWeekTwoC.html'"
-          >
-            <div class="note-header">
-              <div class="note-week">Week 2C</div>
-              <div class="note-status">
-                <i class="fas fa-check-circle" style="color: #10b981"></i>
-                <span>Complete</span>
-              </div>
-            </div>
-            <h3 class="note-title">Measures of Dispersion</h3>
-            <p class="note-description">
-              Understand the spread of data with Variance and Standard
-              Deviation. Visualize how data clusters or spreads out using
-              histograms and interactive simulators. Learn why the mean isn't
-              enough.
-            </p>
-            <div class="note-topics">
-              <span class="topic-tag">Variance</span>
-              <span class="topic-tag">Standard Deviation</span>
-              <span class="topic-tag">Range</span>
-              <span class="topic-tag">Population vs Sample</span>
-            </div>
-            <div class="note-footer">
-              <div class="note-meta">
-                <div class="note-meta-item">
-                  <i class="fas fa-chart-area"></i>
-                  <span>Visual Simulators</span>
+                <!-- Week 3B Note -->
+                <div
+                  class="note-card"
+                  onclick="window.location.href='Week3/FSPWeekThreeB.html'"
+                >
+                  <div class="note-header">
+                    <div class="note-week">Week 3B</div>
+                    <div class="note-status">
+                      <i class="fas fa-check-circle" style="color: #10b981"></i>
+                      <span>Complete</span>
+                    </div>
+                  </div>
+                  <h3 class="note-title">
+                    Normal Distribution & Statistical Foundations
+                  </h3>
+                  <p class="note-description">
+                    Master the bell curve and understand nature's most important
+                    distribution. Learn the 68-95-99.7 rule, explore departures
+                    from normality, and discover the power of the Central Limit
+                    Theorem with interactive visualizations.
+                  </p>
+                  <div class="note-topics">
+                    <span class="topic-tag">Normal Distribution</span>
+                    <span class="topic-tag">68-95-99.7 Rule</span>
+                    <span class="topic-tag">Skewness</span>
+                    <span class="topic-tag">Central Limit Theorem</span>
+                    <span class="topic-tag">Chebyshev's Inequality</span>
+                  </div>
+                  <div class="note-footer">
+                    <div class="note-meta">
+                      <div class="note-meta-item">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Interactive Demos</span>
+                      </div>
+                      <div class="note-meta-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Live Charts</span>
+                      </div>
+                    </div>
+                    <span class="view-link" style="color: #3b82f6">
+                      Open Notebook
+                      <i class="fas fa-arrow-right"></i>
+                    </span>
+                  </div>
                 </div>
-                <div class="note-meta-item">
-                  <i class="fas fa-ruler-combined"></i>
-                  <span>Step-by-Step Calc</span>
-                </div>
               </div>
-              <span class="view-link" style="color: #3b82f6">
-                Open Notebook
-                <i class="fas fa-arrow-right"></i>
-              </span>
             </div>
           </div>
 
@@ -567,5 +819,25 @@
         </p>
       </div>
     </footer>
+
+    <script>
+      function toggleWeek(weekNumber) {
+        const weekContent = document.getElementById(`week-${weekNumber}`);
+        const weekHeaders = document.querySelectorAll(".week-header");
+        const currentHeader = weekHeaders[weekNumber - 1];
+
+        // Toggle collapsed class
+        weekContent.classList.toggle("collapsed");
+        currentHeader.classList.toggle("collapsed");
+
+        // Prevent event from bubbling to note cards
+        event.stopPropagation();
+      }
+
+      // Initialize all weeks as expanded by default
+      document.addEventListener("DOMContentLoaded", function () {
+        // All weeks start expanded, no action needed
+      });
+    </script>
   </body>
 </html>

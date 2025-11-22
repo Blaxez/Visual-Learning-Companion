@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 3: Paired Datasets - FSP Visual Notebook</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="../../styles/navbar.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Georgia", "Times New Roman", serif;
+        background: #ffffff;
+        color: #1a1a1a;
+        line-height: 1.8;
+        padding: 20px;
+        padding-top: 80px;
+        scroll-behavior: smooth;
+      }
+
+      :root {
+        --nav-bg-glass: rgba(0, 0, 0, 0.9);
+        --nav-border-glass: rgba(255, 255, 255, 0.1);
+        --nav-text-color: #ffffff;
+        --nav-active-color: #3b82f6;
+        --nav-hover-bg: rgba(255, 255, 255, 0.1);
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: #000000;
+        color: #ffffff;
+        padding: 60px 40px;
+        margin-bottom: 40px;
+        border: 3px solid #000000;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 3em;
+        margin-bottom: 15px;
+        font-weight: 300;
+        letter-spacing: 2px;
+      }
+
+      .header p {
+        font-size: 1.3em;
+        font-weight: 300;
+        margin: 10px 0;
+      }
+
+      .section {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 50px;
+        margin-bottom: 40px;
+        position: relative;
+      }
+
+      .section::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: -10px;
+        bottom: -10px;
+        background: #f5f5f5;
+        z-index: -1;
+      }
+
+      .section h2 {
+        color: #000000;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        border-bottom: 4px solid #000000;
+        padding-bottom: 15px;
+        font-weight: 400;
+        letter-spacing: 1px;
+      }
+
+      .section h3 {
+        color: #000000;
+        font-size: 1.8em;
+        margin: 35px 0 20px 0;
+        font-weight: 400;
+        border-left: 6px solid #000000;
+        padding-left: 20px;
+      }
+
+      .section h4 {
+        color: #000000;
+        font-size: 1.4em;
+        margin: 25px 0 15px 0;
+        font-weight: 500;
+      }
+
+      .intro-text {
+        font-size: 1.2em;
+        line-height: 2;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-left: 4px solid #000000;
+      }
+
+      .definition-box {
+        background: #f5f5f5;
+        border-left: 8px solid #000000;
+        padding: 25px;
+        margin: 25px 0;
+        font-style: italic;
+      }
+
+      .example-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .example-box::before {
+        content: "EXAMPLE";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .warning-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .warning-box::before {
+        content: "⚠ WARNING";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .success-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .success-box::before {
+        content: "✓ KEY INSIGHT";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .info-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .info-box::before {
+        content: "ℹ INFO";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .sampling-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin: 30px 0;
+      }
+
+      .sampling-card {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 25px;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .sampling-card::after {
+        content: "";
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        right: -6px;
+        bottom: -6px;
+        background: #e0e0e0;
+        z-index: -1;
+        transition: all 0.3s;
+      }
+
+      .sampling-card:hover {
+        transform: translate(-3px, -3px);
+      }
+
+      .sampling-card:hover::after {
+        top: 8px;
+        left: 8px;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 400px;
+        margin: 40px 0;
+        padding: 30px;
+        background: #fafafa;
+        border: 2px solid #e0e0e0;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 30px 0;
+        background: #ffffff;
+      }
+
+      th,
+      td {
+        border: 2px solid #000000;
+        padding: 20px;
+        text-align: left;
+      }
+
+      th {
+        background: #000000;
+        color: #ffffff;
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+
+      tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      button {
+        background: #000000;
+        color: #ffffff;
+        border: 3px solid #000000;
+        padding: 15px 35px;
+        cursor: pointer;
+        font-size: 1.1em;
+        transition: all 0.3s;
+        margin: 10px;
+        font-family: "Georgia", serif;
+        letter-spacing: 1px;
+      }
+
+      button:hover {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      .correlation-visual {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        margin: 30px 0;
+        gap: 20px;
+      }
+
+      .corr-box {
+        flex: 1;
+        min-width: 200px;
+        text-align: center;
+        padding: 20px;
+        border: 2px solid #000000;
+        position: relative;
+      }
+
+      .corr-box::after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: -5px;
+        bottom: -5px;
+        background: #e0e0e0;
+        z-index: -1;
+      }
+
+      .corr-value {
+        font-size: 2.5em;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 70px 10px 10px;
+        }
+        .header h1 {
+          font-size: 1.8em;
+        }
+        .section {
+          padding: 30px 15px;
+        }
+        .chart-container {
+          height: 300px;
+          padding: 15px;
+        }
+        .sampling-grid {
+          grid-template-columns: 1fr;
+        }
+        table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="modern-nav">
+      <div class="nav-inner">
+        <a href="../../index.html" class="nav-brand">
+          <i class="fas fa-layer-group"></i>
+          <span>Notes App</span>
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+          </a>
+          <a href="../index.html" class="nav-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>FSP</span>
+          </a>
+          <a href="../../ATA/index.html" class="nav-item">
+            <i class="fas fa-code-branch"></i>
+            <span>ATA</span>
+          </a>
+          <a href="../../BDA/index.html" class="nav-item">
+            <i class="fas fa-database"></i>
+            <span>BDA</span>
+          </a>
+          <a href="../../LANA/index.html" class="nav-item">
+            <i class="fas fa-square-root-alt"></i>
+            <span>LANA</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <h1>Week 3: Paired Datasets</h1>
+        <p>Uncovering Relationships in Data <i class="fas fa-link"></i></p>
+        <p style="font-size: 1rem; margin-top: 10px; opacity: 0.8">
+          Correlation, Scatterplots & The Science of Connections
+        </p>
+      </div>
+
+      <!-- Overview -->
+      <div class="section">
+        <h2>Week's Overview</h2>
+        <div class="intro-text">
+          Welcome to Week 3! This week, we explore how two variables relate to
+          each other through paired datasets. You'll learn to visualize
+          relationships with scatterplots, understand the critical difference
+          between correlation and causation, and quantify relationships using
+          the correlation coefficient.
+        </div>
+
+        <div class="sampling-grid">
+          <div class="sampling-card">
+            <h3><i class="fas fa-clipboard-list"></i> Key Topics</h3>
+            <ul style="list-style: none; margin-top: 15px; line-height: 1.8">
+              <li><i class="fas fa-check"></i> Paired Datasets</li>
+              <li><i class="fas fa-check"></i> Scatterplots</li>
+              <li><i class="fas fa-check"></i> Correlation vs. Causation</li>
+              <li><i class="fas fa-check"></i> Correlation Coefficient (R)</li>
+            </ul>
+          </div>
+          <div class="sampling-card">
+            <h3><i class="fas fa-bullseye"></i> Learning Goals</h3>
+            <ul style="list-style: none; margin-top: 15px; line-height: 1.8">
+              <li><i class="fas fa-arrow-right"></i> Understand paired data</li>
+              <li>
+                <i class="fas fa-arrow-right"></i> Create & interpret
+                scatterplots
+              </li>
+              <li>
+                <i class="fas fa-arrow-right"></i> Distinguish correlation from
+                causation
+              </li>
+              <li>
+                <i class="fas fa-arrow-right"></i> Calculate correlation
+                coefficient
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 1: Paired Datasets -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            1
+          </div>
+          <h2 style="margin: 0; border: none">
+            Paired Datasets <i class="fas fa-exchange-alt"></i>
+          </h2>
+        </div>
+
+        <p>
+          A <strong>paired dataset</strong> contains two related variables
+          measured for the same individuals or observations. Instead of looking
+          at one variable in isolation, we examine how two variables interact.
+        </p>
+
+        <div class="definition-box">
+          <h4>Definition</h4>
+          <p>
+            <strong>Paired Data:</strong> A dataset where each observation has
+            two measurements that are naturally connected.
+          </p>
+        </div>
+
+        <div class="example-box">
+          <h4>Example: Caffeine & Heart Rate</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Person</th>
+                <th>Caffeine (mg)</th>
+                <th>Heart Rate (bpm)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Person 1</td>
+                <td>50</td>
+                <td>75</td>
+              </tr>
+              <tr>
+                <td>Person 2</td>
+                <td>100</td>
+                <td>85</td>
+              </tr>
+              <tr>
+                <td>Person 3</td>
+                <td>25</td>
+                <td>70</td>
+              </tr>
+              <tr>
+                <td>Person 4</td>
+                <td>150</td>
+                <td>90</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top: 15px">
+            Each person has <strong>two linked measurements</strong>: caffeine
+            consumption and heart rate. This pairing allows us to explore their
+            relationship.
+          </p>
+        </div>
+
+        <div class="success-box">
+          <h4>Why Paired Data Matters</h4>
+          <p>
+            Paired datasets let us discover
+            <strong>relationships and patterns</strong> between variables. We
+            can answer questions like: "Does more study time lead to higher
+            grades?" or "Is there a connection between exercise and stress
+            levels?"
+          </p>
+        </div>
+      </div>
+
+      <!-- Section 2: Scatterplots -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            2
+          </div>
+          <h2 style="margin: 0; border: none">
+            Scatterplots: Visualizing Relationships
+            <i class="fas fa-chart-scatter"></i>
+          </h2>
+        </div>
+
+        <p>
+          A <strong>scatterplot</strong> is a graph that displays paired data as
+          points on a coordinate plane. Each dot represents one observation with
+          its values for both variables.
+        </p>
+
+        <div class="info-box">
+          <h4>How to Read a Scatterplot</h4>
+          <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8">
+            <li>
+              <strong>X-axis:</strong> One variable (often the independent
+              variable)
+            </li>
+            <li>
+              <strong>Y-axis:</strong> Another variable (often the dependent
+              variable)
+            </li>
+            <li>
+              <strong>Each Point:</strong> One observation with both
+              measurements
+            </li>
+            <li>
+              <strong>Pattern:</strong> The arrangement of points reveals the
+              relationship
+            </li>
+          </ul>
+        </div>
+
+        <h3>Types of Relationships</h3>
+
+        <div class="sampling-grid">
+          <div class="sampling-card">
+            <h4><i class="fas fa-arrow-trend-up"></i> Positive Correlation</h4>
+            <p>As one variable increases, the other tends to increase.</p>
+            <p style="margin-top: 10px">
+              <strong>Example:</strong> Study time vs. exam scores
+            </p>
+          </div>
+          <div class="sampling-card">
+            <h4>
+              <i class="fas fa-arrow-trend-down"></i> Negative Correlation
+            </h4>
+            <p>As one variable increases, the other tends to decrease.</p>
+            <p style="margin-top: 10px">
+              <strong>Example:</strong> Social media usage vs. sleep duration
+            </p>
+          </div>
+          <div class="sampling-card">
+            <h4><i class="fas fa-circle-question"></i> No Correlation</h4>
+            <p>No clear pattern; variables are unrelated.</p>
+            <p style="margin-top: 10px">
+              <strong>Example:</strong> Shoe size vs. IQ
+            </p>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="positiveCorrelation"></canvas>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="negativeCorrelation"></canvas>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="noCorrelation"></canvas>
+        </div>
+      </div>
+
+      <!-- Section 3: Correlation vs Causation -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            3
+          </div>
+          <h2 style="margin: 0; border: none">
+            Correlation vs. Causation <i class="fas fa-not-equal"></i>
+          </h2>
+        </div>
+
+        <p>
+          This is one of the <strong>most important concepts</strong> in
+          statistics. Just because two variables are related doesn't mean one
+          causes the other!
+        </p>
+
+        <div class="definition-box">
+          <h4>Key Definitions</h4>
+          <p>
+            <strong>Correlation:</strong> A statistical relationship between two
+            variables. They change together.
+          </p>
+          <p style="margin-top: 10px">
+            <strong>Causation:</strong> One variable directly influences or
+            causes changes in another.
+          </p>
+        </div>
+
+        <div class="warning-box">
+          <h4>The Golden Rule</h4>
+          <p
+            style="
+              font-size: 1.3em;
+              font-weight: bold;
+              text-align: center;
+              margin: 20px 0;
+            "
+          >
+            CORRELATION ≠ CAUSATION
+          </p>
+          <p>
+            Finding a correlation between two variables does NOT prove that one
+            causes the other. There could be other explanations!
+          </p>
+        </div>
+
+        <div class="example-box">
+          <h4>Classic Example: Ice Cream & Drowning</h4>
+          <p>
+            Data shows a <strong>strong positive correlation</strong> between
+            ice cream sales and drowning incidents. Does this mean eating ice
+            cream causes drowning?
+          </p>
+          <p style="margin-top: 15px; font-weight: bold; color: #d32f2f">
+            NO! Both are affected by a third variable:
+            <strong>warm weather</strong> (a confounding variable).
+          </p>
+          <ul style="margin: 15px 0 0 20px; line-height: 1.8">
+            <li>☀️ Hot weather → More people buy ice cream</li>
+            <li>☀️ Hot weather → More people go swimming</li>
+            <li>🏊 More swimming → More drowning incidents</li>
+          </ul>
+        </div>
+
+        <div class="example-box">
+          <h4>Real-World Scenario: Study Time & Grades</h4>
+          <p>
+            Students who study more tend to get higher grades (positive
+            correlation). Does studying <strong>cause</strong> higher grades?
+          </p>
+          <p style="margin-top: 15px">
+            <strong>Likely, YES</strong> - but other factors also play a role:
+          </p>
+          <ul style="margin: 10px 0 0 20px">
+            <li>Natural ability</li>
+            <li>Prior knowledge</li>
+            <li>Quality of study (not just quantity)</li>
+            <li>Teaching effectiveness</li>
+          </ul>
+        </div>
+
+        <div class="success-box">
+          <h4>When Can We Infer Causation?</h4>
+          <p>To establish causation, you typically need:</p>
+          <ul style="margin: 10px 0 0 20px; line-height: 1.8">
+            <li>
+              ✓ <strong>Controlled experiments</strong> (like randomized trials)
+            </li>
+            <li>
+              ✓ <strong>Temporal precedence</strong> (cause comes before effect)
+            </li>
+            <li>✓ <strong>Rule out confounding variables</strong></li>
+            <li>
+              ✓ <strong>Logical mechanism</strong> explaining the relationship
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Section 4: Correlation Coefficient -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            4
+          </div>
+          <h2 style="margin: 0; border: none">
+            Correlation Coefficient (R) <i class="fas fa-calculator"></i>
+          </h2>
+        </div>
+
+        <p>
+          The <strong>correlation coefficient (R)</strong> is a number that
+          measures the strength and direction of a linear relationship between
+          two variables.
+        </p>
+
+        <div class="definition-box">
+          <h4>Understanding R</h4>
+          <p><strong>Range:</strong> R values range from -1 to +1</p>
+          <ul style="margin: 10px 0 0 20px; line-height: 1.8">
+            <li><strong>R = +1:</strong> Perfect positive correlation</li>
+            <li><strong>R = 0:</strong> No linear relationship</li>
+            <li><strong>R = -1:</strong> Perfect negative correlation</li>
+          </ul>
+          <p style="margin-top: 10px">
+            <strong>Strength:</strong> The closer |R| is to 1, the stronger the
+            relationship.
+          </p>
+        </div>
+
+        <h3>Visual Guide to R Values</h3>
+        <div class="correlation-visual">
+          <div class="corr-box">
+            <div class="corr-value" style="color: #2e7d32">+1.0</div>
+            <p><strong>Perfect Positive</strong></p>
+            <p style="font-size: 0.9em">Points form a perfect upward line</p>
+          </div>
+          <div class="corr-box">
+            <div class="corr-value" style="color: #388e3c">+0.7</div>
+            <p><strong>Strong Positive</strong></p>
+            <p style="font-size: 0.9em">Clear upward trend</p>
+          </div>
+          <div class="corr-box">
+            <div class="corr-value" style="color: #666">0.0</div>
+            <p><strong>No Correlation</strong></p>
+            <p style="font-size: 0.9em">Random scatter</p>
+          </div>
+          <div class="corr-box">
+            <div class="corr-value" style="color: #d32f2f">-0.7</div>
+            <p><strong>Strong Negative</strong></p>
+            <p style="font-size: 0.9em">Clear downward trend</p>
+          </div>
+          <div class="corr-box">
+            <div class="corr-value" style="color: #c62828">-1.0</div>
+            <p><strong>Perfect Negative</strong></p>
+            <p style="font-size: 0.9em">Points form a perfect downward line</p>
+          </div>
+        </div>
+
+        <h3>The Formula</h3>
+        <div class="info-box">
+          <p
+            style="
+              text-align: center;
+              font-family: monospace;
+              font-size: 1.2em;
+              margin: 20px 0;
+            "
+          >
+            R = Σ[(xᵢ - x̄)(yᵢ - ȳ)] / √[Σ(xᵢ - x̄)² × Σ(yᵢ - ȳ)²]
+          </p>
+          <p><strong>Where:</strong></p>
+          <ul style="margin: 10px 0 0 20px">
+            <li>xᵢ, yᵢ = individual data points</li>
+            <li>x̄, ȳ = means of x and y</li>
+            <li>Σ = sum</li>
+          </ul>
+        </div>
+
+        <h3>Step-by-Step Calculation</h3>
+        <div class="example-box">
+          <ol style="margin-left: 20px; line-height: 2">
+            <li>
+              <strong>Calculate the means</strong> (x̄ and ȳ) of both variables
+            </li>
+            <li>
+              <strong>Find deviations</strong> from the mean for each point: (xᵢ
+              - x̄) and (yᵢ - ȳ)
+            </li>
+            <li>
+              <strong>Multiply</strong> the deviations for each pair and sum
+              them
+            </li>
+            <li>
+              <strong>Calculate</strong> the sum of squared deviations for each
+              variable
+            </li>
+            <li>
+              <strong>Divide</strong> the product of deviations by the square
+              root of the product of squared deviations
+            </li>
+          </ol>
+        </div>
+
+        <div class="success-box">
+          <h4>Using Google Sheets</h4>
+          <p>
+            In Google Sheets, use the
+            <code
+              style="background: #f0f0f0; padding: 2px 8px; border-radius: 3px"
+              >CORREL()</code
+            >
+            function:
+          </p>
+          <p
+            style="
+              margin-top: 10px;
+              font-family: monospace;
+              background: #f0f0f0;
+              padding: 10px;
+              border-radius: 5px;
+            "
+          >
+            =CORREL(A2:A10, B2:B10)
+          </p>
+        </div>
+      </div>
+
+      <!-- Section 5: Applications -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            5
+          </div>
+          <h2 style="margin: 0; border: none">
+            Real-World Applications <i class="fas fa-globe"></i>
+          </h2>
+        </div>
+
+        <div class="sampling-grid">
+          <div class="sampling-card">
+            <h4><i class="fas fa-envelope"></i> Spam Detection</h4>
+            <p><strong>Variables:</strong> Email length, spam keywords count</p>
+            <p style="margin-top: 10px">
+              If strong positive correlation exists, emails with many spam
+              keywords AND long length are flagged as spam.
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-film"></i> Netflix Recommendations</h4>
+            <p><strong>Variables:</strong> User A ratings, User B ratings</p>
+            <p style="margin-top: 10px">
+              High correlation between users = similar taste. Netflix recommends
+              movies User A liked to User B.
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-chart-line"></i> Stock Market Analysis</h4>
+            <p><strong>Variables:</strong> Two stock prices</p>
+            <p style="margin-top: 10px">
+              Correlation helps diversify portfolios by finding stocks that
+              don't move together.
+            </p>
+          </div>
+
+          <div class="sampling-card">
+            <h4><i class="fas fa-heartbeat"></i> Health Studies</h4>
+            <p>
+              <strong>Variables:</strong> Exercise hours, cholesterol levels
+            </p>
+            <p style="margin-top: 10px">
+              Negative correlation observed, but controlled studies needed to
+              prove causation.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Practice Questions -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            6
+          </div>
+          <h2 style="margin: 0; border: none">
+            Practice Questions <i class="fas fa-pen-to-square"></i>
+          </h2>
+        </div>
+
+        <div class="example-box">
+          <h4>Question 1</h4>
+          <p>
+            A scatterplot shows dots trending upward from left to right. What
+            type of correlation is this?
+          </p>
+          <button onclick="showAnswer(1)">Show Answer</button>
+          <div
+            id="answer1"
+            style="
+              display: none;
+              margin-top: 15px;
+              padding: 15px;
+              background: #f0f0f0;
+              border-left: 4px solid #000;
+            "
+          >
+            <strong>Answer: Positive Correlation</strong><br />
+            When points trend upward, as one variable increases, the other also
+            increases.
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4>Question 2</h4>
+          <p>True or False: Correlation always implies causation.</p>
+          <button onclick="showAnswer(2)">Show Answer</button>
+          <div
+            id="answer2"
+            style="
+              display: none;
+              margin-top: 15px;
+              padding: 15px;
+              background: #f0f0f0;
+              border-left: 4px solid #000;
+            "
+          >
+            <strong>Answer: FALSE</strong><br />
+            This is a critical concept! Correlation does NOT imply causation.
+            Just because two variables are related doesn't mean one causes the
+            other.
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4>Question 3</h4>
+          <p>
+            What is the range of values for the correlation coefficient (R)?
+          </p>
+          <button onclick="showAnswer(3)">Show Answer</button>
+          <div
+            id="answer3"
+            style="
+              display: none;
+              margin-top: 15px;
+              padding: 15px;
+              background: #f0f0f0;
+              border-left: 4px solid #000;
+            "
+          >
+            <strong>Answer: -1 to +1</strong><br />
+            R = +1 (perfect positive), R = 0 (no linear relationship), R = -1
+            (perfect negative)
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4>Question 4</h4>
+          <p>
+            You find a strong positive correlation (R = +0.9) between ice cream
+            sales and beach visits. Does eating ice cream cause people to go to
+            the beach?
+          </p>
+          <button onclick="showAnswer(4)">Show Answer</button>
+          <div
+            id="answer4"
+            style="
+              display: none;
+              margin-top: 15px;
+              padding: 15px;
+              background: #f0f0f0;
+              border-left: 4px solid #000;
+            "
+          >
+            <strong>Answer: No</strong><br />
+            Both variables are likely influenced by a confounding variable:
+            <strong>warm weather</strong>. Hot days increase both ice cream
+            sales (people want to cool down) and beach visits (people want to
+            swim). The ice cream doesn't cause beach visits!
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        style="
+          background: #000;
+          color: #fff;
+          padding: 40px;
+          text-align: center;
+          margin-top: 50px;
+        "
+      >
+        <h3 style="margin-bottom: 20px; color: #ffffff">
+          📚 Continue Your Learning Journey
+        </h3>
+        <p>You've mastered Paired Datasets and Correlation! Keep going!</p>
+        <div style="margin-top: 2rem">
+          <a
+            href="../Week2/FSPWeekTwoC.html"
+            style="
+              display: inline-block;
+              border: 2px solid #ffffff;
+              color: #ffffff;
+              padding: 15px 30px;
+              text-decoration: none;
+              font-weight: bold;
+              margin: 10px;
+            "
+          >
+            <i class="fas fa-arrow-left"></i> Previous: Week 2C
+          </a>
+        </div>
+        <div
+          style="
+            margin-top: 30px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            color: #888;
+          "
+        >
+          <a
+            href="../../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >Home</a
+          >
+          |
+          <a
+            href="../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >FSP Notes</a
+          >
+          |
+          <a
+            href="../../ATA/index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >ATA</a
+          >
+          |
+          <a
+            href="../../BDA/index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >BDA</a
+          >
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9em; color: #666">
+          Foundations of Statistics & Probability | Visual Learning Companion
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Scatterplot: Positive Correlation
+      const ctx1 = document
+        .getElementById("positiveCorrelation")
+        .getContext("2d");
+      new Chart(ctx1, {
+        type: "scatter",
+        data: {
+          datasets: [
+            {
+              label: "Study Hours vs Exam Scores",
+              data: [
+                { x: 1, y: 55 },
+                { x: 2, y: 60 },
+                { x: 3, y: 65 },
+                { x: 4, y: 72 },
+                { x: 5, y: 78 },
+                { x: 6, y: 82 },
+                { x: 7, y: 88 },
+                { x: 8, y: 92 },
+                { x: 9, y: 95 },
+              ],
+              backgroundColor: "#000000",
+              pointRadius: 6,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Positive Correlation Example",
+              font: { size: 18, family: "Georgia" },
+            },
+          },
+          scales: {
+            x: { title: { display: true, text: "Study Hours" } },
+            y: { title: { display: true, text: "Exam Score (%)" } },
+          },
+        },
+      });
+
+      // Scatterplot: Negative Correlation
+      const ctx2 = document
+        .getElementById("negativeCorrelation")
+        .getContext("2d");
+      new Chart(ctx2, {
+        type: "scatter",
+        data: {
+          datasets: [
+            {
+              label: "Social Media (hrs) vs Sleep (hrs)",
+              data: [
+                { x: 1, y: 8.5 },
+                { x: 2, y: 8 },
+                { x: 3, y: 7.5 },
+                { x: 4, y: 7 },
+                { x: 5, y: 6.5 },
+                { x: 6, y: 6 },
+                { x: 7, y: 5.5 },
+                { x: 8, y: 5 },
+              ],
+              backgroundColor: "#d32f2f",
+              pointRadius: 6,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Negative Correlation Example",
+              font: { size: 18, family: "Georgia" },
+            },
+          },
+          scales: {
+            x: { title: { display: true, text: "Social Media Hours" } },
+            y: { title: { display: true, text: "Sleep Hours" } },
+          },
+        },
+      });
+
+      // Scatterplot: No Correlation
+      const ctx3 = document.getElementById("noCorrelation").getContext("2d");
+      new Chart(ctx3, {
+        type: "scatter",
+        data: {
+          datasets: [
+            {
+              label: "Shoe Size vs IQ",
+              data: [
+                { x: 7, y: 105 },
+                { x: 8, y: 98 },
+                { x: 9, y: 112 },
+                { x: 7.5, y: 95 },
+                { x: 10, y: 108 },
+                { x: 8.5, y: 102 },
+                { x: 9.5, y: 99 },
+                { x: 11, y: 110 },
+              ],
+              backgroundColor: "#666",
+              pointRadius: 6,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "No Correlation Example",
+              font: { size: 18, family: "Georgia" },
+            },
+          },
+          scales: {
+            x: { title: { display: true, text: "Shoe Size" } },
+            y: { title: { display: true, text: "IQ Score" } },
+          },
+        },
+      });
+
+      // Answer reveal function
+      function showAnswer(num) {
+        const answer = document.getElementById(`answer${num}`);
+        answer.style.display =
+          answer.style.display === "none" ? "block" : "none";
+      }
+    </script>
+
+    <!-- Footer -->
+    <div
+      class="section"
+      style="
+        background: #000000;
+        color: #ffffff;
+        text-align: center;
+        margin-bottom: 0;
+      "
+    >
+      <h3 style="color: #ffffff; border: none">
+        Continue Your Learning Journey
+      </h3>
+      <p>You've mastered Paired Datasets & Correlation! Ready for more?</p>
+      <div style="margin-top: 2rem">
+        <a
+          href="FSPWeekThreeB.html"
+          style="
+            display: inline-block;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px;
+          "
+        >
+          <i class="fas fa-arrow-right"></i> Next: Week 3B
+        </a>
+        <a
+          href="../Week2/FSPWeekTwoC.html"
+          style="
+            display: inline-block;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px;
+          "
+        >
+          <i class="fas fa-arrow-left"></i> Previous: Week 2C
+        </a>
+      </div>
+      <div
+        style="
+          margin-top: 30px;
+          border-top: 1px solid #333;
+          padding-top: 20px;
+          color: #888;
+        "
+      >
+        <a
+          href="../../index.html"
+          style="color: #888; text-decoration: none; margin: 0 10px"
+          >Home</a
+        >
+        |
+        <a
+          href="../index.html"
+          style="color: #888; text-decoration: none; margin: 0 10px"
+          >FSP Notes</a
+        >
+      </div>
+      <p style="margin-top: 20px; font-size: 0.9em; color: #666">
+        Foundations of Statistics & Probability | Visual Learning Companion
+      </p>
+    </div>
+  </div>
+  </body>
+</html>
+
