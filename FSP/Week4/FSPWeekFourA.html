@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 4A: Understanding Data Types | FSP</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="../../styles/navbar.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Georgia", "Times New Roman", serif;
+        background: #ffffff;
+        color: #1a1a1a;
+        line-height: 1.8;
+        padding: 20px;
+        padding-top: 80px;
+        scroll-behavior: smooth;
+      }
+
+      :root {
+        --nav-bg-glass: rgba(0, 0, 0, 0.9);
+        --nav-border-glass: rgba(255, 255, 255, 0.1);
+        --nav-text-color: #ffffff;
+        --nav-active-color: #3b82f6;
+        --nav-hover-bg: rgba(255, 255, 255, 0.1);
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: #000000;
+        color: #ffffff;
+        padding: 60px 40px;
+        margin-bottom: 40px;
+        border: 3px solid #000000;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 3em;
+        margin-bottom: 15px;
+        font-weight: 300;
+        letter-spacing: 2px;
+      }
+
+      .header p {
+        font-size: 1.3em;
+        font-weight: 300;
+        margin: 10px 0;
+      }
+
+      .section {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 50px;
+        margin-bottom: 40px;
+        position: relative;
+      }
+
+      .section::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: -10px;
+        bottom: -10px;
+        background: #f5f5f5;
+        z-index: -1;
+      }
+
+      .section h2 {
+        color: #000000;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        border-bottom: 4px solid #000000;
+        padding-bottom: 15px;
+        font-weight: 400;
+        letter-spacing: 1px;
+      }
+
+      .section h3 {
+        color: #000000;
+        font-size: 1.8em;
+        margin: 35px 0 20px 0;
+        font-weight: 400;
+        border-left: 6px solid #000000;
+        padding-left: 20px;
+      }
+
+      .section h4 {
+        color: #000000;
+        font-size: 1.4em;
+        margin: 25px 0 15px 0;
+        font-weight: 500;
+      }
+
+      .intro-text {
+        font-size: 1.2em;
+        line-height: 2;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-left: 4px solid #000000;
+      }
+
+      .definition-box {
+        background: #f5f5f5;
+        border-left: 8px solid #000000;
+        padding: 25px;
+        margin: 25px 0;
+        font-style: italic;
+      }
+
+      .example-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .example-box::before {
+        content: "EXAMPLE";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .success-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .success-box::before {
+        content: "✓ KEY INSIGHT";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .info-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .info-box::before {
+        content: "ℹ INFO";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .sampling-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin: 30px 0;
+      }
+
+      .sampling-card {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 25px;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .sampling-card::after {
+        content: "";
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        right: -6px;
+        bottom: -6px;
+        background: #e0e0e0;
+        z-index: -1;
+        transition: all 0.3s;
+      }
+
+      .sampling-card:hover {
+        transform: translate(-3px, -3px);
+      }
+
+      .sampling-card:hover::after {
+        top: 8px;
+        left: 8px;
+      }
+
+      .interactive-demo {
+        background: #f9f9f9;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .interactive-demo::before {
+        content: "🎮 INTERACTIVE DEMO";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 30px 0;
+        background: #ffffff;
+      }
+
+      th,
+      td {
+        border: 2px solid #000000;
+        padding: 20px;
+        text-align: left;
+      }
+
+      th {
+        background: #000000;
+        color: #ffffff;
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+
+      tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      button {
+        background: #000000;
+        color: #ffffff;
+        border: 3px solid #000000;
+        padding: 15px 35px;
+        cursor: pointer;
+        font-size: 1.1em;
+        transition: all 0.3s;
+        margin: 10px;
+        font-family: "Georgia", serif;
+        letter-spacing: 1px;
+      }
+
+      button:hover {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #000000;
+        font-size: 1.1em;
+        font-family: "Georgia", serif;
+        margin: 10px 0;
+      }
+
+      .data-tree {
+        background: #f5f5f5;
+        padding: 30px;
+        margin: 30px 0;
+        border: 2px solid #000000;
+      }
+
+      .tree-branch {
+        margin: 20px 0 20px 40px;
+        padding-left: 20px;
+        border-left: 3px solid #000000;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 400px;
+        width: 100%;
+        margin: 20px 0;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 70px 10px 10px;
+        }
+        .header h1 {
+          font-size: 1.8em;
+        }
+        .section {
+          padding: 30px 15px;
+        }
+        .sampling-grid {
+          grid-template-columns: 1fr;
+        }
+        table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="modern-nav">
+      <div class="nav-inner">
+        <a href="../../index.html" class="nav-brand">
+          <i class="fas fa-layer-group"></i>
+          <span>Notes App</span>
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+          </a>
+          <a href="../index.html" class="nav-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>FSP</span>
+          </a>
+          <a href="../../ATA/index.html" class="nav-item">
+            <i class="fas fa-code-branch"></i>
+            <span>ATA</span>
+          </a>
+          <a href="../../BDA/index.html" class="nav-item">
+            <i class="fas fa-database"></i>
+            <span>BDA</span>
+          </a>
+          <a href="../../LANA/index.html" class="nav-item">
+            <i class="fas fa-square-root-alt"></i>
+            <span>LANA</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <h1>Week 4A: Understanding Data Types</h1>
+        <p>
+          The Foundation of Statistical Analysis <i class="fas fa-database"></i>
+        </p>
+        <p style="font-size: 1rem; margin-top: 10px; opacity: 0.8">
+          "Not all data is created equal"
+        </p>
+      </div>
+
+      <!-- Overview -->
+      <div class="section">
+        <h2>Week's Overview</h2>
+        <div class="intro-text">
+          Welcome to Week 4A! Understanding data types is the absolute
+          foundation of statistical analysis. The way we analyze data depends
+          entirely on what <em>type</em> of data we're working with. Get this
+          right, and everything else falls into place. Get it wrong, and your
+          analysis could be completely invalid!
+        </div>
+
+        <div class="sampling-grid">
+          <div class="sampling-card">
+            <h3><i class="fas fa-clipboard-list"></i> Key Topics</h3>
+            <ul style="list-style: none; margin-top: 15px; line-height: 1.8">
+              <li><i class="fas fa-check"></i> Quantitative vs Qualitative</li>
+              <li><i class="fas fa-check"></i> Discrete vs Continuous</li>
+              <li><i class="fas fa-check"></i> Nominal vs Ordinal</li>
+              <li><i class="fas fa-check"></i> Real-World Applications</li>
+            </ul>
+          </div>
+          <div class="sampling-card">
+            <h3><i class="fas fa-bullseye"></i> Learning Goals</h3>
+            <ul style="list-style: none; margin-top: 15px; line-height: 1.8">
+              <li>
+                <i class="fas fa-arrow-right"></i> Classify any data correctly
+              </li>
+              <li>
+                <i class="fas fa-arrow-right"></i> Choose appropriate analysis
+                methods
+              </li>
+              <li>
+                <i class="fas fa-arrow-right"></i> Avoid common classification
+                errors
+              </li>
+              <li>
+                <i class="fas fa-arrow-right"></i> Apply to real scenarios
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 1: The Big Picture -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            1
+          </div>
+          <h2 style="margin: 0; border: none">
+            Data Types: The Foundation <i class="fas fa-layer-group"></i>
+          </h2>
+        </div>
+
+        <p>
+          All data falls into two main categories:
+          <strong>Quantitative</strong> (numerical) and
+          <strong>Qualitative</strong> (categorical). This is the 80/20 rule of
+          data analysis - master this distinction and you're 80% of the way
+          there!
+        </p>
+
+        <div class="data-tree">
+          <h3 style="border: none; margin-top: 0">📊 Data Type Hierarchy</h3>
+          <div style="margin-top: 20px">
+            <strong style="font-size: 1.3em">ALL DATA</strong>
+            <div class="tree-branch">
+              <strong style="font-size: 1.2em"
+                >🔢 Quantitative (Numerical)</strong
+              >
+              <p style="margin: 10px 0">Data you can measure or count</p>
+              <div class="tree-branch">
+                <strong>Discrete</strong> - Countable values (whole numbers)
+                <p style="margin-left: 20px; color: #666">
+                  Example: Number of students, goals scored
+                </p>
+              </div>
+              <div class="tree-branch">
+                <strong>Continuous</strong> - Measurable values (any value in a
+                range)
+                <p style="margin-left: 20px; color: #666">
+                  Example: Height, temperature, time
+                </p>
+              </div>
+            </div>
+            <div class="tree-branch">
+              <strong style="font-size: 1.2em"
+                >📝 Qualitative (Categorical)</strong
+              >
+              <p style="margin: 10px 0">
+                Data that describes qualities or characteristics
+              </p>
+              <div class="tree-branch">
+                <strong>Nominal</strong> - Categories without order
+                <p style="margin-left: 20px; color: #666">
+                  Example: Colors, car brands, gender
+                </p>
+              </div>
+              <div class="tree-branch">
+                <strong>Ordinal</strong> - Categories with meaningful order
+                <p style="margin-left: 20px; color: #666">
+                  Example: Ratings, education levels, rankings
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="success-box">
+          <h4>Why This Matters</h4>
+          <p>Different data types require different statistical methods:</p>
+          <ul style="margin: 15px 0 0 20px; line-height: 1.8">
+            <li>
+              <strong>Quantitative data:</strong> You can calculate means,
+              standard deviations, perform regression
+            </li>
+            <li>
+              <strong>Qualitative data:</strong> You work with frequencies,
+              modes, chi-square tests
+            </li>
+            <li>Using the wrong method = invalid results! ❌</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Section 2: Quantitative Data -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            2
+          </div>
+          <h2 style="margin: 0; border: none">
+            Quantitative Data <i class="fas fa-calculator"></i>
+          </h2>
+        </div>
+
+        <p>
+          Quantitative data involves <strong>numbers</strong>. You can perform
+          mathematical operations on it. But there's a critical distinction...
+        </p>
+
+        <div class="sampling-grid">
+          <div class="sampling-card" style="border-left: 5px solid #3b82f6">
+            <h4><i class="fas fa-sort-numeric-up"></i> Discrete Data</h4>
+            <p><strong>Can only take specific, separate values</strong></p>
+            <p style="margin-top: 15px">
+              Usually whole numbers. You <em>count</em> discrete data.
+            </p>
+            <hr style="margin: 20px 0; border: 1px solid #ddd" />
+            <p><strong>Examples:</strong></p>
+            <ul style="margin-left: 20px; line-height: 1.8">
+              <li>Number of students in a class</li>
+              <li>Goals scored in a cricket match</li>
+              <li>Number of cars in a parking lot</li>
+              <li>Books on a shelf</li>
+            </ul>
+          </div>
+          <div class="sampling-card" style="border-left: 5px solid #10b981">
+            <h4><i class="fas fa-ruler"></i> Continuous Data</h4>
+            <p><strong>Can take any value within a range</strong></p>
+            <p style="margin-top: 15px">
+              Can have decimals. You <em>measure</em> continuous data.
+            </p>
+            <hr style="margin: 20px 0; border: 1px solid #ddd" />
+            <p><strong>Examples:</strong></p>
+            <ul style="margin-left: 20px; line-height: 1.8">
+              <li>Height (170.5 cm, 170.55 cm...)</li>
+              <li>Weight (65.3 kg, 65.35 kg...)</li>
+              <li>Temperature (25.6°C, 25.67°C...)</li>
+              <li>Time duration (10.23 seconds...)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="quantitativeChart"></canvas>
+        </div>
+
+        <div class="example-box">
+          <h4>Quick Test</h4>
+          <p><strong>Question:</strong> Is "age" discrete or continuous?</p>
+          <button onclick="toggleSolution('age')">Show Answer</button>
+          <div
+            id="age"
+            style="
+              display: none;
+              margin-top: 15px;
+              padding: 15px;
+              background: #f0f0f0;
+            "
+          >
+            <p><strong>Answer:</strong> It depends on how you measure it!</p>
+            <ul style="margin: 10px 0 0 20px">
+              <li>
+                <strong>Discrete:</strong> If you measure in whole years (e.g.,
+                "I'm 25 years old")
+              </li>
+              <li>
+                <strong>Continuous:</strong> If you include fractions (e.g.,
+                "I'm 25.5 years old")
+              </li>
+            </ul>
+            <p style="margin-top: 10px">
+              <em>In practice, age is usually treated as discrete!</em>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Qualitative Data -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            3
+          </div>
+          <h2 style="margin: 0; border: none">
+            Qualitative Data <i class="fas fa-tags"></i>
+          </h2>
+        </div>
+
+        <p>
+          Qualitative data describes
+          <strong>qualities, categories, or characteristics</strong>. You can't
+          do arithmetic on it. But order matters...
+        </p>
+
+        <div class="sampling-grid">
+          <div class="sampling-card" style="border-left: 5px solid #f59e0b">
+            <h4><i class="fas fa-tag"></i> Nominal Data</h4>
+            <p><strong>Categories WITHOUT inherent order</strong></p>
+            <p style="margin-top: 15px">
+              Just labels or names. No "greater than" or "less than".
+            </p>
+            <hr style="margin: 20px 0; border: 1px solid #ddd" />
+            <p><strong>Examples:</strong></p>
+            <ul style="margin-left: 20px; line-height: 1.8">
+              <li>Eye color (brown, blue, green)</li>
+              <li>Car brands (Maruti, Tata, Hyundai)</li>
+              <li>Gender (male, female, other)</li>
+              <li>Types of cuisine (Indian, Chinese, Italian)</li>
+            </ul>
+          </div>
+          <div class="sampling-card" style="border-left: 5px solid #8b5cf6">
+            <h4><i class="fas fa-sort-amount-up"></i> Ordinal Data</h4>
+            <p><strong>Categories WITH meaningful order</strong></p>
+            <p style="margin-top: 15px">
+              Clear ranking or sequence. But intervals might not be equal!
+            </p>
+            <hr style="margin: 20px 0; border: 1px solid #ddd" />
+            <p><strong>Examples:</strong></p>
+            <ul style="margin-left: 20px; line-height: 1.8">
+              <li>
+                Customer satisfaction (very dissatisfied → very satisfied)
+              </li>
+              <li>
+                Education level (high school → bachelor's → master's → PhD)
+              </li>
+              <li>Rankings (1st, 2nd, 3rd place)</li>
+              <li>Ratings (1 star, 2 stars, ... 5 stars)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <h4>The Key Difference</h4>
+          <p>
+            <strong>Nominal:</strong> "Red" isn't better or worse than "blue".
+            No order.
+          </p>
+          <p style="margin-top: 10px">
+            <strong>Ordinal:</strong> "Very satisfied" is definitely better than
+            "dissatisfied". Clear order!
+          </p>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="qualitativeChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Section 4: Interactive Classifier -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            4
+          </div>
+          <h2 style="margin: 0; border: none">
+            Interactive Data Classifier <i class="fas fa-tasks"></i>
+          </h2>
+        </div>
+
+        <div class="interactive-demo">
+          <h4>Test Your Understanding!</h4>
+          <p>Enter any type of data below, and I'll help you classify it:</p>
+
+          <input
+            type="text"
+            id="dataInput"
+            placeholder="e.g., Temperature in Celsius, Eye color, Number of goals..."
+          />
+          <button onclick="classifyData()">Classify Data</button>
+
+          <div
+            id="classificationResult"
+            style="
+              display: none;
+              margin-top: 20px;
+              padding: 20px;
+              background: #fff;
+              border: 3px solid #000;
+            "
+          >
+            <!-- Result will appear here -->
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4>Common Classification Examples</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Data Type</th>
+                <th>Category</th>
+                <th>Sub-Category</th>
+                <th>Why?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Temperature (°C)</td>
+                <td>Quantitative</td>
+                <td>Continuous</td>
+                <td>Can be measured to any decimal</td>
+              </tr>
+              <tr>
+                <td>Number of siblings</td>
+                <td>Quantitative</td>
+                <td>Discrete</td>
+                <td>You count them (whole numbers)</td>
+              </tr>
+              <tr>
+                <td>Eye color</td>
+                <td>Qualitative</td>
+                <td>Nominal</td>
+                <td>Categories with no order</td>
+              </tr>
+              <tr>
+                <td>Star rating (1-5)</td>
+                <td>Qualitative</td>
+                <td>Ordinal</td>
+                <td>Clear order from worst to best</td>
+              </tr>
+              <tr>
+                <td>Income in Rupees</td>
+                <td>Quantitative</td>
+                <td>Continuous</td>
+                <td>Can have decimal values</td>
+              </tr>
+              <tr>
+                <td>Education level</td>
+                <td>Qualitative</td>
+                <td>Ordinal</td>
+                <td>Natural progression/ranking</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section 5: Practice Problems -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            5
+          </div>
+          <h2 style="margin: 0; border: none">
+            Practice Problems <i class="fas fa-pen"></i>
+          </h2>
+        </div>
+
+        <div class="example-box">
+          <h4>Problem 1: Classify the Following</h4>
+          <p>
+            Categorize each data type as <strong>Quantitative</strong> or
+            <strong>Qualitative</strong>, then further classify them:
+          </p>
+          <ol style="margin: 20px 0 0 20px; line-height: 2">
+            <li>Weight of apples in kg</li>
+            <li>Brand of smartphone</li>
+            <li>Customer satisfaction level (Poor, Fair, Good, Excellent)</li>
+            <li>Number of emails received daily</li>
+            <li>Blood type (A, B, AB, O)</li>
+          </ol>
+          <button onclick="toggleSolution('prob1')">Show Solutions</button>
+          <div
+            id="prob1"
+            style="
+              display: none;
+              margin-top: 20px;
+              padding: 20px;
+              background: #f0f0f0;
+            "
+          >
+            <ol style="margin-left: 20px; line-height: 2">
+              <li>
+                <strong>Quantitative - Continuous</strong> (measured, can have
+                decimals)
+              </li>
+              <li>
+                <strong>Qualitative - Nominal</strong> (categories, no inherent
+                order)
+              </li>
+              <li>
+                <strong>Qualitative - Ordinal</strong> (categories with clear
+                order)
+              </li>
+              <li>
+                <strong>Quantitative - Discrete</strong> (counted, whole
+                numbers)
+              </li>
+              <li>
+                <strong>Qualitative - Nominal</strong> (categories, no natural
+                order)
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4>Problem 2: Real-World Scenario</h4>
+          <p>You're analyzing data for a Mumbai cricket stadium:</p>
+          <ul style="margin: 15px 0 0 20px; line-height: 2">
+            <li>Number of spectators</li>
+            <li>Ticket price</li>
+            <li>Seat category (General, Premium, VIP)</li>
+            <li>Match duration in hours</li>
+            <li>Team names</li>
+          </ul>
+          <p style="margin-top: 15px">Classify each data type.</p>
+          <button onclick="toggleSolution('prob2')">Show Solutions</button>
+          <div
+            id="prob2"
+            style="
+              display: none;
+              margin-top: 20px;
+              padding: 20px;
+              background: #f0f0f0;
+            "
+          >
+            <ul style="margin-left: 20px; line-height: 2">
+              <li>
+                <strong>Number of spectators:</strong> Quantitative - Discrete
+              </li>
+              <li><strong>Ticket price:</strong> Quantitative - Continuous</li>
+              <li>
+                <strong>Seat category:</strong> Qualitative - Ordinal (General <
+                Premium < VIP)
+              </li>
+              <li>
+                <strong>Match duration:</strong> Quantitative - Continuous
+              </li>
+              <li><strong>Team names:</strong> Qualitative - Nominal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="section"
+        style="
+          background: #000000;
+          color: #ffffff;
+          text-align: center;
+          margin-bottom: 0;
+        "
+      >
+        <h3 style="color: #ffffff; border: none">
+          Continue Your Learning Journey
+        </h3>
+        <p>You've mastered Data Types! Ready for more statistical concepts?</p>
+        <div style="margin-top: 2rem">
+          <a
+            href="../Week3/FSPWeekThreeC.html"
+            style="
+              display: inline-block;
+              border: 2px solid #ffffff;
+              color: #ffffff;
+              padding: 15px 30px;
+              text-decoration: none;
+              font-weight: bold;
+              margin: 10px;
+            "
+          >
+            <i class="fas fa-arrow-left"></i> Previous: Week 3C
+          </a>
+        </div>
+        <div
+          style="
+            margin-top: 30px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            color: #888;
+          "
+        >
+          <a
+            href="../../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >Home</a
+          >
+          |
+          <a
+            href="../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >FSP Notes</a
+          >
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9em; color: #666">
+          Foundations of Statistics & Probability | Visual Learning Companion
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Toggle solution visibility
+      function toggleSolution(id) {
+        const el = document.getElementById(id);
+        if (el.style.display === "none") {
+          el.style.display = "block";
+        } else {
+          el.style.display = "none";
+        }
+      }
+
+      // Interactive Data Classifier
+      function classifyData() {
+        const input = document
+          .getElementById("dataInput")
+          .value.toLowerCase()
+          .trim();
+        const resultDiv = document.getElementById("classificationResult");
+
+        if (!input) {
+          alert("Please enter a data type first!");
+          return;
+        }
+
+        let category = "";
+        let subCategory = "";
+        let explanation = "";
+
+        // Simple keyword-based classification
+        if (
+          input.includes("number of") ||
+          input.includes("count") ||
+          input.includes("goals") ||
+          input.includes("students") ||
+          input.includes("siblings")
+        ) {
+          category = "Quantitative";
+          subCategory = "Discrete";
+          explanation =
+            "This is countable data that can only take whole number values.";
+        } else if (
+          input.includes("height") ||
+          input.includes("weight") ||
+          input.includes("temperature") ||
+          input.includes("time") ||
+          input.includes("income") ||
+          input.includes("price")
+        ) {
+          category = "Quantitative";
+          subCategory = "Continuous";
+          explanation =
+            "This is measurable data that can take any value within a range, including decimals.";
+        } else if (
+          input.includes("rating") ||
+          input.includes("satisfaction") ||
+          input.includes("education") ||
+          input.includes("rank") ||
+          input.includes("level") ||
+          input.includes("grade")
+        ) {
+          category = "Qualitative";
+          subCategory = "Ordinal";
+          explanation =
+            "This is categorical data with a meaningful order or ranking.";
+        } else if (
+          input.includes("color") ||
+          input.includes("brand") ||
+          input.includes("type") ||
+          input.includes("gender") ||
+          input.includes("name") ||
+          input.includes("category")
+        ) {
+          category = "Qualitative";
+          subCategory = "Nominal";
+          explanation = "This is categorical data without any inherent order.";
+        } else {
+          // Default classification question
+          resultDiv.innerHTML = `
+            <h4 style="margin-top: 0;">Help me classify "${input}"</h4>
+            <p><strong>Ask yourself these questions:</strong></p>
+            <ol style="margin: 15px 0 0 20px; line-height: 2">
+              <li><strong>Can you measure it with numbers?</strong>
+                <ul style="margin-left: 20px;">
+                  <li>YES → It's <strong>Quantitative</strong></li>
+                  <li>NO → It's <strong>Qualitative</strong></li>
+                </ul>
+              </li>
+              <li><strong>If Quantitative:</strong> Can it have decimals?
+                <ul style="margin-left: 20px;">
+                  <li>YES → <strong>Continuous</strong></li>
+                  <li>NO (only whole numbers) → <strong>Discrete</strong></li>
+                </ul>
+              </li>
+              <li><strong>If Qualitative:</strong> Do categories have natural order?
+                <ul style="margin-left: 20px;">
+                  <li>YES → <strong>Ordinal</strong></li>
+                  <li>NO → <strong>Nominal</strong></li>
+                </ul>
+              </li>
+            </ol>
+          `;
+          resultDiv.style.display = "block";
+          return;
+        }
+
+        resultDiv.innerHTML = `
+          <h4 style="margin-top: 0;">Classification Result for "${input}"</h4>
+          <div style="background: #000; color: #fff; padding: 20px; margin: 20px 0;">
+            <p style="font-size: 1.5em; margin: 0;"><strong>${category}</strong> → <strong>${subCategory}</strong></p>
+          </div>
+          <p style="margin-top: 15px;"><strong>Explanation:</strong> ${explanation}</p>
+          <p style="margin-top: 15px; color: #666; font-style: italic;">Note: This is a simplified classifier. For ambiguous cases, consider the context and how you're collecting the data!</p>
+        `;
+        resultDiv.style.display = "block";
+      }
+
+      // Allow Enter key to classify
+      document
+        .getElementById("dataInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            classifyData();
+          }
+        });
+
+      // Chart.js visualizations
+      // Quantitative Data Visualization
+      const quantCtx = document
+        .getElementById("quantitativeChart")
+        .getContext("2d");
+      const quantitativeChart = new Chart(quantCtx, {
+        type: "bar",
+        data: {
+          labels: ["Discrete Examples", "Continuous Examples"],
+          datasets: [
+            {
+              label: "Number of Students (Discrete)",
+              data: [25, 0],
+              backgroundColor: "rgba(59, 130, 246, 0.7)",
+              borderColor: "rgba(59, 130, 246, 1)",
+              borderWidth: 2,
+            },
+            {
+              label: "Books Read (Discrete)",
+              data: [12, 0],
+              backgroundColor: "rgba(59, 130, 246, 0.5)",
+              borderColor: "rgba(59, 130, 246, 1)",
+              borderWidth: 2,
+            },
+            {
+              label: "Temperature °C (Continuous)",
+              data: [0, 25.6],
+              backgroundColor: "rgba(16, 185, 129, 0.7)",
+              borderColor: "rgba(16, 185, 129, 1)",
+              borderWidth: 2,
+            },
+            {
+              label: "Time in seconds (Continuous)",
+              data: [0, 12.45],
+              backgroundColor: "rgba(16, 185, 129, 0.5)",
+              borderColor: "rgba(16, 185, 129, 1)",
+              borderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Quantitative Data: Discrete vs Continuous",
+              font: { size: 18, weight: "bold", family: "Georgia" },
+            },
+            legend: {
+              display: true,
+              position: "bottom",
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "Value",
+              },
+            },
+          },
+        },
+      });
+
+      // Qualitative Data Visualization
+      const qualCtx = document
+        .getElementById("qualitativeChart")
+        .getContext("2d");
+      const qualitativeChart = new Chart(qualCtx, {
+        type: "doughnut",
+        data: {
+          labels: [
+            "Nominal: Eye Colors",
+            "Nominal: Car Brands",
+            "Ordinal: Satisfaction (Poor)",
+            "Ordinal: Satisfaction (Fair)",
+            "Ordinal: Satisfaction (Good)",
+            "Ordinal: Satisfaction (Excellent)",
+          ],
+          datasets: [
+            {
+              label: "Frequency",
+              data: [25, 25, 12.5, 12.5, 12.5, 12.5],
+              backgroundColor: [
+                "rgba(245, 158, 11, 0.7)",
+                "rgba(245, 158, 11, 0.5)",
+                "rgba(139, 92, 246, 0.4)",
+                "rgba(139, 92, 246, 0.6)",
+                "rgba(139, 92, 246, 0.8)",
+                "rgba(139, 92, 246, 1)",
+              ],
+              borderColor: "#000",
+              borderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Qualitative Data: Nominal vs Ordinal Distribution",
+              font: { size: 18, weight: "bold", family: "Georgia" },
+            },
+            legend: {
+              display: true,
+              position: "right",
+            },
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
