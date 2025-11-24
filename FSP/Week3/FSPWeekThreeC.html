@@ -4,8 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Week 3C: Chebyshev's Inequality | FSP</title>
+    <!-- Chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Mermaid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <link rel="stylesheet" href="../../styles/navbar.css" />
+    <!-- Font Awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -33,6 +37,10 @@
         --nav-text-color: #ffffff;
         --nav-active-color: #3b82f6;
         --nav-hover-bg: rgba(255, 255, 255, 0.1);
+        
+        /* Topic Colors */
+        --safe-color: #10b981; /* Green for "Inside" */
+        --risk-color: #ef4444; /* Red for "Outside" */
       }
 
       .container {
@@ -40,6 +48,7 @@
         margin: 0 auto;
       }
 
+      /* Header Styling */
       .header {
         background: #000000;
         color: #ffffff;
@@ -47,6 +56,7 @@
         margin-bottom: 40px;
         border: 3px solid #000000;
         text-align: center;
+        box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
       }
 
       .header h1 {
@@ -62,6 +72,7 @@
         margin: 10px 0;
       }
 
+      /* Section Styling */
       .section {
         background: #ffffff;
         border: 2px solid #000000;
@@ -73,12 +84,13 @@
       .section::before {
         content: "";
         position: absolute;
-        top: 10px;
-        left: 10px;
-        right: -10px;
-        bottom: -10px;
-        background: #f5f5f5;
+        top: 8px;
+        left: 8px;
+        right: -8px;
+        bottom: -8px;
+        background: #f0f0f0;
         z-index: -1;
+        border: 2px solid #000;
       }
 
       .section h2 {
@@ -100,13 +112,6 @@
         padding-left: 20px;
       }
 
-      .section h4 {
-        color: #000000;
-        font-size: 1.4em;
-        margin: 25px 0 15px 0;
-        font-weight: 500;
-      }
-
       .intro-text {
         font-size: 1.2em;
         line-height: 2;
@@ -116,24 +121,17 @@
         border-left: 4px solid #000000;
       }
 
-      .definition-box {
-        background: #f5f5f5;
-        border-left: 8px solid #000000;
-        padding: 25px;
-        margin: 25px 0;
-        font-style: italic;
-      }
-
-      .example-box {
+      /* Alert Boxes with Font Awesome Icons */
+      .example-box, .success-box, .info-box, .warning-box, .interactive-demo, .rule-box {
         background: #ffffff;
         border: 3px solid #000000;
         padding: 30px;
-        margin: 30px 0;
+        margin: 40px 0;
         position: relative;
       }
 
-      .example-box::before {
-        content: "EXAMPLE";
+      .example-box::before, .success-box::before, .info-box::before, 
+      .warning-box::before, .interactive-demo::before, .rule-box::before {
         position: absolute;
         top: -15px;
         left: 20px;
@@ -141,73 +139,24 @@
         color: #ffffff;
         padding: 5px 20px;
         font-size: 0.9em;
-        font-weight: bold;
+        font-weight: 900;
         letter-spacing: 2px;
+        font-family: "Font Awesome 6 Free", "Georgia", serif;
       }
 
-      .warning-box {
-        background: #ffffff;
-        border: 3px solid #000000;
-        padding: 30px;
-        margin: 30px 0;
-        position: relative;
+      .example-box::before { content: "\f02d  EXAMPLE"; } /* fa-book */
+      .success-box::before { content: "\f00c  KEY INSIGHT"; } /* fa-check */
+      .info-box::before { content: "\f129  INFO"; } /* fa-info */
+      .warning-box::before { content: "\f071  WARNING"; } /* fa-exclamation-triangle */
+      .interactive-demo::before { content: "\f11b  INTERACTIVE"; } /* fa-gamepad */
+      .rule-box::before { content: "\f1c0  THE FORMULA"; } /* fa-database/formula */
+
+      .rule-box {
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        text-align: center;
       }
 
-      .warning-box::before {
-        content: "⚠ WARNING";
-        position: absolute;
-        top: -15px;
-        left: 20px;
-        background: #000000;
-        color: #ffffff;
-        padding: 5px 20px;
-        font-size: 0.9em;
-        font-weight: bold;
-        letter-spacing: 2px;
-      }
-
-      .success-box {
-        background: #ffffff;
-        border: 3px solid #000000;
-        padding: 30px;
-        margin: 30px 0;
-        position: relative;
-      }
-
-      .success-box::before {
-        content: "✓ KEY INSIGHT";
-        position: absolute;
-        top: -15px;
-        left: 20px;
-        background: #000000;
-        color: #ffffff;
-        padding: 5px 20px;
-        font-size: 0.9em;
-        font-weight: bold;
-        letter-spacing: 2px;
-      }
-
-      .info-box {
-        background: #ffffff;
-        border: 3px solid #000000;
-        padding: 30px;
-        margin: 30px 0;
-        position: relative;
-      }
-
-      .info-box::before {
-        content: "ℹ INFO";
-        position: absolute;
-        top: -15px;
-        left: 20px;
-        background: #000000;
-        color: #ffffff;
-        padding: 5px 20px;
-        font-size: 0.9em;
-        font-weight: bold;
-        letter-spacing: 2px;
-      }
-
+      /* Grid Layouts */
       .sampling-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -223,122 +172,50 @@
         position: relative;
       }
 
-      .sampling-card::after {
-        content: "";
-        position: absolute;
-        top: 6px;
-        left: 6px;
-        right: -6px;
-        bottom: -6px;
-        background: #e0e0e0;
-        z-index: -1;
-        transition: all 0.3s;
-      }
-
       .sampling-card:hover {
-        transform: translate(-3px, -3px);
+        transform: translate(-5px, -5px);
+        box-shadow: 8px 8px 0px rgba(0,0,0,0.8);
       }
 
-      .sampling-card:hover::after {
-        top: 8px;
-        left: 8px;
+      /* Slider Styling */
+      .slider-container { margin: 20px 0; }
+      .slider-container label { display: block; margin-bottom: 10px; font-weight: bold; font-size: 1.1em; }
+      .slider { width: 100%; height: 8px; border-radius: 5px; background: #ddd; outline: none; -webkit-appearance: none; appearance: none; }
+      .slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 25px; height: 25px; border-radius: 50%; background: #000000; cursor: pointer; transition: 0.2s; }
+      .slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+      /* Visual Progress Bar for Interaction */
+      .progress-bg { width: 100%; height: 20px; background: #eee; border: 2px solid #000; margin-top: 15px; position: relative; }
+      .progress-fill { height: 100%; background: #10b981; width: 75%; transition: width 0.3s ease; }
+      
+      /* Charts & Mermaid */
+      .mermaid-container {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 20px;
+        margin: 30px 0;
+        text-align: center;
+        overflow-x: auto;
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+      }
+
+      .mermaid {
+        display: flex;
+        justify-content: center;
+        width: 100%;
       }
 
       .chart-container {
         position: relative;
-        height: 400px;
-        margin: 40px 0;
-        padding: 30px;
-        background: #fafafa;
-        border: 2px solid #e0e0e0;
-      }
-
-      .interactive-demo {
-        background: #f9f9f9;
-        border: 3px solid #000000;
-        padding: 30px;
-        margin: 30px 0;
-        position: relative;
-      }
-
-      .interactive-demo::before {
-        content: "🎮 INTERACTIVE DEMO";
-        position: absolute;
-        top: -15px;
-        left: 20px;
-        background: #000000;
-        color: #ffffff;
-        padding: 5px 20px;
-        font-size: 0.9em;
-        font-weight: bold;
-        letter-spacing: 2px;
-      }
-
-      .slider-container {
-        margin: 20px 0;
-      }
-
-      .slider-container label {
-        display: block;
-        margin-bottom: 10px;
-        font-weight: bold;
-        font-size: 1.1em;
-      }
-
-      .slider {
+        height: 350px;
         width: 100%;
-        height: 8px;
-        border-radius: 5px;
-        background: #ddd;
-        outline: none;
-        -webkit-appearance: none;
-        appearance: none;
-      }
-
-      .slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 25px;
-        height: 25px;
-        border-radius: 50%;
-        background: #000000;
-        cursor: pointer;
-      }
-
-      .slider::-moz-range-thumb {
-        width: 25px;
-        height: 25px;
-        border-radius: 50%;
-        background: #000000;
-        cursor: pointer;
-        border: none;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
         margin: 30px 0;
-        background: #ffffff;
+        border: 2px solid #000;
+        padding: 10px;
+        background: #fff;
       }
 
-      th,
-      td {
-        border: 2px solid #000000;
-        padding: 20px;
-        text-align: left;
-      }
-
-      th {
-        background: #000000;
-        color: #ffffff;
-        font-weight: 500;
-        letter-spacing: 1px;
-      }
-
-      tr:nth-child(even) {
-        background: #f9f9f9;
-      }
-
+      /* Buttons */
       button {
         background: #000000;
         color: #ffffff;
@@ -350,62 +227,25 @@
         margin: 10px;
         font-family: "Georgia", serif;
         letter-spacing: 1px;
+        font-weight: bold;
       }
 
       button:hover {
         background: #ffffff;
         color: #000000;
-      }
-
-      .rule-box {
-        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-        border: 4px solid #000000;
-        padding: 40px;
-        margin: 40px 0;
-        text-align: center;
-        position: relative;
-      }
-
-      .rule-box::before {
-        content: "📏 THE FORMULA";
-        position: absolute;
-        top: -18px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #000000;
-        color: #ffffff;
-        padding: 5px 30px;
-        font-size: 0.9em;
-        font-weight: bold;
-        letter-spacing: 3px;
+        box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
       }
 
       @media (max-width: 768px) {
-        body {
-          padding: 70px 10px 10px;
-        }
-        .header h1 {
-          font-size: 1.8em;
-        }
-        .section {
-          padding: 30px 15px;
-        }
-        .chart-container {
-          height: 300px;
-          padding: 15px;
-        }
-        .sampling-grid {
-          grid-template-columns: 1fr;
-        }
-        table {
-          display: block;
-          overflow-x: auto;
-          white-space: nowrap;
-        }
+        body { padding: 70px 10px 10px; }
+        .header h1 { font-size: 1.8em; }
+        .section { padding: 30px 15px; }
+        .sampling-grid { grid-template-columns: 1fr; }
       }
     </style>
   </head>
   <body>
+    <!-- Navbar (Preserved) -->
     <nav class="modern-nav">
       <div class="nav-inner">
         <a href="../../index.html" class="nav-brand">
@@ -470,9 +310,6 @@
                 <i class="fas fa-check"></i> Chebyshev's Inequality Formula
               </li>
               <li><i class="fas fa-check"></i> Real-World Applications</li>
-              <li>
-                <i class="fas fa-check"></i> Calculating Probability Bounds
-              </li>
             </ul>
           </div>
           <div class="sampling-card">
@@ -488,9 +325,6 @@
               <li>
                 <i class="fas fa-arrow-right"></i> Solve real-world problems
               </li>
-              <li>
-                <i class="fas fa-arrow-right"></i> Interpret standard deviations
-              </li>
             </ul>
           </div>
         </div>
@@ -498,32 +332,9 @@
 
       <!-- Section 1: Understanding Data Variability -->
       <div class="section">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-          "
-        >
-          <div
-            style="
-              background: #000;
-              color: #fff;
-              width: 40px;
-              height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-weight: bold;
-              font-size: 1.2em;
-            "
-          >
-            1
-          </div>
-          <h2 style="margin: 0; border: none">
-            Why Data Variability Matters? <i class="fas fa-chart-bar"></i>
-          </h2>
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">1</div>
+          <h2 style="margin: 0; border: none">Why Data Variability Matters? <i class="fas fa-chart-bar"></i></h2>
         </div>
 
         <p>
@@ -534,120 +345,77 @@
 
         <div class="example-box">
           <h4>Scenario: The E-Commerce Delivery</h4>
-          <p>
-            Imagine you run an online store. You want to tell customers when
-            their package will arrive.
-          </p>
+          <p>Imagine you run an online store. You want to tell customers when their package will arrive.</p>
           <div class="sampling-grid" style="margin-top: 20px">
-            <div class="sampling-card">
-              <h4>Low Variability</h4>
+            <div class="sampling-card" style="border-left: 5px solid #10b981;">
+              <h4 style="color:#10b981">Low Variability</h4>
               <p>Most deliveries take 3-5 days.</p>
-              <p>
-                <strong>Result:</strong> Happy customers, reliable promises.
-              </p>
+              <p><strong>Result:</strong> Happy customers, reliable promises.</p>
             </div>
-            <div class="sampling-card">
-              <h4>High Variability</h4>
+            <div class="sampling-card" style="border-left: 5px solid #ef4444;">
+              <h4 style="color:#ef4444">High Variability</h4>
               <p>Some take 1 day, others take 2 weeks!</p>
               <p><strong>Result:</strong> Complaints, impossible to plan.</p>
             </div>
           </div>
-          <p style="margin-top: 15px">
-            <strong>Insight:</strong> Measuring spread (Standard Deviation)
-            helps set realistic expectations and identify anomalies.
-          </p>
         </div>
 
         <div class="info-box">
           <h4>Measures of Variability Recap</h4>
           <ul style="margin-left: 20px; line-height: 1.8">
-            <li><strong>Range:</strong> Max - Min (Sensitive to outliers)</li>
-            <li>
-              <strong>Variance:</strong> Average squared difference from mean
-            </li>
-            <li>
-              <strong>Standard Deviation (σ):</strong> Square root of variance
-              (The "ruler" for spread)
-            </li>
+            <li><strong>Variance:</strong> Average squared difference from mean.</li>
+            <li><strong>Standard Deviation (σ):</strong> Square root of variance. This is our "ruler" for spread.</li>
           </ul>
         </div>
       </div>
 
       <!-- Section 2: Chebyshev's Inequality -->
       <div class="section">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-          "
-        >
-          <div
-            style="
-              background: #000;
-              color: #fff;
-              width: 40px;
-              height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-weight: bold;
-              font-size: 1.2em;
-            "
-          >
-            2
-          </div>
-          <h2 style="margin: 0; border: none">
-            Chebyshev's Inequality <i class="fas fa-shield-alt"></i>
-          </h2>
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #10b981; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">2</div>
+          <h2 style="margin: 0; border: none">Chebyshev's Inequality <i class="fas fa-shield-alt"></i></h2>
         </div>
 
         <p>
           This theorem provides a <strong>lower bound</strong> on the
           probability that data falls within a certain distance from the mean.
-          The magic? It works for <strong>ANY</strong> distribution (Normal,
-          Skewed, Bimodal, etc.).
+          The magic? It works for <strong>ANY</strong> distribution (Normal, Skewed, etc.).
         </p>
 
         <div class="rule-box">
-          <h3
-            style="
-              font-size: 2em;
-              margin-bottom: 20px;
-              font-family: 'Courier New', monospace;
-            "
-          >
+          <h3 style="font-size: 2em; margin-bottom: 20px; font-family: 'Courier New', monospace;">
             P(|X - μ| ≥ kσ) ≤ 1/k²
           </h3>
           <p style="font-size: 1.2em">
-            "The probability that a value is more than
-            <strong>k</strong> standard deviations away from the mean is at most
-            <strong>1/k²</strong>."
+            "The probability that a value is more than <strong>k</strong> standard deviations away from the mean is <em>at most</em> <strong>1/k²</strong>."
           </p>
         </div>
 
-        <div class="definition-box">
-          <h4>The "So What?"</h4>
-          <p>
-            Conversely, it means that <strong>at least (1 - 1/k²)</strong> of
-            the data lies <strong>within</strong> k standard deviations of the
-            mean.
-          </p>
-          <ul style="margin: 15px 0 0 20px; line-height: 1.8">
-            <li>
-              <strong>k = 2:</strong> At least <strong>75%</strong> of data is
-              within ±2σ.
-            </li>
-            <li>
-              <strong>k = 3:</strong> At least <strong>88.9%</strong> of data is
-              within ±3σ.
-            </li>
-            <li>
-              <strong>k = 4:</strong> At least <strong>93.75%</strong> of data
-              is within ±4σ.
-            </li>
-          </ul>
+        <!-- Mermaid Logic Flow -->
+        <div class="mermaid-container">
+          <div class="mermaid">
+            flowchart TD
+              Data[Unknown Data Distribution] --> Calc{"Calculate Distance<br>k = (Value - Mean) / SD"}
+              
+              Calc --> kVal[Value of k]
+              
+              kVal -- "Calculate 1/k²" --> Risk["<b>Risk (Outside Range)</b><br>Max Probability = 1/k²"]
+              kVal -- "Calculate 1 - 1/k²" --> Safe["<b>Safety (Inside Range)</b><br>Min Probability = 1 - 1/k²"]
+              
+              style Risk fill:#fee2e2,stroke:#ef4444,stroke-width:2px
+              style Safe fill:#d1fae5,stroke:#10b981,stroke-width:2px
+              style Calc fill:#f3f4f6,stroke:#000
+          </div>
+        </div>
+
+        <div class="success-box">
+          <h4>The "Safety Net" Guarantee</h4>
+          <p>Chebyshev guarantees the minimum amount of data inside the range:</p>
+          
+          <!-- Chart.js Visualization -->
+          <div class="chart-container">
+            <canvas id="chebyshevChart"></canvas>
+          </div>
         </div>
 
         <div class="interactive-demo">
@@ -657,28 +425,25 @@
             the guaranteed percentage of data within that range.
           </p>
           <div class="slider-container">
-            <label for="kInput"
-              >k (Standard Deviations): <span id="kValue">2</span></label
-            >
-            <input
-              type="range"
-              id="kInput"
-              class="slider"
-              min="1.1"
-              max="10"
-              step="0.1"
-              value="2"
-            />
+            <label for="kInput">k (Standard Deviations): <span id="kValue">2</span></label>
+            <input type="range" id="kInput" class="slider" min="1.1" max="10" step="0.1" value="2" />
           </div>
-          <div
-            id="chebyshevResult"
-            style="text-align: center; margin-top: 20px"
-          >
-            <div style="font-size: 3em; font-weight: bold; color: #000">
+          
+          <!-- Visual Progress Bar -->
+          <div class="progress-bg">
+            <div id="probBar" class="progress-fill"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.9em; margin-top: 5px;">
+            <span>Mean (μ)</span>
+            <span>Range Boundary (kσ)</span>
+          </div>
+
+          <div id="chebyshevResult" style="text-align: center; margin-top: 20px">
+            <div style="font-size: 3em; font-weight: bold; color: #10b981;">
               75.00%
             </div>
-            <p>of data is guaranteed to be within ±2σ</p>
-            <p style="color: #666; font-size: 0.9em; margin-top: 5px">
+            <p>of data is <strong>guaranteed</strong> to be within ±2σ</p>
+            <p style="color: #ef4444; font-size: 0.9em; margin-top: 5px;">
               (Max 25.00% outside)
             </p>
           </div>
@@ -687,64 +452,28 @@
 
       <!-- Section 3: Real-World Applications -->
       <div class="section">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-          "
-        >
-          <div
-            style="
-              background: #000;
-              color: #fff;
-              width: 40px;
-              height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-weight: bold;
-              font-size: 1.2em;
-            "
-          >
-            3
-          </div>
-          <h2 style="margin: 0; border: none">
-            Real-World Applications <i class="fas fa-globe"></i>
-          </h2>
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">3</div>
+          <h2 style="margin: 0; border: none">Real-World Applications <i class="fas fa-globe"></i></h2>
         </div>
 
         <div class="sampling-grid">
           <div class="sampling-card">
-            <h4><i class="fas fa-user-secret"></i> Fraud Detection</h4>
+            <h4><i class="fas fa-user-secret" style="color:#ef4444"></i> Fraud Detection</h4>
             <p>
-              <strong>Scenario:</strong> Monitoring credit card transactions.
-            </p>
-            <p>
-              <strong>Application:</strong> If a transaction is 3 standard
-              deviations above the mean (k=3), Chebyshev says there's less than
-              an 11% chance of this happening normally. It's a "red flag" for
-              potential fraud.
+              If a credit card transaction is <strong>3σ</strong> above the mean, Chebyshev says there's less than an 11% chance of this happening normally. It's a flag for potential fraud.
             </p>
           </div>
           <div class="sampling-card">
-            <h4><i class="fas fa-truck"></i> Delivery Estimation</h4>
-            <p><strong>Scenario:</strong> Logistics planning.</p>
+            <h4><i class="fas fa-truck" style="color:#3b82f6"></i> Logistics</h4>
             <p>
-              <strong>Application:</strong> To guarantee service levels, a
-              company might use k=4. They can say with >93% confidence that a
-              package will arrive within the calculated time window, regardless
-              of traffic or weather patterns.
+              To guarantee service levels, a company might use <strong>k=4</strong>. They can say with <strong>>93% confidence</strong> that a package will arrive within the calculated window.
             </p>
           </div>
           <div class="sampling-card">
-            <h4><i class="fas fa-chart-line"></i> Stock Market Risk</h4>
-            <p><strong>Scenario:</strong> Assessing volatility.</p>
+            <h4><i class="fas fa-chart-line" style="color:#10b981"></i> Stock Risk</h4>
             <p>
-              <strong>Application:</strong> Investors use it to estimate the
-              maximum probability of extreme losses. If a stock drop is 5σ away,
-              it's extremely rare (max 4% chance), helping in risk modeling.
+              Investors use it to model extreme losses. If a stock drop is <strong>5σ</strong> away, it's extremely rare (max 4% chance), helping to stress-test portfolios.
             </p>
           </div>
         </div>
@@ -752,36 +481,13 @@
 
       <!-- Section 4: Practice -->
       <div class="section">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-          "
-        >
-          <div
-            style="
-              background: #000;
-              color: #fff;
-              width: 40px;
-              height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-weight: bold;
-              font-size: 1.2em;
-            "
-          >
-            4
-          </div>
-          <h2 style="margin: 0; border: none">
-            Let's Practice! <i class="fas fa-dumbbell"></i>
-          </h2>
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">4</div>
+          <h2 style="margin: 0; border: none">Let's Practice! <i class="fas fa-dumbbell"></i></h2>
         </div>
 
         <div class="example-box">
-          <h4>Problem 1: The Mumbai Chai Shop ☕</h4>
+          <h4>Problem 1: The Mumbai Chai Shop <i class="fas fa-mug-hot"></i></h4>
           <p>
             <strong>Given:</strong> Average daily sales (μ) = ₹5,000. Standard
             Deviation (σ) = ₹1,000.<br />
@@ -790,38 +496,22 @@
           </p>
 
           <button onclick="toggleSolution('sol1')">Show Solution</button>
-          <div
-            id="sol1"
-            style="
-              display: none;
-              margin-top: 20px;
-              background: #f9f9f9;
-              padding: 20px;
-              border-left: 4px solid #000;
-            "
-          >
+          <div id="sol1" style="display: none; margin-top: 20px; background: #f9f9f9; padding: 20px; border-left: 4px solid #000;">
             <p><strong>Step 1: Determine Distance from Mean</strong></p>
-            <p>Range is ₹3,000 to ₹7,000. Mean is ₹5,000.</p>
-            <p>Distance = ₹7,000 - ₹5,000 = ₹2,000.</p>
+            <p>₹7,000 - ₹5,000 = ₹2,000.</p>
 
             <p><strong>Step 2: Calculate k</strong></p>
             <p>k = Distance / σ = 2000 / 1000 = <strong>2</strong>.</p>
 
             <p><strong>Step 3: Apply Formula</strong></p>
-            <p>
-              Max Probability (Outside) ≤ 1/k² = 1/2² = 1/4 =
-              <strong>0.25</strong>.
-            </p>
+            <p>Max Probability (Outside) ≤ 1/k² = 1/4 = <strong>0.25</strong>.</p>
 
-            <p>
-              <strong>Answer:</strong> There is at most a
-              <strong>25%</strong> chance sales will be outside this range.
-            </p>
+            <p style="color: #ef4444; font-weight: bold;">Answer: Max 25% chance sales are outside this range.</p>
           </div>
         </div>
 
         <div class="example-box">
-          <h4>Problem 2: Exam Scores 📝</h4>
+          <h4>Problem 2: Exam Scores <i class="fas fa-file-alt"></i></h4>
           <p>
             <strong>Given:</strong> Mean score = 70. SD = 5.<br />
             <strong>Question:</strong> What percentage of students scored
@@ -829,113 +519,54 @@
           </p>
 
           <button onclick="toggleSolution('sol2')">Show Solution</button>
-          <div
-            id="sol2"
-            style="
-              display: none;
-              margin-top: 20px;
-              background: #f9f9f9;
-              padding: 20px;
-              border-left: 4px solid #000;
-            "
-          >
+          <div id="sol2" style="display: none; margin-top: 20px; background: #f9f9f9; padding: 20px; border-left: 4px solid #000;">
             <p><strong>Step 1: Determine Distance</strong></p>
-            <p>85 - 70 = 15. (Also 70 - 55 = 15).</p>
+            <p>85 - 70 = 15.</p>
 
             <p><strong>Step 2: Calculate k</strong></p>
             <p>k = 15 / 5 = <strong>3</strong>.</p>
 
             <p><strong>Step 3: Apply Formula</strong></p>
-            <p>
-              Min Probability (Inside) ≥ 1 - 1/k² = 1 - 1/9 ≈
-              <strong>0.889</strong>.
-            </p>
+            <p>Min Probability (Inside) ≥ 1 - 1/k² = 1 - 1/9 ≈ <strong>0.889</strong>.</p>
 
-            <p>
-              <strong>Answer:</strong> At least <strong>88.9%</strong> of
-              students scored between 55 and 85.
-            </p>
+            <p style="color: #10b981; font-weight: bold;">Answer: At least 88.9% of students.</p>
           </div>
         </div>
       </div>
 
-      <!-- Footer -->
-      <div
-        class="section"
-        style="
-          background: #000000;
-          color: #ffffff;
-          text-align: center;
-          margin-bottom: 0;
-        "
-      >
-        <h3 style="color: #ffffff; border: none">
-          Continue Your Learning Journey
-        </h3>
-        <p>
-          You've mastered Chebyshev's Inequality! You're becoming a stats pro.
-        </p>
+      <!-- Footer (Preserved) -->
+      <div class="section" style="background: #000000; color: #ffffff; text-align: center; margin-bottom: 0;">
+        <h3 style="color: #ffffff; border: none">Continue Your Learning Journey</h3>
+        <p>You've mastered Chebyshev's Inequality! You're becoming a stats pro.</p>
         <div style="margin-top: 2rem">
-          <a
-            href="FSPWeekThreeB.html"
-            style="
-              display: inline-block;
-              border: 2px solid #ffffff;
-              color: #ffffff;
-              padding: 15px 30px;
-              text-decoration: none;
-              font-weight: bold;
-              margin: 10px;
-            "
-          >
+          <a href="FSPWeekThreeB.html" style="display: inline-block; border: 2px solid #ffffff; color: #ffffff; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 10px;">
             <i class="fas fa-arrow-left"></i> Previous: Week 3B
           </a>
-          <a
-            href="../Week4/FSPWeekFourA.html"
-            style="
-              display: inline-block;
-              border: 2px solid #ffffff;
-              color: #ffffff;
-              padding: 15px 30px;
-              text-decoration: none;
-              font-weight: bold;
-              margin: 10px;
-            "
-          >
+          <a href="../Week4/FSPWeekFourA.html" style="display: inline-block; border: 2px solid #ffffff; color: #ffffff; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 10px;">
             Next: Week 4A <i class="fas fa-arrow-right"></i>
           </a>
         </div>
-        <div
-          style="
-            margin-top: 30px;
-            border-top: 1px solid #333;
-            padding-top: 20px;
-            color: #888;
-          "
-        >
-          <a
-            href="../../index.html"
-            style="color: #888; text-decoration: none; margin: 0 10px"
-            >Home</a
-          >
-          |
-          <a
-            href="../index.html"
-            style="color: #888; text-decoration: none; margin: 0 10px"
-            >FSP Notes</a
-          >
+        <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; color: #888;">
+          <a href="../../index.html" style="color: #888; text-decoration: none; margin: 0 10px">Home</a> |
+          <a href="../index.html" style="color: #888; text-decoration: none; margin: 0 10px">FSP Notes</a>
         </div>
-        <p style="margin-top: 20px; font-size: 0.9em; color: #666">
-          Foundations of Statistics & Probability | Visual Learning Companion
-        </p>
+        <p style="margin-top: 20px; font-size: 0.9em; color: #666">Foundations of Statistics & Probability | Visual Learning Companion</p>
       </div>
     </div>
 
     <script>
+      // Initialize Mermaid
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'neutral',
+        flowchart: { curve: 'basis' }
+      });
+
       // Interactive Chebyshev Calculator
       const kInput = document.getElementById("kInput");
       const kValue = document.getElementById("kValue");
       const resultDiv = document.getElementById("chebyshevResult");
+      const probBar = document.getElementById("probBar");
 
       function updateChebyshev() {
         const k = parseFloat(kInput.value);
@@ -946,15 +577,60 @@
         const percentInside = (probInside * 100).toFixed(2);
         const percentOutside = (probOutside * 100).toFixed(2);
 
+        // Update Text
         resultDiv.innerHTML = `
-                <div style="font-size: 3em; font-weight: bold; color: #000;">${percentInside}%</div>
-                <p>of data is guaranteed to be within ±${k.toFixed(1)}σ</p>
-                <p style="color: #666; font-size: 0.9em; margin-top: 5px;">(Max ${percentOutside}% outside)</p>
-            `;
+            <div style="font-size: 3em; font-weight: bold; color: #10b981;">${percentInside}%</div>
+            <p>of data is guaranteed to be within ±${k.toFixed(1)}σ</p>
+            <p style="color: #ef4444; font-size: 0.9em; margin-top: 5px;">(Max ${percentOutside}% outside)</p>
+        `;
+
+        // Update Bar
+        probBar.style.width = percentInside + "%";
       }
 
       kInput.addEventListener("input", updateChebyshev);
       updateChebyshev(); // Initialize
+
+      // Chart.js Visualization
+      const ctx = document.getElementById('chebyshevChart').getContext('2d');
+      const myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: ['k = 2 (2σ)', 'k = 3 (3σ)', 'k = 4 (4σ)'],
+              datasets: [{
+                  label: 'Minimum % Inside Range',
+                  data: [75, 88.89, 93.75],
+                  backgroundColor: [
+                      'rgba(16, 185, 129, 0.6)', // Green
+                      'rgba(16, 185, 129, 0.8)',
+                      'rgba(16, 185, 129, 1)'
+                  ],
+                  borderColor: [
+                      'rgba(16, 185, 129, 1)',
+                      'rgba(16, 185, 129, 1)',
+                      'rgba(16, 185, 129, 1)'
+                  ],
+                  borderWidth: 2
+              },
+              {
+                  label: 'Maximum % Outside Range',
+                  data: [25, 11.11, 6.25],
+                  backgroundColor: 'rgba(239, 68, 68, 0.5)', // Red
+                  borderColor: 'rgba(239, 68, 68, 1)',
+                  borderWidth: 2
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  title: { display: true, text: 'Standard Deviation Guarantees', font: { size: 16 } },
+              },
+              scales: {
+                  y: { beginAtZero: true, max: 100, title: { display: true, text: 'Percentage (%)' } }
+              }
+          }
+      });
 
       // Solution Toggler
       function toggleSolution(id) {

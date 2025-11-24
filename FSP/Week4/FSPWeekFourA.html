@@ -4,8 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Week 4A: Understanding Data Types | FSP</title>
+    <!-- Chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Mermaid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <link rel="stylesheet" href="../../styles/navbar.css" />
+    <!-- Font Awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -33,6 +37,10 @@
         --nav-text-color: #ffffff;
         --nav-active-color: #3b82f6;
         --nav-hover-bg: rgba(255, 255, 255, 0.1);
+        
+        /* Topic Colors */
+        --quant-color: #2563eb;
+        --qual-color: #d97706;
       }
 
       .container {
@@ -40,6 +48,7 @@
         margin: 0 auto;
       }
 
+      /* Header Styling */
       .header {
         background: #000000;
         color: #ffffff;
@@ -47,6 +56,7 @@
         margin-bottom: 40px;
         border: 3px solid #000000;
         text-align: center;
+        box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
       }
 
       .header h1 {
@@ -62,6 +72,7 @@
         margin: 10px 0;
       }
 
+      /* Section Styling */
       .section {
         background: #ffffff;
         border: 2px solid #000000;
@@ -73,12 +84,13 @@
       .section::before {
         content: "";
         position: absolute;
-        top: 10px;
-        left: 10px;
-        right: -10px;
-        bottom: -10px;
-        background: #f5f5f5;
+        top: 8px;
+        left: 8px;
+        right: -8px;
+        bottom: -8px;
+        background: #f0f0f0;
         z-index: -1;
+        border: 2px solid #000;
       }
 
       .section h2 {
@@ -100,13 +112,6 @@
         padding-left: 20px;
       }
 
-      .section h4 {
-        color: #000000;
-        font-size: 1.4em;
-        margin: 25px 0 15px 0;
-        font-weight: 500;
-      }
-
       .intro-text {
         font-size: 1.2em;
         line-height: 2;
@@ -116,24 +121,17 @@
         border-left: 4px solid #000000;
       }
 
-      .definition-box {
-        background: #f5f5f5;
-        border-left: 8px solid #000000;
-        padding: 25px;
-        margin: 25px 0;
-        font-style: italic;
-      }
-
-      .example-box {
+      /* Alert Boxes with Font Awesome Icons */
+      .example-box, .success-box, .info-box, .warning-box, .interactive-demo {
         background: #ffffff;
         border: 3px solid #000000;
         padding: 30px;
-        margin: 30px 0;
+        margin: 40px 0;
         position: relative;
       }
 
-      .example-box::before {
-        content: "EXAMPLE";
+      .example-box::before, .success-box::before, .info-box::before, 
+      .warning-box::before, .interactive-demo::before {
         position: absolute;
         top: -15px;
         left: 20px;
@@ -141,52 +139,17 @@
         color: #ffffff;
         padding: 5px 20px;
         font-size: 0.9em;
-        font-weight: bold;
+        font-weight: 900;
         letter-spacing: 2px;
+        font-family: "Font Awesome 6 Free", "Georgia", serif;
       }
 
-      .success-box {
-        background: #ffffff;
-        border: 3px solid #000000;
-        padding: 30px;
-        margin: 30px 0;
-        position: relative;
-      }
+      .example-box::before { content: "\f02d  EXAMPLE"; } /* fa-book */
+      .success-box::before { content: "\f00c  KEY INSIGHT"; } /* fa-check */
+      .info-box::before { content: "\f129  INFO"; } /* fa-info */
+      .interactive-demo::before { content: "\f11b  INTERACTIVE DEMO"; } /* fa-gamepad */
 
-      .success-box::before {
-        content: "✓ KEY INSIGHT";
-        position: absolute;
-        top: -15px;
-        left: 20px;
-        background: #000000;
-        color: #ffffff;
-        padding: 5px 20px;
-        font-size: 0.9em;
-        font-weight: bold;
-        letter-spacing: 2px;
-      }
-
-      .info-box {
-        background: #ffffff;
-        border: 3px solid #000000;
-        padding: 30px;
-        margin: 30px 0;
-        position: relative;
-      }
-
-      .info-box::before {
-        content: "ℹ INFO";
-        position: absolute;
-        top: -15px;
-        left: 20px;
-        background: #000000;
-        color: #ffffff;
-        padding: 5px 20px;
-        font-size: 0.9em;
-        font-weight: bold;
-        letter-spacing: 2px;
-      }
-
+      /* Grid Layouts */
       .sampling-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -202,48 +165,12 @@
         position: relative;
       }
 
-      .sampling-card::after {
-        content: "";
-        position: absolute;
-        top: 6px;
-        left: 6px;
-        right: -6px;
-        bottom: -6px;
-        background: #e0e0e0;
-        z-index: -1;
-        transition: all 0.3s;
-      }
-
       .sampling-card:hover {
-        transform: translate(-3px, -3px);
+        transform: translate(-5px, -5px);
+        box-shadow: 8px 8px 0px rgba(0,0,0,0.8);
       }
 
-      .sampling-card:hover::after {
-        top: 8px;
-        left: 8px;
-      }
-
-      .interactive-demo {
-        background: #f9f9f9;
-        border: 3px solid #000000;
-        padding: 30px;
-        margin: 30px 0;
-        position: relative;
-      }
-
-      .interactive-demo::before {
-        content: "🎮 INTERACTIVE DEMO";
-        position: absolute;
-        top: -15px;
-        left: 20px;
-        background: #000000;
-        color: #ffffff;
-        padding: 5px 20px;
-        font-size: 0.9em;
-        font-weight: bold;
-        letter-spacing: 2px;
-      }
-
+      /* Tables */
       table {
         width: 100%;
         border-collapse: collapse;
@@ -251,8 +178,7 @@
         background: #ffffff;
       }
 
-      th,
-      td {
+      th, td {
         border: 2px solid #000000;
         padding: 20px;
         text-align: left;
@@ -265,10 +191,9 @@
         letter-spacing: 1px;
       }
 
-      tr:nth-child(even) {
-        background: #f9f9f9;
-      }
+      tr:nth-child(even) { background: #f9f9f9; }
 
+      /* Buttons & Inputs */
       button {
         background: #000000;
         color: #ffffff;
@@ -280,11 +205,13 @@
         margin: 10px;
         font-family: "Georgia", serif;
         letter-spacing: 1px;
+        font-weight: bold;
       }
 
       button:hover {
         background: #ffffff;
         color: #000000;
+        box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
       }
 
       input[type="text"] {
@@ -294,19 +221,24 @@
         font-size: 1.1em;
         font-family: "Georgia", serif;
         margin: 10px 0;
+        background: #fdfdfd;
       }
 
-      .data-tree {
-        background: #f5f5f5;
-        padding: 30px;
-        margin: 30px 0;
+      /* Mermaid & Charts */
+      .mermaid-container {
+        background: #ffffff;
         border: 2px solid #000000;
+        padding: 20px;
+        margin: 30px 0;
+        text-align: center;
+        overflow-x: auto;
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
       }
 
-      .tree-branch {
-        margin: 20px 0 20px 40px;
-        padding-left: 20px;
-        border-left: 3px solid #000000;
+      .mermaid {
+        display: flex;
+        justify-content: center;
+        width: 100%;
       }
 
       .chart-container {
@@ -314,30 +246,22 @@
         height: 400px;
         width: 100%;
         margin: 20px 0;
+        border: 2px solid #000;
+        padding: 10px;
       }
 
+      /* Responsive */
       @media (max-width: 768px) {
-        body {
-          padding: 70px 10px 10px;
-        }
-        .header h1 {
-          font-size: 1.8em;
-        }
-        .section {
-          padding: 30px 15px;
-        }
-        .sampling-grid {
-          grid-template-columns: 1fr;
-        }
-        table {
-          display: block;
-          overflow-x: auto;
-          white-space: nowrap;
-        }
+        body { padding: 70px 10px 10px; }
+        .header h1 { font-size: 1.8em; }
+        .section { padding: 30px 15px; }
+        .sampling-grid { grid-template-columns: 1fr; }
+        table { display: block; overflow-x: auto; white-space: nowrap; }
       }
     </style>
   </head>
   <body>
+    <!-- Navbar (Preserved) -->
     <nav class="modern-nav">
       <div class="nav-inner">
         <a href="../../index.html" class="nav-brand">
@@ -415,42 +339,16 @@
                 <i class="fas fa-arrow-right"></i> Avoid common classification
                 errors
               </li>
-              <li>
-                <i class="fas fa-arrow-right"></i> Apply to real scenarios
-              </li>
             </ul>
           </div>
         </div>
       </div>
 
-      <!-- Section 1: The Big Picture -->
+      <!-- Section 1: The Big Picture (Mermaid) -->
       <div class="section">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-          "
-        >
-          <div
-            style="
-              background: #000;
-              color: #fff;
-              width: 40px;
-              height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-weight: bold;
-              font-size: 1.2em;
-            "
-          >
-            1
-          </div>
-          <h2 style="margin: 0; border: none">
-            Data Types: The Foundation <i class="fas fa-layer-group"></i>
-          </h2>
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">1</div>
+          <h2 style="margin: 0; border: none">Data Types: The Foundation <i class="fas fa-sitemap"></i></h2>
         </div>
 
         <p>
@@ -461,49 +359,30 @@
           there!
         </p>
 
-        <div class="data-tree">
-          <h3 style="border: none; margin-top: 0">📊 Data Type Hierarchy</h3>
-          <div style="margin-top: 20px">
-            <strong style="font-size: 1.3em">ALL DATA</strong>
-            <div class="tree-branch">
-              <strong style="font-size: 1.2em"
-                >🔢 Quantitative (Numerical)</strong
-              >
-              <p style="margin: 10px 0">Data you can measure or count</p>
-              <div class="tree-branch">
-                <strong>Discrete</strong> - Countable values (whole numbers)
-                <p style="margin-left: 20px; color: #666">
-                  Example: Number of students, goals scored
-                </p>
-              </div>
-              <div class="tree-branch">
-                <strong>Continuous</strong> - Measurable values (any value in a
-                range)
-                <p style="margin-left: 20px; color: #666">
-                  Example: Height, temperature, time
-                </p>
-              </div>
-            </div>
-            <div class="tree-branch">
-              <strong style="font-size: 1.2em"
-                >📝 Qualitative (Categorical)</strong
-              >
-              <p style="margin: 10px 0">
-                Data that describes qualities or characteristics
-              </p>
-              <div class="tree-branch">
-                <strong>Nominal</strong> - Categories without order
-                <p style="margin-left: 20px; color: #666">
-                  Example: Colors, car brands, gender
-                </p>
-              </div>
-              <div class="tree-branch">
-                <strong>Ordinal</strong> - Categories with meaningful order
-                <p style="margin-left: 20px; color: #666">
-                  Example: Ratings, education levels, rankings
-                </p>
-              </div>
-            </div>
+        <!-- Upgraded Mermaid Diagram 1 -->
+        <div class="mermaid-container">
+          <div class="mermaid">
+            graph TD
+              Root[("DATA TYPES")]
+              
+              Root --> Quant[<b>QUANTITATIVE</b><br>Numerical]
+              Root --> Qual[<b>QUALITATIVE</b><br>Categorical]
+              
+              Quant --> Discrete["<b>Discrete</b><br>(Countable)<br><i>e.g., # of students</i>"]
+              Quant --> Continuous["<b>Continuous</b><br>(Measurable)<br><i>e.g., Height, Time</i>"]
+              
+              Qual --> Nominal["<b>Nominal</b><br>(No Order)<br><i>e.g., Colors, Brands</i>"]
+              Qual --> Ordinal["<b>Ordinal</b><br>(Ordered)<br><i>e.g., Rankings, Grades</i>"]
+
+              style Root fill:#000,color:#fff,stroke:#000
+              
+              style Quant fill:#2563eb,color:#fff,stroke:#000
+              style Discrete fill:#dbeafe,stroke:#2563eb,stroke-width:2px
+              style Continuous fill:#dbeafe,stroke:#2563eb,stroke-width:2px
+              
+              style Qual fill:#d97706,color:#fff,stroke:#000
+              style Nominal fill:#fef3c7,stroke:#d97706,stroke-width:2px
+              style Ordinal fill:#fef3c7,stroke:#d97706,stroke-width:2px
           </div>
         </div>
 
@@ -512,46 +391,23 @@
           <p>Different data types require different statistical methods:</p>
           <ul style="margin: 15px 0 0 20px; line-height: 1.8">
             <li>
-              <strong>Quantitative data:</strong> You can calculate means,
-              standard deviations, perform regression
+              <span style="color: #2563eb; font-weight: bold;">Quantitative data:</span> You can calculate means,
+              standard deviations, perform regression.
             </li>
             <li>
-              <strong>Qualitative data:</strong> You work with frequencies,
-              modes, chi-square tests
+              <span style="color: #d97706; font-weight: bold;">Qualitative data:</span> You work with frequencies,
+              modes, chi-square tests.
             </li>
-            <li>Using the wrong method = invalid results! ❌</li>
+            <li>Using the wrong method = invalid results! <i class="fas fa-times" style="color: red;"></i></li>
           </ul>
         </div>
       </div>
 
       <!-- Section 2: Quantitative Data -->
       <div class="section">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-          "
-        >
-          <div
-            style="
-              background: #000;
-              color: #fff;
-              width: 40px;
-              height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-weight: bold;
-              font-size: 1.2em;
-            "
-          >
-            2
-          </div>
-          <h2 style="margin: 0; border: none">
-            Quantitative Data <i class="fas fa-calculator"></i>
-          </h2>
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #2563eb; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">2</div>
+          <h2 style="margin: 0; border: none">Quantitative Data <i class="fas fa-calculator"></i></h2>
         </div>
 
         <p>
@@ -560,8 +416,8 @@
         </p>
 
         <div class="sampling-grid">
-          <div class="sampling-card" style="border-left: 5px solid #3b82f6">
-            <h4><i class="fas fa-sort-numeric-up"></i> Discrete Data</h4>
+          <div class="sampling-card" style="border-left: 5px solid #2563eb">
+            <h4><i class="fas fa-sort-numeric-up" style="color: #2563eb;"></i> Discrete Data</h4>
             <p><strong>Can only take specific, separate values</strong></p>
             <p style="margin-top: 15px">
               Usually whole numbers. You <em>count</em> discrete data.
@@ -570,13 +426,12 @@
             <p><strong>Examples:</strong></p>
             <ul style="margin-left: 20px; line-height: 1.8">
               <li>Number of students in a class</li>
-              <li>Goals scored in a cricket match</li>
+              <li>Goals scored in a match</li>
               <li>Number of cars in a parking lot</li>
-              <li>Books on a shelf</li>
             </ul>
           </div>
-          <div class="sampling-card" style="border-left: 5px solid #10b981">
-            <h4><i class="fas fa-ruler"></i> Continuous Data</h4>
+          <div class="sampling-card" style="border-left: 5px solid #3b82f6">
+            <h4><i class="fas fa-ruler" style="color: #3b82f6;"></i> Continuous Data</h4>
             <p><strong>Can take any value within a range</strong></p>
             <p style="margin-top: 15px">
               Can have decimals. You <em>measure</em> continuous data.
@@ -585,7 +440,6 @@
             <p><strong>Examples:</strong></p>
             <ul style="margin-left: 20px; line-height: 1.8">
               <li>Height (170.5 cm, 170.55 cm...)</li>
-              <li>Weight (65.3 kg, 65.35 kg...)</li>
               <li>Temperature (25.6°C, 25.67°C...)</li>
               <li>Time duration (10.23 seconds...)</li>
             </ul>
@@ -597,75 +451,36 @@
         </div>
 
         <div class="example-box">
-          <h4>Quick Test</h4>
+          <h4>Quick Test <i class="fas fa-question-circle"></i></h4>
           <p><strong>Question:</strong> Is "age" discrete or continuous?</p>
-          <button onclick="toggleSolution('age')">Show Answer</button>
-          <div
-            id="age"
-            style="
-              display: none;
-              margin-top: 15px;
-              padding: 15px;
-              background: #f0f0f0;
-            "
-          >
+          <button onclick="toggleSolution('age')">Reveal Answer</button>
+          <div id="age" style="display: none; margin-top: 15px; padding: 15px; background: #f0f0f0; border-left: 4px solid #000;">
             <p><strong>Answer:</strong> It depends on how you measure it!</p>
             <ul style="margin: 10px 0 0 20px">
-              <li>
-                <strong>Discrete:</strong> If you measure in whole years (e.g.,
-                "I'm 25 years old")
-              </li>
-              <li>
-                <strong>Continuous:</strong> If you include fractions (e.g.,
-                "I'm 25.5 years old")
-              </li>
+              <li><strong>Discrete:</strong> If you measure in whole years (e.g., "I'm 25").</li>
+              <li><strong>Continuous:</strong> If you include strictly time elapsed (e.g., "25.5 years").</li>
             </ul>
-            <p style="margin-top: 10px">
-              <em>In practice, age is usually treated as discrete!</em>
-            </p>
+            <p style="margin-top: 10px"><em>In practice, age is usually treated as discrete!</em></p>
           </div>
         </div>
       </div>
 
       <!-- Section 3: Qualitative Data -->
       <div class="section">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-          "
-        >
-          <div
-            style="
-              background: #000;
-              color: #fff;
-              width: 40px;
-              height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-weight: bold;
-              font-size: 1.2em;
-            "
-          >
-            3
-          </div>
-          <h2 style="margin: 0; border: none">
-            Qualitative Data <i class="fas fa-tags"></i>
-          </h2>
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #d97706; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">3</div>
+          <h2 style="margin: 0; border: none">Qualitative Data <i class="fas fa-tags"></i></h2>
         </div>
 
         <p>
           Qualitative data describes
-          <strong>qualities, categories, or characteristics</strong>. You can't
+          <strong>categories or characteristics</strong>. You can't
           do arithmetic on it. But order matters...
         </p>
 
         <div class="sampling-grid">
-          <div class="sampling-card" style="border-left: 5px solid #f59e0b">
-            <h4><i class="fas fa-tag"></i> Nominal Data</h4>
+          <div class="sampling-card" style="border-left: 5px solid #d97706">
+            <h4><i class="fas fa-tag" style="color: #d97706;"></i> Nominal Data</h4>
             <p><strong>Categories WITHOUT inherent order</strong></p>
             <p style="margin-top: 15px">
               Just labels or names. No "greater than" or "less than".
@@ -676,11 +491,10 @@
               <li>Eye color (brown, blue, green)</li>
               <li>Car brands (Maruti, Tata, Hyundai)</li>
               <li>Gender (male, female, other)</li>
-              <li>Types of cuisine (Indian, Chinese, Italian)</li>
             </ul>
           </div>
-          <div class="sampling-card" style="border-left: 5px solid #8b5cf6">
-            <h4><i class="fas fa-sort-amount-up"></i> Ordinal Data</h4>
+          <div class="sampling-card" style="border-left: 5px solid #fbbf24">
+            <h4><i class="fas fa-sort-amount-up" style="color: #fbbf24;"></i> Ordinal Data</h4>
             <p><strong>Categories WITH meaningful order</strong></p>
             <p style="margin-top: 15px">
               Clear ranking or sequence. But intervals might not be equal!
@@ -688,14 +502,9 @@
             <hr style="margin: 20px 0; border: 1px solid #ddd" />
             <p><strong>Examples:</strong></p>
             <ul style="margin-left: 20px; line-height: 1.8">
-              <li>
-                Customer satisfaction (very dissatisfied → very satisfied)
-              </li>
-              <li>
-                Education level (high school → bachelor's → master's → PhD)
-              </li>
+              <li>Customer satisfaction (Poor → Good)</li>
+              <li>Education level (HS → Bachelor's → PhD)</li>
               <li>Rankings (1st, 2nd, 3rd place)</li>
-              <li>Ratings (1 star, 2 stars, ... 5 stars)</li>
             </ul>
           </div>
         </div>
@@ -717,57 +526,48 @@
         </div>
       </div>
 
-      <!-- Section 4: Interactive Classifier -->
+      <!-- Section 4: Interactive Classifier with Mermaid Logic -->
       <div class="section">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-          "
-        >
-          <div
-            style="
-              background: #000;
-              color: #fff;
-              width: 40px;
-              height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-weight: bold;
-              font-size: 1.2em;
-            "
-          >
-            4
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">4</div>
+          <h2 style="margin: 0; border: none">Interactive Data Classifier <i class="fas fa-tasks"></i></h2>
+        </div>
+        
+        <p>How do we decide what data type we have? Follow this logic:</p>
+        
+        <!-- Mermaid Decision Tree -->
+        <div class="mermaid-container">
+          <div class="mermaid">
+            flowchart TD
+              Start(Input Data) --> Q1{Is it a Number?}
+              
+              Q1 -- YES --> Q2{Can it have<br>Decimals?}
+              Q2 -- YES --> Res1[<b>Continuous</b><br>Quantitative]
+              Q2 -- NO --> Res2[<b>Discrete</b><br>Quantitative]
+              
+              Q1 -- NO --> Q3{Does Order<br>Matter?}
+              Q3 -- YES --> Res3[<b>Ordinal</b><br>Qualitative]
+              Q3 -- NO --> Res4[<b>Nominal</b><br>Qualitative]
+
+              style Start fill:#000,color:#fff
+              style Res1 fill:#dbeafe,stroke:#2563eb
+              style Res2 fill:#dbeafe,stroke:#2563eb
+              style Res3 fill:#fef3c7,stroke:#d97706
+              style Res4 fill:#fef3c7,stroke:#d97706
+              style Q1 fill:#fff,stroke:#000
+              style Q2 fill:#fff,stroke:#000
+              style Q3 fill:#fff,stroke:#000
           </div>
-          <h2 style="margin: 0; border: none">
-            Interactive Data Classifier <i class="fas fa-tasks"></i>
-          </h2>
         </div>
 
         <div class="interactive-demo">
           <h4>Test Your Understanding!</h4>
           <p>Enter any type of data below, and I'll help you classify it:</p>
 
-          <input
-            type="text"
-            id="dataInput"
-            placeholder="e.g., Temperature in Celsius, Eye color, Number of goals..."
-          />
+          <input type="text" id="dataInput" placeholder="e.g., Temperature, Eye color, Number of goals..." />
           <button onclick="classifyData()">Classify Data</button>
 
-          <div
-            id="classificationResult"
-            style="
-              display: none;
-              margin-top: 20px;
-              padding: 20px;
-              background: #fff;
-              border: 3px solid #000;
-            "
-          >
+          <div id="classificationResult" style="display: none; margin-top: 20px; padding: 20px; background: #fff; border: 3px solid #000;">
             <!-- Result will appear here -->
           </div>
         </div>
@@ -808,18 +608,6 @@
                 <td>Ordinal</td>
                 <td>Clear order from worst to best</td>
               </tr>
-              <tr>
-                <td>Income in Rupees</td>
-                <td>Quantitative</td>
-                <td>Continuous</td>
-                <td>Can have decimal values</td>
-              </tr>
-              <tr>
-                <td>Education level</td>
-                <td>Qualitative</td>
-                <td>Ordinal</td>
-                <td>Natural progression/ranking</td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -827,178 +615,60 @@
 
       <!-- Section 5: Practice Problems -->
       <div class="section">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-          "
-        >
-          <div
-            style="
-              background: #000;
-              color: #fff;
-              width: 40px;
-              height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-weight: bold;
-              font-size: 1.2em;
-            "
-          >
-            5
-          </div>
-          <h2 style="margin: 0; border: none">
-            Practice Problems <i class="fas fa-pen"></i>
-          </h2>
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">5</div>
+          <h2 style="margin: 0; border: none">Practice Problems <i class="fas fa-pen-fancy"></i></h2>
         </div>
 
         <div class="example-box">
           <h4>Problem 1: Classify the Following</h4>
-          <p>
-            Categorize each data type as <strong>Quantitative</strong> or
-            <strong>Qualitative</strong>, then further classify them:
-          </p>
+          <p>Categorize each data type as <strong>Quantitative</strong> or <strong>Qualitative</strong>:</p>
           <ol style="margin: 20px 0 0 20px; line-height: 2">
             <li>Weight of apples in kg</li>
             <li>Brand of smartphone</li>
-            <li>Customer satisfaction level (Poor, Fair, Good, Excellent)</li>
+            <li>Customer satisfaction level</li>
             <li>Number of emails received daily</li>
-            <li>Blood type (A, B, AB, O)</li>
           </ol>
           <button onclick="toggleSolution('prob1')">Show Solutions</button>
-          <div
-            id="prob1"
-            style="
-              display: none;
-              margin-top: 20px;
-              padding: 20px;
-              background: #f0f0f0;
-            "
-          >
+          <div id="prob1" style="display: none; margin-top: 20px; padding: 20px; background: #f0f0f0;">
             <ol style="margin-left: 20px; line-height: 2">
-              <li>
-                <strong>Quantitative - Continuous</strong> (measured, can have
-                decimals)
-              </li>
-              <li>
-                <strong>Qualitative - Nominal</strong> (categories, no inherent
-                order)
-              </li>
-              <li>
-                <strong>Qualitative - Ordinal</strong> (categories with clear
-                order)
-              </li>
-              <li>
-                <strong>Quantitative - Discrete</strong> (counted, whole
-                numbers)
-              </li>
-              <li>
-                <strong>Qualitative - Nominal</strong> (categories, no natural
-                order)
-              </li>
+              <li><strong>Quantitative - Continuous</strong> (measured)</li>
+              <li><strong>Qualitative - Nominal</strong> (categories, no order)</li>
+              <li><strong>Qualitative - Ordinal</strong> (categories with order)</li>
+              <li><strong>Quantitative - Discrete</strong> (counted)</li>
             </ol>
-          </div>
-        </div>
-
-        <div class="example-box">
-          <h4>Problem 2: Real-World Scenario</h4>
-          <p>You're analyzing data for a Mumbai cricket stadium:</p>
-          <ul style="margin: 15px 0 0 20px; line-height: 2">
-            <li>Number of spectators</li>
-            <li>Ticket price</li>
-            <li>Seat category (General, Premium, VIP)</li>
-            <li>Match duration in hours</li>
-            <li>Team names</li>
-          </ul>
-          <p style="margin-top: 15px">Classify each data type.</p>
-          <button onclick="toggleSolution('prob2')">Show Solutions</button>
-          <div
-            id="prob2"
-            style="
-              display: none;
-              margin-top: 20px;
-              padding: 20px;
-              background: #f0f0f0;
-            "
-          >
-            <ul style="margin-left: 20px; line-height: 2">
-              <li>
-                <strong>Number of spectators:</strong> Quantitative - Discrete
-              </li>
-              <li><strong>Ticket price:</strong> Quantitative - Continuous</li>
-              <li>
-                <strong>Seat category:</strong> Qualitative - Ordinal (General <
-                Premium < VIP)
-              </li>
-              <li>
-                <strong>Match duration:</strong> Quantitative - Continuous
-              </li>
-              <li><strong>Team names:</strong> Qualitative - Nominal</li>
-            </ul>
           </div>
         </div>
       </div>
 
-      <!-- Footer -->
-      <div
-        class="section"
-        style="
-          background: #000000;
-          color: #ffffff;
-          text-align: center;
-          margin-bottom: 0;
-        "
-      >
-        <h3 style="color: #ffffff; border: none">
-          Continue Your Learning Journey
-        </h3>
+      <!-- Footer (Preserved) -->
+      <div class="section" style="background: #000000; color: #ffffff; text-align: center; margin-bottom: 0;">
+        <h3 style="color: #ffffff; border: none">Continue Your Learning Journey</h3>
         <p>You've mastered Data Types! Ready for more statistical concepts?</p>
         <div style="margin-top: 2rem">
-          <a
-            href="../Week3/FSPWeekThreeC.html"
-            style="
-              display: inline-block;
-              border: 2px solid #ffffff;
-              color: #ffffff;
-              padding: 15px 30px;
-              text-decoration: none;
-              font-weight: bold;
-              margin: 10px;
-            "
-          >
+          <a href="../Week3/FSPWeekThreeC.html" style="display: inline-block; border: 2px solid #ffffff; color: #ffffff; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 10px;">
             <i class="fas fa-arrow-left"></i> Previous: Week 3C
           </a>
+          <a href="FSPWeekFourB.html" style="display: inline-block; background: #ffffff; color: #000000; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 10px;">
+            Next: Week 4B <i class="fas fa-arrow-right"></i>
+          </a>
         </div>
-        <div
-          style="
-            margin-top: 30px;
-            border-top: 1px solid #333;
-            padding-top: 20px;
-            color: #888;
-          "
-        >
-          <a
-            href="../../index.html"
-            style="color: #888; text-decoration: none; margin: 0 10px"
-            >Home</a
-          >
-          |
-          <a
-            href="../index.html"
-            style="color: #888; text-decoration: none; margin: 0 10px"
-            >FSP Notes</a
-          >
+        <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; color: #888;">
+          <a href="../../index.html" style="color: #888; text-decoration: none; margin: 0 10px">Home</a> |
+          <a href="../index.html" style="color: #888; text-decoration: none; margin: 0 10px">FSP Notes</a>
         </div>
-        <p style="margin-top: 20px; font-size: 0.9em; color: #666">
-          Foundations of Statistics & Probability | Visual Learning Companion
-        </p>
+        <p style="margin-top: 20px; font-size: 0.9em; color: #666">Foundations of Statistics & Probability | Visual Learning Companion</p>
       </div>
     </div>
 
     <script>
+      // Initialize Mermaid
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'neutral',
+        flowchart: { curve: 'basis' }
+      });
+
       // Toggle solution visibility
       function toggleSolution(id) {
         const el = document.getElementById(id);
@@ -1011,10 +681,7 @@
 
       // Interactive Data Classifier
       function classifyData() {
-        const input = document
-          .getElementById("dataInput")
-          .value.toLowerCase()
-          .trim();
+        const input = document.getElementById("dataInput").value.toLowerCase().trim();
         const resultDiv = document.getElementById("classificationResult");
 
         if (!input) {
@@ -1024,141 +691,59 @@
 
         let category = "";
         let subCategory = "";
-        let explanation = "";
+        let color = "#000";
 
-        // Simple keyword-based classification
-        if (
-          input.includes("number of") ||
-          input.includes("count") ||
-          input.includes("goals") ||
-          input.includes("students") ||
-          input.includes("siblings")
-        ) {
+        // Logic
+        if (input.includes("number") || input.includes("count") || input.includes("goals") || input.includes("students") || input.includes("siblings")) {
           category = "Quantitative";
           subCategory = "Discrete";
-          explanation =
-            "This is countable data that can only take whole number values.";
-        } else if (
-          input.includes("height") ||
-          input.includes("weight") ||
-          input.includes("temperature") ||
-          input.includes("time") ||
-          input.includes("income") ||
-          input.includes("price")
-        ) {
+          color = "#2563eb"; // Blue
+        } else if (input.includes("height") || input.includes("weight") || input.includes("temp") || input.includes("time") || input.includes("price")) {
           category = "Quantitative";
           subCategory = "Continuous";
-          explanation =
-            "This is measurable data that can take any value within a range, including decimals.";
-        } else if (
-          input.includes("rating") ||
-          input.includes("satisfaction") ||
-          input.includes("education") ||
-          input.includes("rank") ||
-          input.includes("level") ||
-          input.includes("grade")
-        ) {
+          color = "#3b82f6"; // Lighter Blue
+        } else if (input.includes("rating") || input.includes("satisfaction") || input.includes("grade") || input.includes("rank") || input.includes("level")) {
           category = "Qualitative";
           subCategory = "Ordinal";
-          explanation =
-            "This is categorical data with a meaningful order or ranking.";
-        } else if (
-          input.includes("color") ||
-          input.includes("brand") ||
-          input.includes("type") ||
-          input.includes("gender") ||
-          input.includes("name") ||
-          input.includes("category")
-        ) {
+          color = "#d97706"; // Orange
+        } else if (input.includes("color") || input.includes("brand") || input.includes("type") || input.includes("gender") || input.includes("name")) {
           category = "Qualitative";
           subCategory = "Nominal";
-          explanation = "This is categorical data without any inherent order.";
+          color = "#fbbf24"; // Light Orange
         } else {
-          // Default classification question
-          resultDiv.innerHTML = `
-            <h4 style="margin-top: 0;">Help me classify "${input}"</h4>
-            <p><strong>Ask yourself these questions:</strong></p>
-            <ol style="margin: 15px 0 0 20px; line-height: 2">
-              <li><strong>Can you measure it with numbers?</strong>
-                <ul style="margin-left: 20px;">
-                  <li>YES → It's <strong>Quantitative</strong></li>
-                  <li>NO → It's <strong>Qualitative</strong></li>
-                </ul>
-              </li>
-              <li><strong>If Quantitative:</strong> Can it have decimals?
-                <ul style="margin-left: 20px;">
-                  <li>YES → <strong>Continuous</strong></li>
-                  <li>NO (only whole numbers) → <strong>Discrete</strong></li>
-                </ul>
-              </li>
-              <li><strong>If Qualitative:</strong> Do categories have natural order?
-                <ul style="margin-left: 20px;">
-                  <li>YES → <strong>Ordinal</strong></li>
-                  <li>NO → <strong>Nominal</strong></li>
-                </ul>
-              </li>
-            </ol>
-          `;
+          // Default prompt
+          resultDiv.innerHTML = `<p>I'm not sure about "<strong>${input}</strong>". Ask: Is it a number? Does order matter?</p>`;
           resultDiv.style.display = "block";
           return;
         }
 
         resultDiv.innerHTML = `
-          <h4 style="margin-top: 0;">Classification Result for "${input}"</h4>
-          <div style="background: #000; color: #fff; padding: 20px; margin: 20px 0;">
-            <p style="font-size: 1.5em; margin: 0;"><strong>${category}</strong> → <strong>${subCategory}</strong></p>
+          <div style="border-left: 5px solid ${color}; padding-left: 15px;">
+            <h4 style="margin: 0; color: ${color}; text-transform: uppercase;">${category}</h4>
+            <h2 style="margin: 5px 0;">${subCategory}</h2>
+            <p>Based on your input, this fits the pattern for ${subCategory} data.</p>
           </div>
-          <p style="margin-top: 15px;"><strong>Explanation:</strong> ${explanation}</p>
-          <p style="margin-top: 15px; color: #666; font-style: italic;">Note: This is a simplified classifier. For ambiguous cases, consider the context and how you're collecting the data!</p>
         `;
         resultDiv.style.display = "block";
       }
 
-      // Allow Enter key to classify
-      document
-        .getElementById("dataInput")
-        .addEventListener("keypress", function (e) {
-          if (e.key === "Enter") {
-            classifyData();
-          }
-        });
+      // Enter key support
+      document.getElementById("dataInput").addEventListener("keypress", function (e) {
+        if (e.key === "Enter") classifyData();
+      });
 
-      // Chart.js visualizations
-      // Quantitative Data Visualization
-      const quantCtx = document
-        .getElementById("quantitativeChart")
-        .getContext("2d");
-      const quantitativeChart = new Chart(quantCtx, {
+      // Chart.js - Quantitative
+      const quantCtx = document.getElementById("quantitativeChart").getContext("2d");
+      new Chart(quantCtx, {
         type: "bar",
         data: {
-          labels: ["Discrete Examples", "Continuous Examples"],
+          labels: ["Discrete (Counted)", "Continuous (Measured)"],
           datasets: [
             {
-              label: "Number of Students (Discrete)",
-              data: [25, 0],
-              backgroundColor: "rgba(59, 130, 246, 0.7)",
-              borderColor: "rgba(59, 130, 246, 1)",
-              borderWidth: 2,
-            },
-            {
-              label: "Books Read (Discrete)",
-              data: [12, 0],
-              backgroundColor: "rgba(59, 130, 246, 0.5)",
-              borderColor: "rgba(59, 130, 246, 1)",
-              borderWidth: 2,
-            },
-            {
-              label: "Temperature °C (Continuous)",
-              data: [0, 25.6],
-              backgroundColor: "rgba(16, 185, 129, 0.7)",
-              borderColor: "rgba(16, 185, 129, 1)",
-              borderWidth: 2,
-            },
-            {
-              label: "Time in seconds (Continuous)",
-              data: [0, 12.45],
-              backgroundColor: "rgba(16, 185, 129, 0.5)",
-              borderColor: "rgba(16, 185, 129, 1)",
+              label: "Example Values",
+              data: [85, 92.5],
+              backgroundColor: ["rgba(37, 99, 235, 0.7)", "rgba(59, 130, 246, 0.5)"],
+              borderColor: ["#2563eb", "#3b82f6"],
               borderWidth: 2,
             },
           ],
@@ -1167,74 +752,33 @@
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            title: {
-              display: true,
-              text: "Quantitative Data: Discrete vs Continuous",
-              font: { size: 18, weight: "bold", family: "Georgia" },
-            },
-            legend: {
-              display: true,
-              position: "bottom",
-            },
+            title: { display: true, text: "Data Precision Comparison", font: { size: 16 } },
+            legend: { display: false }
           },
-          scales: {
-            y: {
-              beginAtZero: true,
-              title: {
-                display: true,
-                text: "Value",
-              },
-            },
-          },
+          scales: { y: { beginAtZero: true } }
         },
       });
 
-      // Qualitative Data Visualization
-      const qualCtx = document
-        .getElementById("qualitativeChart")
-        .getContext("2d");
-      const qualitativeChart = new Chart(qualCtx, {
+      // Chart.js - Qualitative
+      const qualCtx = document.getElementById("qualitativeChart").getContext("2d");
+      new Chart(qualCtx, {
         type: "doughnut",
         data: {
-          labels: [
-            "Nominal: Eye Colors",
-            "Nominal: Car Brands",
-            "Ordinal: Satisfaction (Poor)",
-            "Ordinal: Satisfaction (Fair)",
-            "Ordinal: Satisfaction (Good)",
-            "Ordinal: Satisfaction (Excellent)",
-          ],
-          datasets: [
-            {
-              label: "Frequency",
-              data: [25, 25, 12.5, 12.5, 12.5, 12.5],
-              backgroundColor: [
-                "rgba(245, 158, 11, 0.7)",
-                "rgba(245, 158, 11, 0.5)",
-                "rgba(139, 92, 246, 0.4)",
-                "rgba(139, 92, 246, 0.6)",
-                "rgba(139, 92, 246, 0.8)",
-                "rgba(139, 92, 246, 1)",
-              ],
-              borderColor: "#000",
-              borderWidth: 2,
-            },
-          ],
+          labels: ["Nominal (Eye Color)", "Ordinal (Satisfaction)"],
+          datasets: [{
+            data: [50, 50],
+            backgroundColor: ["#fbbf24", "#d97706"],
+            borderColor: "#fff",
+            borderWidth: 2
+          }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            title: {
-              display: true,
-              text: "Qualitative Data: Nominal vs Ordinal Distribution",
-              font: { size: 18, weight: "bold", family: "Georgia" },
-            },
-            legend: {
-              display: true,
-              position: "right",
-            },
-          },
+            title: { display: true, text: "Categorical Breakdown", font: { size: 16 } },
+            legend: { position: 'bottom' }
+          }
         },
       });
     </script>

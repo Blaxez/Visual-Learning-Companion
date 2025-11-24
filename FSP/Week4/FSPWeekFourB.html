@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 4B: Data Sorting & Percentiles | FSP</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Mermaid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="../../styles/navbar.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Georgia", "Times New Roman", serif;
+        background: #ffffff;
+        color: #1a1a1a;
+        line-height: 1.8;
+        padding: 20px;
+        padding-top: 80px;
+        scroll-behavior: smooth;
+      }
+
+      /* ... (Your existing CSS remains unchanged) ... */
+      :root {
+        --nav-bg-glass: rgba(0, 0, 0, 0.9);
+        --nav-border-glass: rgba(255, 255, 255, 0.1);
+        --nav-text-color: #ffffff;
+        --nav-active-color: #3b82f6;
+        --nav-hover-bg: rgba(255, 255, 255, 0.1);
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        margin-top: 20px;
+      }
+
+      .header {
+        background: #000000;
+        color: #ffffff;
+        padding: 60px 40px;
+        margin-bottom: 40px;
+        border: 3px solid #000000;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 3em;
+        margin-bottom: 15px;
+        font-weight: 300;
+        letter-spacing: 2px;
+      }
+
+      .header p {
+        font-size: 1.3em;
+        font-weight: 300;
+        margin: 10px 0;
+      }
+
+      .section {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 50px;
+        margin-bottom: 40px;
+        position: relative;
+      }
+
+      .section::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: -10px;
+        bottom: -10px;
+        background: #f5f5f5;
+        z-index: -1;
+      }
+
+      .section h2 {
+        color: #000000;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        border-bottom: 4px solid #000000;
+        padding-bottom: 15px;
+        font-weight: 400;
+        letter-spacing: 1px;
+      }
+
+      .section h3 {
+        color: #000000;
+        font-size: 1.8em;
+        margin: 35px 0 20px 0;
+        font-weight: 400;
+        border-left: 6px solid #000000;
+        padding-left: 20px;
+      }
+
+      .section h4 {
+        color: #000000;
+        font-size: 1.4em;
+        margin: 25px 0 15px 0;
+        font-weight: 500;
+      }
+
+      .intro-text {
+        font-size: 1.2em;
+        line-height: 2;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-left: 4px solid #000000;
+      }
+
+      .example-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .example-box::before {
+        content: "EXAMPLE";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .success-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .success-box::before {
+        content: "✓ KEY INSIGHT";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .info-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .info-box::before {
+        content: "ℹ INFO";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .sampling-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin: 30px 0;
+      }
+
+      .sampling-card {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 25px;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .sampling-card:hover {
+        transform: translate(-3px, -3px);
+        box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.1);
+      }
+
+      .interactive-demo {
+        background: #f9f9f9;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+      }
+
+      .interactive-demo::before {
+        content: "🎮 INTERACTIVE DEMO";
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 30px 0;
+        background: #ffffff;
+      }
+
+      th,
+      td {
+        border: 2px solid #000000;
+        padding: 20px;
+        text-align: left;
+      }
+
+      th {
+        background: #000000;
+        color: #ffffff;
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+
+      tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      button {
+        background: #000000;
+        color: #ffffff;
+        border: 3px solid #000000;
+        padding: 15px 35px;
+        cursor: pointer;
+        font-size: 1.1em;
+        transition: all 0.3s;
+        margin: 10px;
+        font-family: "Georgia", serif;
+        letter-spacing: 1px;
+      }
+
+      button:hover {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #000000;
+        font-size: 1.1em;
+        font-family: "Georgia", serif;
+        margin: 10px 0;
+      }
+
+      /* Mermaid Container Style */
+      .mermaid-container {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+        overflow-x: auto;
+      }
+
+      .mermaid {
+        display: flex;
+        justify-content: center;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 70px 10px 10px;
+        }
+        .header h1 {
+          font-size: 1.8em;
+        }
+        .section {
+          padding: 30px 15px;
+        }
+        .sampling-grid {
+          grid-template-columns: 1fr;
+        }
+        table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+   <nav class="modern-nav">
+      <div class="nav-inner">
+        <a href="../../index.html" class="nav-brand">
+          <i class="fas fa-layer-group"></i>
+          <span>Notes App</span>
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+          </a>
+          <a href="../index.html" class="nav-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>FSP</span>
+          </a>
+          <a href="../../ATA/index.html" class="nav-item">
+            <i class="fas fa-code-branch"></i>
+            <span>ATA</span>
+          </a>
+          <a href="../../BDA/index.html" class="nav-item">
+            <i class="fas fa-database"></i>
+            <span>BDA</span>
+          </a>
+          <a href="../../LANA/index.html" class="nav-item">
+            <i class="fas fa-square-root-alt"></i>
+            <span>LANA</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <h1>Week 4B: Data Sorting & Percentiles</h1>
+        <p>
+          Organizing and Understanding Data Distribution
+          <i class="fas fa-sort-amount-down"></i>
+        </p>
+        <p style="font-size: 1rem; margin-top: 10px; opacity: 0.8">
+          "Order brings clarity to chaos"
+        </p>
+      </div>
+
+      <!-- Overview -->
+      <div class="section">
+        <h2>Week's Overview</h2>
+        <div class="intro-text">
+          Welcome to Week 4B! This week we dive into the essential concepts of
+          data analysis: <strong>Sorting, Quartiles, and Percentiles</strong>.
+        </div>
+
+        <div class="sampling-grid">
+          <div class="sampling-card">
+            <h3><i class="fas fa-clipboard-list"></i> Key Topics</h3>
+            <ul style="list-style: none; margin-top: 15px; line-height: 1.8">
+              <li><i class="fas fa-check"></i> Data Sorting (The 80/20 Rule)</li>
+              <li><i class="fas fa-check"></i> Quartiles & Percentiles</li>
+              <li><i class="fas fa-check"></i> Calculation Logic</li>
+            </ul>
+          </div>
+          <div class="sampling-card">
+            <h3><i class="fas fa-bullseye"></i> Learning Goals</h3>
+            <ul style="list-style: none; margin-top: 15px; line-height: 1.8">
+              <li><i class="fas fa-arrow-right"></i> Master sorting techniques</li>
+              <li><i class="fas fa-arrow-right"></i> Interpret percentiles</li>
+              <li><i class="fas fa-arrow-right"></i> Understand distribution</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 1: Data Sorting -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">1</div>
+          <h2 style="margin: 0; border: none">Data Sorting: The Foundation <i class="fas fa-sort"></i></h2>
+        </div>
+
+        <p>Sorting is the first step in data analysis. It allows us to organize data to identify extremes.</p>
+
+        <!-- FIXED DIAGRAM 1: Sorting Flow -->
+        <div class="mermaid-container">
+          <div class="mermaid">
+            flowchart LR
+                A[Unsorted Data] -->|Sorting Process| B[Sorted Data]
+                B --> C[Easier Analysis]
+                B --> D[Data Visualization]
+                C --> E[Identify Extremes]
+                C --> F[Calculate Statistics]
+                D --> G[Histograms]
+                D --> H[Box Plots]
+          </div>
+          <p style="margin-top: 10px; font-style: italic; color: #666">
+            Figure 1: The Value of Sorting
+          </p>
+        </div>
+
+        <div class="success-box">
+          <h4>The 80/20 Rule of Sorting</h4>
+          <p>The critical 20% of effort—simply arranging data—unlocks 80% of the analytical value.</p>
+        </div>
+
+        <!-- FIXED DIAGRAM 2: Pareto Pie Chart -->
+        <div class="mermaid-container">
+          <div class="mermaid">
+            %%{init: {'theme': 'base', 'themeVariables': { 'pie1': '#000000', 'pie2': '#ffffff', 'pieStrokeColor': '#000000'}}}%%
+            pie title The Pareto Principle (80/20 Rule)
+                "Value Unlocked" : 80
+                "Effort Required" : 20
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Quartiles & Percentiles -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">2</div>
+          <h2 style="margin: 0; border: none">Quartiles & Percentiles <i class="fas fa-chart-pie"></i></h2>
+        </div>
+
+        <div class="sampling-grid">
+            <div class="sampling-card" style="border-left: 5px solid #3b82f6">
+              <h4><i class="fas fa-columns"></i> Quartiles</h4>
+              <p>Divide data into <strong>four equal parts</strong>.</p>
+            </div>
+            <div class="sampling-card" style="border-left: 5px solid #10b981">
+              <h4><i class="fas fa-percentage"></i> Percentiles</h4>
+              <p>Divide data into <strong>100 equal parts</strong>.</p>
+            </div>
+        </div>
+
+        <!-- FIXED DIAGRAM 3: Quartile Pie Chart -->
+        <div class="mermaid-container">
+          <div class="mermaid">
+            %%{init: {'theme':'neutral'}}%%
+            pie title Data Distribution (Quartiles)
+                "Q1 (Lowest 25%)" : 25
+                "Q2 (Next 25%)" : 25
+                "Q3 (Next 25%)" : 25
+                "Q4 (Highest 25%)" : 25
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Google Sheets Functions -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">3</div>
+          <h2 style="margin: 0; border: none">Google Sheets Functions <i class="fas fa-table"></i></h2>
+        </div>
+
+        <table>
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>PERCENTILE.INC</code></td>
+                <td><strong>Inclusive:</strong> Includes 0% and 100% (min and max).</td>
+              </tr>
+              <tr>
+                <td><code>PERCENTILE.EXC</code></td>
+                <td><strong>Exclusive:</strong> Excludes 0% and 100%.</td>
+              </tr>
+            </tbody>
+        </table>
+
+        <!-- FIXED DIAGRAM 4: Calculation Sequence -->
+        <div class="mermaid-container">
+          <div class="mermaid">
+            sequenceDiagram
+                participant User
+                participant GoogleSheets
+                User->>GoogleSheets: Enters Data & Formula
+                GoogleSheets->>GoogleSheets: Sorts Data Internally
+                GoogleSheets->>GoogleSheets: Calculates Rank
+                GoogleSheets->>GoogleSheets: Interpolates Value
+                GoogleSheets-->>User: Returns Percentile Value
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Real-World Applications -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">4</div>
+          <h2 style="margin: 0; border: none">Real-World Applications <i class="fas fa-globe"></i></h2>
+        </div>
+
+        <h3>1. Spam Detection 📧</h3>
+        <p>Spam filters use percentiles to set thresholds for suspicious features.</p>
+
+        <!-- FIXED DIAGRAM 5: Spam Logic Flowchart -->
+        <div class="mermaid-container">
+          <div class="mermaid">
+            flowchart TD
+                A[Incoming Email] --> B{Analyze Features}
+                B --> C[Count Links]
+                B --> D[Check Keywords]
+                C --> E{> 90th Percentile?}
+                D --> F{Score > Threshold?}
+                E -->|Yes| G[Flag as Spam]
+                E -->|No| H[Pass to Inbox]
+                F -->|Yes| G
+                F -->|No| H
+          </div>
+        </div>
+
+        <h3>2. Personalized Recommendations (Netflix) 🎬</h3>
+        <p>Streaming services analyze your viewing history against population percentiles.</p>
+
+        <!-- FIXED DIAGRAM 6: Complex Sequence -->
+        <div class="mermaid-container">
+          <div class="mermaid">
+            sequenceDiagram
+                participant User
+                participant Netflix
+                participant Engine as Rec. Engine
+                participant DB as Database
+                User->>Netflix: Requests Content
+                Netflix->>Engine: Get Recommendations
+                Engine->>DB: Fetch User History
+                DB-->>Engine: User Data
+                Engine->>Engine: Calculate Percentiles
+                Note right of Engine: Compares to Top 10% Viewers
+                Engine->>DB: Query Matching Content
+                DB-->>Engine: Content Metadata
+                Engine-->>Netflix: Personalized List
+                Netflix-->>User: Display Top Picks
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Demo (Logic retained) -->
+      <div class="section">
+        <div class="interactive-demo">
+          <h4>Interactive Percentile Calculator</h4>
+          <p>Enter a list of numbers (comma separated) and find the percentile:</p>
+          <input type="text" id="datasetInput" placeholder="e.g., 10, 20, 30, 40, 50" value="10, 20, 30, 40, 50" />
+          <div style="display: flex; gap: 10px; align-items: center">
+            <label for="percentileInput">Percentile (0-100):</label>
+            <input type="number" id="percentileInput" value="50" min="0" max="100" style="width: 100px" />
+          </div>
+          <button onclick="calculateInteractivePercentile()">Calculate</button>
+          <div id="calcResult" style="display: none; margin-top: 20px; padding: 20px; background: #fff; border: 3px solid #000;">
+            <p id="resultText" style="font-size: 1.2em; font-weight: bold"></p>
+            <p id="explanationText" style="color: #666; margin-top: 10px"></p>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+          <!-- Footer -->
+      <div
+        class="section"
+        style="
+          background: #000000;
+          color: #ffffff;
+          text-align: center;
+          margin-bottom: 0;
+        "
+      >
+        <h3 style="color: #ffffff; border: none">
+          Continue Your Learning Journey
+        </h3>
+        <p>You've mastered Data Types! Ready for more statistical concepts?</p>
+        <div style="margin-top: 2rem">
+          <a
+            href="../Week4/FSPWeekFourA.html"
+            style="
+              display: inline-block;
+              border: 2px solid #ffffff;
+              color: #ffffff;
+              padding: 15px 30px;
+              text-decoration: none;
+              font-weight: bold;
+              margin: 10px;
+            "
+          >
+            <i class="fas fa-arrow-left"></i> Previous: Week 4A
+          </a>
+          <a
+            href="../Week4/FSPWeekFourC.html"
+            style="
+              display: inline-block;
+              background: #ffffff;
+              color: #000000;
+              padding: 15px 30px;
+              text-decoration: none;
+              font-weight: bold;
+              margin: 10px;
+            "
+          >
+            Next: Week 4C <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div
+          style="
+            margin-top: 30px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            color: #888;
+          "
+        >
+          <a
+            href="../../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >Home</a
+          >
+          |
+          <a
+            href="../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >FSP Notes</a
+          >
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9em; color: #666">
+          Foundations of Statistics & Probability | Visual Learning Companion
+        </p>
+      </div>
+
+    <script>
+      // Initialize Mermaid with correct configuration
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "neutral",
+        flowchart: { curve: "basis" },
+        securityLevel: 'loose'
+      });
+
+      function calculateInteractivePercentile() {
+        const dataInput = document.getElementById("datasetInput").value;
+        const pInput = document.getElementById("percentileInput").value;
+        const resultDiv = document.getElementById("calcResult");
+        const resultText = document.getElementById("resultText");
+        const explanationText = document.getElementById("explanationText");
+
+        // Parse data
+        let data = dataInput
+          .split(",")
+          .map((x) => parseFloat(x.trim()))
+          .filter((x) => !isNaN(x));
+
+        if (data.length === 0) {
+          alert("Please enter valid numbers separated by commas.");
+          return;
+        }
+
+        // Sort data
+        data.sort((a, b) => a - b);
+        const n = data.length;
+        const p = parseFloat(pInput);
+
+        // Calculate Rank Index
+        const rankIndex = (p / 100) * (n + 1);
+
+        let result;
+        let explanation = `Sorted Data: [${data.join(", ")}]<br>Rank Index = (${p}/100) * (${n} + 1) = ${rankIndex.toFixed(2)}`;
+
+        // Interpolation logic
+        if (rankIndex < 1) {
+          result = data[0]; // Minimum
+          explanation += `<br>Rank < 1, so taking minimum value.`;
+        } else if (rankIndex >= n + 1) {
+          result = data[n - 1]; // Maximum
+          explanation += `<br>Rank > n, so taking maximum value.`;
+        } else {
+          const lowerIndex = Math.floor(rankIndex);
+          const fraction = rankIndex - lowerIndex;
+
+          // Adjust for 0-based array indexing
+          const valLower = data[lowerIndex - 1];
+          const valUpper = data[lowerIndex] || data[lowerIndex - 1];
+
+          if (fraction === 0) {
+            result = valLower;
+            explanation += `<br>Rank is a whole number. Value at position ${lowerIndex} is ${result}.`;
+          } else {
+            result = valLower + fraction * (valUpper - valLower);
+            explanation += `<br>Interpolating between ${valLower} (pos ${lowerIndex}) and ${valUpper} (pos ${lowerIndex + 1}).<br>`;
+            explanation += `Calculation: ${valLower} + ${fraction.toFixed(2)} * (${valUpper} - ${valLower}) = ${result.toFixed(2)}`;
+          }
+        }
+
+        resultText.innerText = `${p}th Percentile = ${result.toFixed(2)}`;
+        explanationText.innerHTML = explanation;
+        resultDiv.style.display = "block";
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 4D: Percentiles and Quartiles | FSP</title>
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Mermaid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="../../styles/navbar.css" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Georgia", "Times New Roman", serif;
+        background: #ffffff;
+        color: #1a1a1a;
+        line-height: 1.8;
+        padding: 20px;
+        padding-top: 80px;
+        scroll-behavior: smooth;
+      }
+
+      /* Theme Colors */
+      :root {
+        --percentile-color: #8b5cf6;
+        --quartile-color: #10b981;
+        --border-color: #000000;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      /* Header Styling */
+      .header {
+        background: #000000;
+        color: #ffffff;
+        padding: 60px 40px;
+        margin-bottom: 40px;
+        border: 3px solid #000000;
+        text-align: center;
+        box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.2);
+      }
+
+      .header h1 {
+        font-size: 3em;
+        margin-bottom: 15px;
+        font-weight: 300;
+        letter-spacing: 2px;
+      }
+
+      .header p {
+        font-size: 1.3em;
+        font-weight: 300;
+        margin: 10px 0;
+      }
+
+      /* Section Styling */
+      .section {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 50px;
+        margin-bottom: 40px;
+        position: relative;
+      }
+
+      .section::before {
+        content: "";
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        right: -8px;
+        bottom: -8px;
+        background: #f0f0f0;
+        z-index: -1;
+        border: 2px solid #000;
+      }
+
+      .section h2 {
+        color: #000000;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        border-bottom: 4px solid #000000;
+        padding-bottom: 15px;
+        font-weight: 400;
+        letter-spacing: 1px;
+      }
+
+      .section h3 {
+        color: #000000;
+        font-size: 1.8em;
+        margin: 35px 0 20px 0;
+        font-weight: 400;
+        border-left: 6px solid #000000;
+        padding-left: 20px;
+      }
+
+      .intro-text {
+        font-size: 1.2em;
+        line-height: 2;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-left: 4px solid #000000;
+      }
+
+      /* Alert Boxes with Font Awesome Icons */
+      .example-box,
+      .success-box,
+      .info-box,
+      .warning-box,
+      .interactive-demo,
+      .formula-box {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 40px 0;
+        position: relative;
+      }
+
+      .example-box::before,
+      .success-box::before,
+      .info-box::before,
+      .warning-box::before,
+      .interactive-demo::before,
+      .formula-box::before {
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: 900;
+        letter-spacing: 2px;
+        font-family: "Font Awesome 6 Free", "Georgia", serif;
+      }
+
+      .example-box::before { content: "\f02d  EXAMPLE"; }
+      .success-box::before { content: "\f00c  KEY INSIGHT"; }
+      .info-box::before { content: "\f129  INFO"; }
+      .warning-box::before { content: "\f071  CAUTION"; }
+      .interactive-demo::before { content: "\f11b  INTERACTIVE"; }
+      .formula-box::before { content: "\f1ec  THE FORMULA"; }
+
+      .formula-box {
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        text-align: center;
+        padding: 40px 30px;
+      }
+
+      /* Grid Layouts */
+      .sampling-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin: 30px 0;
+      }
+
+      .sampling-card {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 25px;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .sampling-card:hover {
+        transform: translate(-5px, -5px);
+        box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.8);
+      }
+
+      /* Tables */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 30px 0;
+        background: #ffffff;
+      }
+
+      th, td {
+        border: 2px solid #000000;
+        padding: 20px;
+        text-align: left;
+      }
+
+      th {
+        background: #000000;
+        color: #ffffff;
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+
+      tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      /* Buttons & Inputs */
+      button {
+        background: #000000;
+        color: #ffffff;
+        border: 3px solid #000000;
+        padding: 15px 35px;
+        cursor: pointer;
+        font-size: 1.1em;
+        transition: all 0.3s;
+        margin: 10px;
+        font-family: "Georgia", serif;
+        letter-spacing: 1px;
+        font-weight: bold;
+      }
+
+      button:hover {
+        background: #ffffff;
+        color: #000000;
+        box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+      }
+
+      input[type="number"], input[type="text"] {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #000000;
+        font-size: 1.1em;
+        font-family: "Georgia", serif;
+        margin: 10px 0;
+        background: #fdfdfd;
+      }
+
+      /* Mermaid & Charts */
+      .mermaid-container {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 20px;
+        margin: 30px 0;
+        text-align: center;
+        overflow-x: auto;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.05);
+      }
+
+      .mermaid {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 350px;
+        width: 100%;
+        margin: 20px 0;
+        border: 2px solid #000;
+        padding: 20px;
+        background: #fff;
+      }
+
+      /* Highlight Box */
+      .highlight-box {
+        background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+        color: white;
+        padding: 30px;
+        margin: 30px 0;
+        border-radius: 0;
+        border: 3px solid #000;
+        box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Step Cards */
+      .step-card {
+        background: #ffffff;
+        border: 3px solid #000;
+        padding: 20px;
+        margin: 15px 0;
+        border-left: 8px solid #8b5cf6;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        body { padding: 70px 10px 10px; }
+        .header h1 { font-size: 1.8em; }
+        .section { padding: 30px 15px; }
+        .sampling-grid { grid-template-columns: 1fr; }
+        table { display: block; overflow-x: auto; white-space: nowrap; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="modern-nav">
+      <div class="nav-inner">
+        <a href="../../index.html" class="nav-brand">
+          <i class="fas fa-layer-group"></i>
+          <span>Notes App</span>
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home"></i> <span>Home</span>
+          </a>
+          <a href="../index.html" class="nav-item active">
+            <i class="fas fa-chart-line"></i> <span>FSP</span>
+          </a>
+          <!-- Add other nav links as needed -->
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <h1>Week 4D: Percentiles and Quartiles</h1>
+        <p>Understanding Relative Position in Data <i class="fas fa-chart-area"></i></p>
+        <p style="font-size: 1rem; margin-top: 10px; opacity: 0.8">
+          "Finding your place in the data distribution"
+        </p>
+      </div>
+
+      <!-- Overview -->
+      <div class="section">
+        <h2>Week's Overview</h2>
+        <div class="intro-text">
+          Welcome to Week 4D! <i class="fas fa-rocket"></i> Percentiles and quartiles are powerful statistical tools that help us understand <strong>relative standing</strong> within a dataset. They're used everywhere - from exam scores to healthcare growth charts to salary benchmarks!
+        </div>
+
+        <div class="sampling-grid">
+          <div class="sampling-card">
+            <h3><i class="fas fa-clipboard-list"></i> Key Topics</h3>
+            <ul style="list-style: none; margin-top: 15px; line-height: 1.8">
+              <li><i class="fas fa-check"></i> What are Percentiles?</li>
+              <li><i class="fas fa-check"></i> Understanding Quartiles</li>
+              <li><i class="fas fa-check"></i> Calculating Rank Index</li>
+              <li><i class="fas fa-check"></i> Linear Interpolation</li>
+            </ul>
+          </div>
+          <div class="sampling-card">
+            <h3><i class="fas fa-bullseye"></i> Learning Goals</h3>
+            <ul style="list-style: none; margin-top: 15px; line-height: 1.8">
+              <li><i class="fas fa-arrow-right"></i> Calculate percentiles accurately</li>
+              <li><i class="fas fa-arrow-right"></i> Find quartile values confidently</li>
+              <li><i class="fas fa-arrow-right"></i> Apply to real-world scenarios</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 1: What Are Percentiles? -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #8b5cf6; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">1</div>
+          <h2 style="margin: 0; border: none">What Are Percentiles? <i class="fas fa-percentage"></i></h2>
+        </div>
+
+        <p>A <strong>percentile</strong> is a statistical measure that indicates the value below which a given percentage of observations in a dataset fall.</p>
+
+        <div class="highlight-box">
+          <h3 style="color: white; border: none; margin: 0">Example: The 80th Percentile</h3>
+          <p style="font-size: 1.2em; margin-top: 15px">
+            If a student scores at the <strong>80th percentile</strong> on a test, they scored better than <strong>80% of all students</strong> who took the test! <i class="fas fa-trophy"></i>
+          </p>
+        </div>
+
+        <h3>Why Are Percentiles Important? <i class="fas fa-lightbulb"></i></h3>
+        <ul style="line-height: 2; margin: 20px 0 0 20px">
+          <li><strong>Relative Standing:</strong> Understand how a value compares to others in the dataset</li>
+          <li><strong>Intuitive Comparison:</strong> Easy to understand (better than X% of others)</li>
+          <li><strong>Widely Used:</strong> In education, healthcare, finance, and more</li>
+        </ul>
+
+        <div class="example-box">
+          <h4>Real-World Example: Baby Growth Charts <i class="fas fa-baby"></i></h4>
+          <p>
+            In India, doctors use percentiles to track baby growth. If a baby's weight is in the <strong>90th percentile</strong>, it means the baby is heavier than 90% of babies of the same age. This helps parents and doctors quickly assess whether a baby's growth is on track!
+          </p>
+        </div>
+
+        <!-- Corrected Mermaid Visualization -->
+        <div class="mermaid-container">
+          <div class="mermaid">
+            graph LR
+            A["Data Point"] --> B{"Calculate Percentile"}
+            B --> C["Compare Position to All Data"]
+            C --> D["P-th Percentile:<br>Better than P% of data"]
+            
+            style A fill:#f0f0f0,stroke:#000,stroke-width:2px
+            style B fill:#8b5cf6,color:#fff,stroke:#000,stroke-width:2px
+            style C fill:#fff,stroke:#000,stroke-dasharray: 5 5
+            style D fill:#10b981,color:#fff,stroke:#000,stroke-width:2px
+          </div>
+        </div>
+
+        <div class="success-box">
+          <h4>Key Definition</h4>
+          <p>
+            <strong>The P-th percentile</strong> is the value below which <strong>P% of the data</strong> falls.
+          </p>
+          <p style="margin-top: 10px">For example, the 25th percentile (also called Q1) is the value below which 25% of the data lies.</p>
+        </div>
+      </div>
+
+      <!-- Section 2: Understanding Quartiles -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #10b981; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">2</div>
+          <h2 style="margin: 0; border: none">Understanding Quartiles <i class="fas fa-divide"></i></h2>
+        </div>
+
+        <p>Quartiles are <strong>special percentiles</strong> that divide a dataset into <strong>four equal parts</strong>.</p>
+
+        <div class="sampling-grid">
+          <div class="sampling-card" style="border-left: 5px solid #3b82f6">
+            <h4 style="color: #3b82f6"><i class="fas fa-chart-bar"></i> Q1: First Quartile</h4>
+            <p><strong>25th Percentile</strong></p>
+            <p style="margin-top: 10px">25% of the data falls below this value</p>
+          </div>
+          <div class="sampling-card" style="border-left: 5px solid #10b981">
+            <h4 style="color: #10b981"><i class="fas fa-chart-line"></i> Q2: Second Quartile</h4>
+            <p><strong>50th Percentile (Median!)</strong></p>
+            <p style="margin-top: 10px">50% of the data falls below this value</p>
+          </div>
+          <div class="sampling-card" style="border-left: 5px solid #f59e0b">
+            <h4 style="color: #f59e0b"><i class="fas fa-chart-area"></i> Q3: Third Quartile</h4>
+            <p><strong>75th Percentile</strong></p>
+            <p style="margin-top: 10px">75% of the data falls below this value</p>
+          </div>
+        </div>
+
+        <h3>The Pizza Analogy <i class="fas fa-pizza-slice"></i></h3>
+        <div class="info-box">
+          <p>Imagine dividing a pizza into <strong>four equal slices</strong>. Each slice represents a quartile:</p>
+          <ul style="margin: 15px 0 0 20px; line-height: 2">
+            <li><strong>Q1:</strong> End of the first slice (25%)</li>
+            <li><strong>Q2 (Median):</strong> The cut in the middle (50%)</li>
+            <li><strong>Q3:</strong> End of the third slice (75%)</li>
+          </ul>
+        </div>
+
+        <!-- Visual Diagram -->
+        <div class="mermaid-container">
+          <div class="mermaid">
+            graph LR
+            Min(("Min")) --- Line1
+            Line1 --- Q1["Q1: 25%"]
+            Q1 --- Line2
+            Line2 --- Q2["Q2: 50% (Median)"]
+            Q2 --- Line3
+            Line3 --- Q3["Q3: 75%"]
+            Q3 --- Line4
+            Line4 --- Max(("Max"))
+
+            style Min fill:#ef4444,color:#fff,stroke:#000
+            style Q1 fill:#3b82f6,color:#fff,stroke:#000
+            style Q2 fill:#10b981,color:#fff,stroke:#000
+            style Q3 fill:#f59e0b,color:#fff,stroke:#000
+            style Max fill:#ef4444,color:#fff,stroke:#000
+            
+            linkStyle 0,1,2,3,4,5,6,7 stroke-width:4px,stroke:#555
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4>Salary Analysis Example <i class="fas fa-money-bill-wave"></i></h4>
+          <p>In a company's salary distribution:</p>
+          <table>
+            <tr>
+              <th>Quartile</th>
+              <th>Position</th>
+              <th>Interpretation</th>
+            </tr>
+            <tr>
+              <td>Q1</td>
+              <td>₹3,50,000</td>
+              <td>Entry-level positions</td>
+            </tr>
+            <tr>
+              <td>Q2 (Median)</td>
+              <td>₹6,00,000</td>
+              <td>Middle salary in the company</td>
+            </tr>
+            <tr>
+              <td>Q3</td>
+              <td>₹9,50,000</td>
+              <td>Upper-level positions</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section 3: Calculating Percentiles -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">3</div>
+          <h2 style="margin: 0; border: none">Calculating Percentiles <i class="fas fa-calculator"></i></h2>
+        </div>
+
+        <h3>Step-by-Step Method <i class="fas fa-list-ol"></i></h3>
+
+        <div class="step-card">
+          <h4><i class="fas fa-arrow-right" style="color: #8b5cf6"></i> Step 1: Sort the Data</h4>
+          <p>Arrange your data in <strong>ascending order</strong> (smallest to largest).</p>
+        </div>
+
+        <div class="step-card">
+          <h4><i class="fas fa-arrow-right" style="color: #8b5cf6"></i> Step 2: Calculate the Rank Index</h4>
+          <p>Use the rank index formula:</p>
+          <div class="formula-box" style="margin: 15px 0">
+            <h3 style="font-family: 'Courier New', monospace; font-size: 1.5em; margin: 0;">i = (P / 100) × (n - 1) + 1</h3>
+            <p style="margin-top: 15px">
+              <strong>Where:</strong><br />
+              P = desired percentile (e.g., 25 for Q1)<br />
+              n = number of data points<br />
+              i = rank index (position in sorted data)
+            </p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <h4><i class="fas fa-arrow-right" style="color: #8b5cf6"></i> Step 3: Determine the Percentile Value</h4>
+          <ul style="margin: 10px 0 0 20px; line-height: 2">
+            <li><strong>If i is an integer:</strong> The i-th value in sorted data is the P-th percentile</li>
+            <li><strong>If i is NOT an integer:</strong> Use interpolation (we'll cover this next!)</li>
+          </ul>
+        </div>
+
+        <div class="warning-box">
+          <h4>Why Rank Index Matters</h4>
+          <p>
+            The rank index tells you the <strong>position</strong> of the value corresponding to your desired percentile within the sorted dataset. Think of it like finding the position of a person in a line arranged by height!
+          </p>
+        </div>
+      </div>
+
+      <!-- Section 4: Linear Interpolation -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #ef4444; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">4</div>
+          <h2 style="margin: 0; border: none">Linear Interpolation <i class="fas fa-wave-square"></i></h2>
+        </div>
+
+        <p>When the rank index is <strong>not a whole number</strong>, we use <strong>linear interpolation</strong> to estimate the percentile value.</p>
+
+        <h3>How Does It Work? <i class="fas fa-cogs"></i></h3>
+        <div class="info-box">
+          <p>
+            Linear interpolation assumes a <strong>linear relationship</strong> between two data points. We estimate the value "in between" based on how far along we are between the two points.
+          </p>
+        </div>
+
+        <div class="formula-box">
+          <h3>Interpolation Formula</h3>
+          <div style="font-family: 'Courier New', monospace; font-size: 1.3em; margin: 20px 0;">
+            Percentile Value = <br />
+            Value<sub>lower</sub> + (i - Index<sub>lower</sub>) × (Value<sub>higher</sub> - Value<sub>lower</sub>)
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4>Example: Finding the 2.5th Position <i class="fas fa-search"></i></h4>
+          <p><strong>Given sorted data:</strong> 10, 20, 30, 40, 50</p>
+          <p><strong>Rank Index:</strong> 2.5</p>
+
+          <div style="margin: 20px 0; padding: 20px; background: #f0f0f0; border-left: 4px solid #8b5cf6;">
+            <p><strong>Step 1:</strong> Identify the two data points</p>
+            <ul style="margin-left: 20px">
+              <li>Lower point: Position 2 = 20</li>
+              <li>Higher point: Position 3 = 30</li>
+            </ul>
+
+            <p style="margin-top: 15px"><strong>Step 2:</strong> Calculate the difference</p>
+            <p style="margin-left: 20px">Rank index (2.5) is <strong>0.5 units</strong> away from the lower index (2)</p>
+
+            <p style="margin-top: 15px"><strong>Step 3:</strong> Interpolate</p>
+            <p style="margin-left: 20px; font-family: 'Courier New'">
+              Value = 20 + (2.5 - 2) × (30 - 20)<br />
+              Value = 20 + 0.5 × 10<br />
+              Value = 20 + 5<br />
+              <strong style="color: #10b981">Value = 25</strong>
+            </p>
+          </div>
+          <p style="color: #10b981; font-weight: bold; font-size: 1.2em"><i class="fas fa-check-circle"></i> The interpolated value at rank 2.5 is 25!</p>
+        </div>
+      </div>
+
+      <!-- Section 5: Complete Example -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #8b5cf6; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">5</div>
+          <h2 style="margin: 0; border: none">Complete Example: Finding Quartiles <i class="fas fa-graduation-cap"></i></h2>
+        </div>
+
+        <p><strong>Dataset (sorted):</strong> 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85</p>
+        <p><strong>n = 16 values</strong></p>
+
+        <!-- Calculations (Content Preserved, Styling Improved) -->
+        <div class="example-box">
+          <h4><i class="fas fa-star" style="color: #3b82f6"></i> Calculate Q1 (25th Percentile)</h4>
+          <div style="background: #f0f0f0; padding: 20px; margin: 15px 0; border-left: 4px solid #3b82f6;">
+            <p><strong>Step 1: Calculate Rank Index</strong></p>
+            <p style="font-family: 'Courier New'; margin-left: 20px">
+              i = (25 / 100) × (16 - 1) + 1 = <strong>4.75</strong>
+            </p>
+            <p style="margin-top: 15px"><strong>Step 2: Values</strong></p>
+            <p style="margin-left: 20px">4th value = 25 | 5th value = 30</p>
+            <p style="margin-top: 15px"><strong>Step 3: Interpolate</strong></p>
+            <p style="font-family: 'Courier New'; margin-left: 20px">
+              Q1 = 25 + 0.75 × (30 - 25) = <strong style="color: #3b82f6">28.75</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4><i class="fas fa-star" style="color: #10b981"></i> Calculate Q2 (50th Percentile - Median)</h4>
+          <div style="background: #f0f0f0; padding: 20px; margin: 15px 0; border-left: 4px solid #10b981;">
+            <p><strong>Step 1: Calculate Rank Index</strong></p>
+            <p style="font-family: 'Courier New'; margin-left: 20px">
+              i = (50 / 100) × (16 - 1) + 1 = <strong>8.5</strong>
+            </p>
+            <p style="margin-top: 15px"><strong>Step 2: Values</strong></p>
+            <p style="margin-left: 20px">8th value = 45 | 9th value = 50</p>
+            <p style="margin-top: 15px"><strong>Step 3: Interpolate</strong></p>
+            <p style="font-family: 'Courier New'; margin-left: 20px">
+              Q2 = 45 + 0.5 × (50 - 45) = <strong style="color: #10b981">47.5</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4><i class="fas fa-star" style="color: #f59e0b"></i> Calculate Q3 (75th Percentile)</h4>
+          <div style="background: #f0f0f0; padding: 20px; margin: 15px 0; border-left: 4px solid #f59e0b;">
+            <p><strong>Step 1: Calculate Rank Index</strong></p>
+            <p style="font-family: 'Courier New'; margin-left: 20px">
+              i = (75 / 100) × (16 - 1) + 1 = <strong>12.25</strong>
+            </p>
+            <p style="margin-top: 15px"><strong>Step 2: Values</strong></p>
+            <p style="margin-left: 20px">12th value = 65 | 13th value = 70</p>
+            <p style="margin-top: 15px"><strong>Step 3: Interpolate</strong></p>
+            <p style="font-family: 'Courier New'; margin-left: 20px">
+              Q3 = 65 + 0.25 × (70 - 65) = <strong style="color: #f59e0b">66.25</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- Chart Visualization -->
+        <div class="chart-container">
+          <canvas id="quartilesChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Section 6: Interactive Calculator -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #10b981; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">6</div>
+          <h2 style="margin: 0; border: none">Interactive Percentile Calculator <i class="fas fa-calculator"></i></h2>
+        </div>
+
+        <div class="interactive-demo">
+          <h4>Calculate Any Percentile!</h4>
+          <p>Enter a sorted dataset (comma-separated) and the desired percentile:</p>
+
+          <div style="margin: 20px 0">
+            <label for="dataInput"><strong>Dataset (comma-separated):</strong></label>
+            <input type="text" id="dataInput" placeholder="e.g., 10, 20, 30, 40, 50" value="10, 15, 20, 25, 30, 35, 40, 45, 50" />
+          </div>
+
+          <div style="margin: 20px 0">
+            <label for="percentileInput"><strong>Percentile (0-100):</strong></label>
+            <input type="number" id="percentileInput" min="0" max="100" value="50" />
+          </div>
+
+          <button onclick="calculatePercentile()">Calculate Percentile</button>
+
+          <div id="result" style="display: none; margin-top: 20px; padding: 20px; background: #f0f0f0; border-left: 4px solid #8b5cf6;">
+            <!-- Result will appear here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7: Real-World Applications -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #ef4444; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">7</div>
+          <h2 style="margin: 0; border: none">Real-World Applications <i class="fas fa-globe"></i></h2>
+        </div>
+
+        <div class="sampling-grid">
+          <div class="sampling-card" style="border-left: 5px solid #3b82f6">
+            <h4><i class="fas fa-graduation-cap" style="color: #3b82f6"></i> Education</h4>
+            <p>Competitive exams like JEE/NEET use percentiles. A <strong>99th percentile</strong> means you outperformed 99% of candidates.</p>
+          </div>
+          <div class="sampling-card" style="border-left: 5px solid #10b981">
+            <h4><i class="fas fa-heartbeat" style="color: #10b981"></i> Healthcare</h4>
+            <p>Growth Charts: A child at the <strong>60th percentile</strong> for height is taller than 60% of their age peers.</p>
+          </div>
+          <div class="sampling-card" style="border-left: 5px solid #f59e0b">
+            <h4><i class="fas fa-rupee-sign" style="color: #f59e0b"></i> Finance</h4>
+            <p>Salary Benchmarking: Employees in the <strong>top quartile (Q3+)</strong> earn more than 75% of their peers.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 8: Practice Problems -->
+      <div class="section">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #000; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2em;">8</div>
+          <h2 style="margin: 0; border: none">Practice Problems <i class="fas fa-pen-fancy"></i></h2>
+        </div>
+
+        <div class="example-box">
+          <h4>Problem 1: Finding the 70th Percentile</h4>
+          <p><strong>Dataset:</strong> 12, 18, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80</p>
+          <button onclick="toggleSolution('sol1')">Show Solution</button>
+          <div id="sol1" style="display: none; margin-top: 20px; background: #f0f0f0; padding: 20px; border-left: 4px solid #8b5cf6;">
+            <p><strong>Rank Index:</strong> i = (70/100) × 14 + 1 = 10.8</p>
+            <p><strong>Value:</strong> 55 + 0.8 × (60-55) = <strong style="color: #8b5cf6">59</strong></p>
+          </div>
+        </div>
+
+        <div class="example-box">
+          <h4>Problem 2: Finding Q1</h4>
+          <p><strong>Dataset:</strong> 10, 15, 20, 25, 30</p>
+          <button onclick="toggleSolution('sol2')">Show Solution</button>
+          <div id="sol2" style="display: none; margin-top: 20px; background: #f0f0f0; padding: 20px; border-left: 4px solid #3b82f6;">
+            <p><strong>Rank Index:</strong> i = (25/100) × 4 + 1 = 2</p>
+            <p>The 2nd value is <strong style="color: #3b82f6">15</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="section" style="background: #000000; color: #ffffff; text-align: center; margin-bottom: 0;">
+        <h3 style="color: #ffffff; border: none">Continue Your Learning Journey</h3>
+        <p>You've mastered Percentiles and Quartiles! Ready for more?</p>
+        <div style="margin-top: 2rem">
+          <a href="FSPWeekFourC.html" style="display: inline-block; border: 2px solid #ffffff; color: #ffffff; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 10px;">
+            <i class="fas fa-arrow-left"></i> Previous: Week 4C
+          </a>
+          <a href="../index.html" style="display: inline-block; background: #ffffff; color: #000000; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 10px;">
+            Back to FSP Home <i class="fas fa-home"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Initialize Mermaid with secure settings
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "neutral",
+        securityLevel: 'loose',
+      });
+
+      // Toggle Solutions
+      function toggleSolution(id) {
+        const el = document.getElementById(id);
+        el.style.display = el.style.display === "none" ? "block" : "none";
+      }
+
+      // Interactive Percentile Calculator
+      function calculatePercentile() {
+        const dataInput = document.getElementById("dataInput").value;
+        const percentile = parseFloat(document.getElementById("percentileInput").value);
+        const resultDiv = document.getElementById("result");
+
+        const data = dataInput.split(",").map((x) => parseFloat(x.trim())).filter((x) => !isNaN(x));
+
+        if (data.length === 0) {
+          alert("Please enter valid numbers!");
+          return;
+        }
+        if (percentile < 0 || percentile > 100) {
+          alert("Percentile must be between 0 and 100!");
+          return;
+        }
+
+        data.sort((a, b) => a - b);
+        const n = data.length;
+        const i = (percentile / 100) * (n - 1);
+        let result, explanation;
+
+        if (Number.isInteger(i)) {
+          result = data[i];
+          explanation = `<p>Index is integer: <strong>${i}</strong>. Value: <strong>${result}</strong></p>`;
+        } else {
+          const lowerIndex = Math.floor(i);
+          const upperIndex = Math.ceil(i);
+          const lowerValue = data[lowerIndex];
+          const upperValue = data[upperIndex];
+          const fraction = i - lowerIndex;
+          result = lowerValue + fraction * (upperValue - lowerValue);
+          explanation = `<p>Interpolating between index ${lowerIndex} (${lowerValue}) and ${upperIndex} (${upperValue}). Result: <strong>${result.toFixed(2)}</strong></p>`;
+        }
+
+        resultDiv.innerHTML = `
+          <h4 style="color: #8b5cf6;">${percentile}th Percentile</h4>
+          <p><strong>Sorted:</strong> ${data.join(", ")}</p>
+          ${explanation}
+        `;
+        resultDiv.style.display = "block";
+      }
+
+      // Chart.js - Improved Visualization (Scatter Plot on Number Line)
+      const ctx = document.getElementById("quartilesChart").getContext("2d");
+      
+      const chartData = {
+          // X values correspond to the data points, Y is fixed to create a 1D timeline effect
+          datasets: [
+            {
+              label: 'Min / Max',
+              data: [{x: 10, y: 1}, {x: 85, y: 1}],
+              backgroundColor: '#ef4444',
+              borderColor: '#ef4444',
+              pointRadius: 8,
+              pointHoverRadius: 10,
+              type: 'scatter'
+            },
+            {
+              label: 'Quartiles (Q1, Q2, Q3)',
+              data: [
+                  {x: 28.75, y: 1}, 
+                  {x: 47.5, y: 1}, 
+                  {x: 66.25, y: 1}
+              ],
+              backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'],
+              borderColor: '#000',
+              borderWidth: 1,
+              pointRadius: 12,
+              pointStyle: 'rectRot', // Diamond shape for quartiles
+              type: 'scatter'
+            },
+            {
+              // Connecting line
+              label: 'Range',
+              data: [{x: 10, y: 1}, {x: 85, y: 1}],
+              borderColor: '#000',
+              borderWidth: 2,
+              pointRadius: 0,
+              type: 'line',
+              fill: false,
+              order: 10 // Draw behind points
+            }
+          ]
+      };
+
+      new Chart(ctx, {
+        type: 'scatter',
+        data: chartData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Quartile Visualization on Number Line",
+              font: { size: 16 }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return `${context.dataset.label}: ${context.parsed.x}`;
+                    }
+                }
+            },
+            legend: {
+                labels: { usePointStyle: true }
+            }
+          },
+          scales: {
+            y: {
+              display: false, // Hide Y axis for 1D effect
+              min: 0,
+              max: 2
+            },
+            x: {
+              title: { display: true, text: "Value" },
+              ticks: { stepSize: 5 }
+            }
+          }
+        }
+      });
+
+      // Enter key support
+      document.getElementById("percentileInput").addEventListener("keypress", function (e) {
+        if (e.key === "Enter") calculatePercentile();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 4C: Linear Interpolation | FSP</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Mermaid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="../../styles/navbar.css" />
+    <!-- Font Awesome 6.4.0 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Georgia", "Times New Roman", serif;
+        background: #ffffff;
+        color: #1a1a1a;
+        line-height: 1.8;
+        padding: 20px;
+        padding-top: 80px;
+        scroll-behavior: smooth;
+      }
+
+      /* Navigation Variables */
+      :root {
+        --nav-bg-glass: rgba(0, 0, 0, 0.9);
+        --nav-border-glass: rgba(255, 255, 255, 0.1);
+        --nav-text-color: #ffffff;
+        --nav-active-color: #3b82f6;
+        --nav-hover-bg: rgba(255, 255, 255, 0.1);
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        margin-top: 20px;
+      }
+
+      .header {
+        background: #000000;
+        color: #ffffff;
+        padding: 60px 40px;
+        margin-bottom: 40px;
+        border: 3px solid #000000;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 3em;
+        margin-bottom: 15px;
+        font-weight: 300;
+        letter-spacing: 2px;
+      }
+
+      .header p {
+        font-size: 1.3em;
+        font-weight: 300;
+        margin: 10px 0;
+      }
+
+      .section {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 50px;
+        margin-bottom: 40px;
+        position: relative;
+      }
+
+      .section::before {
+        content: "";
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: -10px;
+        bottom: -10px;
+        background: #f5f5f5;
+        z-index: -1;
+      }
+
+      .section h2 {
+        color: #000000;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        border-bottom: 4px solid #000000;
+        padding-bottom: 15px;
+        font-weight: 400;
+        letter-spacing: 1px;
+      }
+
+      .section h3 {
+        color: #000000;
+        font-size: 1.8em;
+        margin: 35px 0 20px 0;
+        font-weight: 400;
+        border-left: 6px solid #000000;
+        padding-left: 20px;
+      }
+
+      .section h4 {
+        color: #000000;
+        font-size: 1.4em;
+        margin: 25px 0 15px 0;
+        font-weight: 500;
+      }
+
+      .intro-text {
+        font-size: 1.2em;
+        line-height: 2;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: #f9f9f9;
+        border-left: 4px solid #000000;
+      }
+
+      /* --- BOX STYLES WITH FONT AWESOME UNICODE --- */
+      
+      .example-box, .success-box, .info-box, .warning-box, .interactive-demo {
+        background: #ffffff;
+        border: 3px solid #000000;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+        margin-top: 40px; /* Space for the label */
+      }
+
+      /* Common style for the label tag */
+      .example-box::before, .success-box::before, .info-box::before, 
+      .warning-box::before, .interactive-demo::before {
+        position: absolute;
+        top: -15px;
+        left: 20px;
+        background: #000000;
+        color: #ffffff;
+        padding: 5px 20px;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 2px;
+        font-family: "Font Awesome 6 Free", "Georgia", serif; /* Essential for icons */
+        font-weight: 900; /* Essential for solid icons */
+      }
+
+      .example-box::before {
+        content: "EXAMPLE"; 
+        /* No icon needed for example, or could use \f02d (book) */
+      }
+
+      .success-box::before {
+        content: "\f00c  KEY INSIGHT"; /* fa-check */
+      }
+
+      .info-box::before {
+        content: "\f129  INFO"; /* fa-info */
+      }
+
+      .warning-box::before {
+        content: "\f071  LIMITATION"; /* fa-exclamation-triangle */
+      }
+
+      .interactive-demo::before {
+        content: "\f11b  INTERACTIVE DEMO"; /* fa-gamepad */
+      }
+
+      /* ------------------------------------------- */
+
+      .sampling-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin: 30px 0;
+      }
+
+      .sampling-card {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 25px;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      .sampling-card:hover {
+        transform: translate(-3px, -3px);
+        box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.1);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 30px 0;
+        background: #ffffff;
+      }
+
+      th,
+      td {
+        border: 2px solid #000000;
+        padding: 20px;
+        text-align: left;
+      }
+
+      th {
+        background: #000000;
+        color: #ffffff;
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+
+      tr:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      button {
+        background: #000000;
+        color: #ffffff;
+        border: 3px solid #000000;
+        padding: 15px 35px;
+        cursor: pointer;
+        font-size: 1.1em;
+        transition: all 0.3s;
+        margin: 10px;
+        font-family: "Georgia", serif;
+        letter-spacing: 1px;
+      }
+
+      button:hover {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #000000;
+        font-size: 1.1em;
+        font-family: "Georgia", serif;
+        margin: 10px 0;
+      }
+
+      .mermaid-container {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+        overflow-x: auto;
+      }
+
+      .mermaid {
+        display: flex;
+        justify-content: center;
+      }
+
+      .canvas-container {
+        background: #ffffff;
+        border: 2px solid #000000;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+      }
+
+      canvas {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .formula-box {
+        background: #f9f9f9;
+        border: 2px solid #000000;
+        padding: 20px;
+        margin: 20px 0;
+        font-family: "Courier New", monospace;
+        font-size: 1.2em;
+        text-align: center;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 70px 10px 10px;
+        }
+        .header h1 {
+          font-size: 1.8em;
+        }
+        .section {
+          padding: 30px 15px;
+        }
+        .sampling-grid {
+          grid-template-columns: 1fr;
+        }
+        table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="modern-nav">
+      <div class="nav-inner">
+        <a href="../../index.html" class="nav-brand">
+          <i class="fas fa-layer-group"></i>
+          <span>Notes App</span>
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+          </a>
+          <a href="../index.html" class="nav-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>FSP</span>
+          </a>
+          <a href="../../ATA/index.html" class="nav-item">
+            <i class="fas fa-code-branch"></i>
+            <span>ATA</span>
+          </a>
+          <a href="../../BDA/index.html" class="nav-item">
+            <i class="fas fa-database"></i>
+            <span>BDA</span>
+          </a>
+          <a href="../../LANA/index.html" class="nav-item">
+            <i class="fas fa-square-root-alt"></i>
+            <span>LANA</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="header">
+        <h1>Week 4C: Linear Interpolation</h1>
+        <p>
+          Estimating Unknown Values Using Known Points
+          <i class="fas fa-chart-line"></i>
+        </p>
+        <p style="font-size: 1rem; margin-top: 10px; opacity: 0.8">
+          "Connecting the dots to see the bigger picture"
+        </p>
+      </div>
+
+      <!-- Overview -->
+      <div class="section">
+        <h2>Week's Overview</h2>
+        <div class="intro-text">
+          Welcome to Week 4C! <i class="fas fa-rocket"></i> In this week, we explore
+          <strong>Triangles and Ratios</strong> as the foundation for
+          understanding <strong>Linear Interpolation</strong>—a powerful
+          technique for estimating unknown values between known data points.
+          Let's dive in!
+        </div>
+
+        <div class="sampling-grid">
+          <div class="sampling-card">
+            <h3><i class="fas fa-clipboard-list"></i> Key Topics</h3>
+            <ul style="list-style: none; margin-top: 15px; line-height: 1.8">
+              <li><i class="fas fa-check"></i> Triangles and Ratios</li>
+              <li><i class="fas fa-check"></i> Linear Interpolation Basics</li>
+              <li><i class="fas fa-check"></i> Real-World Applications</li>
+            </ul>
+          </div>
+          <div class="sampling-card">
+            <h3><i class="fas fa-bullseye"></i> Learning Goals</h3>
+            <ul style="list-style: none; margin-top: 15px; line-height: 1.8">
+              <li>
+                <i class="fas fa-arrow-right"></i> Understand ratio principles
+              </li>
+              <li>
+                <i class="fas fa-arrow-right"></i> Master interpolation formula
+              </li>
+              <li>
+                <i class="fas fa-arrow-right"></i> Apply to real scenarios
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 1: Triangles and Ratios -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            1
+          </div>
+          <h2 style="margin: 0; border: none">
+            Triangles and Ratios: The Foundation <i class="fas fa-shapes"></i>
+          </h2>
+        </div>
+
+        <p>
+          Before we dive into linear interpolation, let's revisit basic
+          geometry! The concept of dividing line segments using ratios is
+          fundamental to understanding interpolation.
+        </p>
+
+        <h3>What Are Ratios? <i class="fas fa-ruler-combined"></i></h3>
+        <p>
+          A <strong>ratio</strong> is a way to compare two quantities. When we
+          divide a line segment, we're creating parts that relate to each other
+          through ratios.
+        </p>
+
+        <div class="example-box">
+          <h4>Example: Dividing a Line Segment</h4>
+          <p>
+            Imagine a line segment from Point A to Point C. We want to find a
+            Point B that divides this segment in a ratio of 3:1.
+          </p>
+
+          <div class="mermaid-container">
+            <div class="mermaid">
+                flowchart LR
+                A((Point A)) -- "3 parts (75%)" --> B((Point B))
+                B -- "1 part (25%)" --> C((Point C))
+                
+                style A fill:#3b82f6,stroke:#000,stroke-width:2px,color:white
+                style B fill:#10b981,stroke:#000,stroke-width:2px,color:white
+                style C fill:#ef4444,stroke:#000,stroke-width:2px,color:white
+                linkStyle 0 stroke:#000,stroke-width:2px
+                linkStyle 1 stroke:#000,stroke-width:2px
+            </div>
+          </div>
+
+          <p>If the total length is 4 units:</p>
+          <ul>
+            <li><strong>AB = 3 units</strong> (75% of total)</li>
+            <li><strong>BC = 1 unit</strong> (25% of total)</li>
+          </ul>
+        </div>
+
+        <div class="success-box">
+          <h4>Key Principle: Similar Triangles</h4>
+          <p>
+            When you divide a line segment, you create
+            <strong>similar triangles</strong>. The ratios of corresponding
+            sides are equal. This principle is the foundation of linear
+            interpolation!
+          </p>
+        </div>
+
+        <h3>Visual Representation</h3>
+        <div class="canvas-container">
+          <canvas id="ratioCanvas" width="600" height="200"></canvas>
+        </div>
+      </div>
+
+      <!-- Section 2: Linear Interpolation -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            2
+          </div>
+          <h2 style="margin: 0; border: none">
+            Linear Interpolation: Estimating the Unknown
+            <i class="fas fa-chart-line"></i>
+          </h2>
+        </div>
+
+        <h3>What Is Linear Interpolation? <i class="fas fa-search"></i></h3>
+        <div class="intro-text">
+          <strong>Linear interpolation</strong> is a method of estimating a
+          value between two known values by assuming a straight-line
+          relationship. It's one of the most widely used estimation techniques!
+        </div>
+
+        <h3>Why Is It Useful? <i class="fas fa-lightbulb"></i></h3>
+        <ul style="line-height: 2; margin: 20px 0">
+          <li>
+            <strong>Fill in gaps:</strong> When we don't have data for every
+            point
+          </li>
+          <li>
+            <strong>Make predictions:</strong> Estimate values based on trends
+          </li>
+          <li>
+            <strong>Simplify complexity:</strong> Assume linear relationships
+            for easier calculations
+          </li>
+        </ul>
+
+        <div class="mermaid-container">
+          <div class="mermaid">
+            flowchart TD
+            subgraph Inputs
+              P1[("Known Point 1<br>(x1, y1)")]
+              P2[("Known Point 2<br>(x2, y2)")]
+            end
+
+            subgraph Calculation
+              Slope["Calculate Slope (m)"]
+              Formula["Apply Linear Formula<br>y = mx + c"]
+            end
+
+            Output[("Estimated Point<br>(x, y)")]
+
+            P1 --> Slope
+            P2 --> Slope
+            Slope --> Formula
+            Formula --> Output
+
+            style Inputs fill:#f9f9f9,stroke:#000,stroke-dasharray: 5 5
+            style Calculation fill:#e5e7eb,stroke:#000
+            style Output fill:#000,color:#fff,stroke:#000
+            style Slope fill:#fff,stroke:#000
+            style Formula fill:#fff,stroke:#000
+          </div>
+        </div>
+
+        <h3>The Interpolation Process</h3>
+        <div class="sampling-grid">
+          <div class="sampling-card" style="border-left: 5px solid #3b82f6">
+            <h4>Step 1: Identify Known Points</h4>
+            <p>
+              Find two known points: <strong>(x₁, y₁)</strong> and
+              <strong>(x₂, y₂)</strong>
+            </p>
+          </div>
+          <div class="sampling-card" style="border-left: 5px solid #10b981">
+            <h4>Step 2: Calculate Slope</h4>
+            <p>
+              Find the rate of change:
+              <strong>m = (y₂ - y₁) / (x₂ - x₁)</strong>
+            </p>
+          </div>
+          <div class="sampling-card" style="border-left: 5px solid #f59e0b">
+            <h4>Step 3: Interpolate</h4>
+            <p>Use the formula: <strong>y - y₁ = m × (x - x₁)</strong></p>
+          </div>
+        </div>
+
+        <h3>The Formula <i class="fas fa-calculator"></i></h3>
+        <div class="formula-box">
+          y = y₁ + ((y₂ - y₁) / (x₂ - x₁)) × (x - x₁)
+        </div>
+
+        <div class="example-box">
+          <h4>Example: Temperature Interpolation</h4>
+          <p>Suppose we know the temperature at two times:</p>
+          <ul>
+            <li>
+              <strong>Point 1:</strong> At 1 PM (x₁ = 1), temperature is 20°C
+              (y₁ = 20)
+            </li>
+            <li>
+              <strong>Point 2:</strong> At 3 PM (x₂ = 3), temperature is 26°C
+              (y₂ = 26)
+            </li>
+          </ul>
+          <p>
+            <strong>Question:</strong> What's the estimated temperature at 2 PM
+            (x = 2)?
+          </p>
+
+          <h4 style="margin-top: 20px">Solution:</h4>
+          <ol style="line-height: 2">
+            <li>
+              <strong>Calculate slope:</strong> m = (26 - 20) / (3 - 1) = 6 / 2
+              = 3
+            </li>
+            <li>
+              <strong>Interpolate:</strong> y = 20 + 3 × (2 - 1) = 20 + 3 = 23°C
+            </li>
+          </ol>
+          <p>
+            <strong>Answer:</strong> The estimated temperature at 2 PM is
+            <strong>23°C</strong> <i class="fas fa-check-circle" style="color: green"></i>
+          </p>
+        </div>
+
+        <h3>Visual Demonstration</h3>
+        <div class="canvas-container">
+          <canvas id="interpolationCanvas" width="600" height="400"></canvas>
+        </div>
+      </div>
+
+      <!-- Section 3: Real-World Applications -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            3
+          </div>
+          <h2 style="margin: 0; border: none">
+            Real-World Applications <i class="fas fa-globe"></i>
+          </h2>
+        </div>
+
+        <p>
+          Linear interpolation isn't just a mathematical concept—it's used
+          everywhere in technology and daily life! Let's explore some real-world
+          examples.
+        </p>
+
+        <h3>1. GPS and Navigation <i class="fas fa-map-location-dot"></i></h3>
+        <div class="info-box">
+          <p>
+            Your GPS uses interpolation to estimate your position between
+            satellite signals. When you're moving, the system calculates
+            intermediate positions to show smooth movement on the map.
+          </p>
+        </div>
+
+        <div class="mermaid-container">
+          <div class="mermaid">
+            sequenceDiagram
+              autonumber
+              actor User
+              participant GPS as GPS Receiver
+              participant Sat as Satellites
+              
+              User->>GPS: Request Location
+              GPS->>Sat: Ping Signal 1 (Pos A)
+              GPS->>Sat: Ping Signal 2 (Pos B)
+              Note right of GPS: Movement creates gaps
+              GPS->>GPS: Interpolate Position
+              GPS-->>User: Display Estimated Location
+          </div>
+        </div>
+
+        <h3>2. Image Resizing <i class="fas fa-image"></i></h3>
+        <div class="info-box">
+          <p>
+            When you resize an image, software uses interpolation to estimate
+            the color of new pixels. It looks at surrounding pixels and
+            calculates intermediate values to maintain image quality.
+          </p>
+        </div>
+
+        <h3>3. Weather Forecasting <i class="fas fa-cloud-showers-heavy"></i></h3>
+        <div class="example-box">
+          <h4>Indian Example: Monsoon Prediction</h4>
+          <p>
+            Weather stations across India report temperatures and rainfall at
+            different locations. Meteorologists use interpolation to estimate
+            weather conditions at locations without weather stations.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Location</th>
+                <th>Temperature (°C)</th>
+                <th>Method</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mumbai</td>
+                <td>32°C</td>
+                <td>Measured</td>
+              </tr>
+              <tr>
+                <td>Midpoint (Estimated)</td>
+                <td>30°C</td>
+                <td><strong>Interpolated</strong></td>
+              </tr>
+              <tr>
+                <td>Pune</td>
+                <td>28°C</td>
+                <td>Measured</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>4. Big Tech Companies <i class="fas fa-briefcase"></i></h3>
+
+        <div class="sampling-grid">
+          <div class="sampling-card">
+            <h4><i class="fab fa-google"></i> Google</h4>
+            <p>
+              <strong>Maps:</strong> Estimates distances and travel times
+              between waypoints
+            </p>
+            <p>
+              <strong>Search:</strong> Predicts trending topics based on query
+              patterns
+            </p>
+          </div>
+          <div class="sampling-card">
+            <h4><i class="fas fa-film"></i> Netflix</h4>
+            <p>
+              <strong>Recommendations:</strong> Interpolates user preferences to
+              predict ratings for unwatched content
+            </p>
+            <p>
+              <strong>Video Quality:</strong> Adjusts streaming quality based on
+              bandwidth interpolation
+            </p>
+          </div>
+          <div class="sampling-card">
+            <h4><i class="fab fa-amazon"></i> Amazon</h4>
+            <p>
+              <strong>Pricing:</strong> Estimates optimal prices based on demand
+              trends
+            </p>
+            <p>
+              <strong>Delivery:</strong> Calculates estimated delivery times
+            </p>
+          </div>
+        </div>
+
+        <div class="mermaid-container">
+          <div class="mermaid">
+             flowchart TD
+              Data[("User Data Stream")] --> Engine{{"Interpolation<br>Engine"}}
+              
+              Engine -->|Netflix| Recs["Predicting<br>Ratings"]
+              Engine -->|Amazon| Price["Optimizing<br>Dynamic Price"]
+              Engine -->|Google| Maps["Estimating<br>Travel Time"]
+              
+              Recs --> UX[("Enhanced User Experience")]
+              Price --> UX
+              Maps --> UX
+
+              style Data fill:#000,color:#fff
+              style Engine fill:#3b82f6,color:#fff,stroke:#000
+              style UX fill:#10b981,color:#fff,stroke:#000
+              style Recs fill:#fff,stroke:#000
+              style Price fill:#fff,stroke:#000
+              style Maps fill:#fff,stroke:#000
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Limitations -->
+      <div class="section">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+          "
+        >
+          <div
+            style="
+              background: #000;
+              color: #fff;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+              font-size: 1.2em;
+            "
+          >
+            4
+          </div>
+          <h2 style="margin: 0; border: none">
+            Limitations of Linear Interpolation
+            <i class="fas fa-exclamation-triangle"></i>
+          </h2>
+        </div>
+
+        <p>
+          While linear interpolation is powerful, it has important limitations
+          we need to understand:
+        </p>
+
+        <div class="warning-box">
+          <h4>Assumes Linear Relationship</h4>
+          <p>
+            Linear interpolation assumes the relationship between points is a
+            <strong>straight line</strong>. If the actual relationship is curved
+            or non-linear, interpolation can produce inaccurate estimates.
+          </p>
+        </div>
+
+        <div class="sampling-grid">
+          <div class="sampling-card" style="border-left: 5px solid #ef4444">
+            <h4><i class="fas fa-times-circle" style="color:#ef4444"></i> Poor For:</h4>
+            <ul style="line-height: 2">
+              <li>Exponential growth</li>
+              <li>Oscillating data</li>
+              <li>Complex curves</li>
+              <li>Highly variable data</li>
+            </ul>
+          </div>
+          <div class="sampling-card" style="border-left: 5px solid #10b981">
+            <h4><i class="fas fa-check-circle" style="color:#10b981"></i> Good For:</h4>
+            <ul style="line-height: 2">
+              <li>Nearly linear trends</li>
+              <li>Short intervals</li>
+              <li>Stable data</li>
+              <li>Quick estimates</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Example: When Linear Interpolation Fails</h3>
+        <div class="canvas-container">
+          <canvas id="limitationCanvas" width="600" height="400"></canvas>
+        </div>
+      </div>
+
+      <!-- Interactive Demo -->
+      <div class="section">
+        <div class="interactive-demo">
+          <h4>Interactive Linear Interpolation Calculator</h4>
+          <p>Enter two known points and find the interpolated value:</p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 20px;
+              margin: 20px 0;
+            "
+          >
+            <div>
+              <label><strong>Point 1:</strong></label>
+              <input type="number" id="x1" placeholder="x₁" value="1" />
+              <input type="number" id="y1" placeholder="y₁" value="2" />
+            </div>
+            <div>
+              <label><strong>Point 2:</strong></label>
+              <input type="number" id="x2" placeholder="x₂" value="5" />
+              <input type="number" id="y2" placeholder="y₂" value="10" />
+            </div>
+          </div>
+
+          <div>
+            <label><strong>Find y at x =</strong></label>
+            <input
+              type="number"
+              id="xTarget"
+              placeholder="x value"
+              value="3"
+              style="width: 150px"
+            />
+          </div>
+
+          <button onclick="calculateInterpolation()">Calculate</button>
+
+          <div
+            id="interpResult"
+            style="
+              display: none;
+              margin-top: 20px;
+              padding: 20px;
+              background: #fff;
+              border: 3px solid #000;
+            "
+          >
+            <p id="resultText" style="font-size: 1.2em; font-weight: bold"></p>
+            <p id="formulaText" style="color: #666; margin-top: 10px"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Practice Questions -->
+      <div class="section">
+        <h2>Practice Questions <i class="fas fa-pen-fancy"></i></h2>
+
+        <div class="example-box">
+          <h4>Question 1: Temperature Estimation</h4>
+          <p>
+            The temperature at 10 AM is 25°C and at 2 PM is 33°C. Estimate the
+            temperature at 12 PM using linear interpolation.
+          </p>
+        </div>
+
+        <div class="example-box">
+          <h4>Question 2: Distance Calculation</h4>
+          <p>
+            A car is at position 10 km at time t=0 and at position 50 km at time
+            t=4 hours. Where will the car be at t=2 hours, assuming constant
+            speed?
+          </p>
+        </div>
+
+        <div class="example-box">
+          <h4>Question 3: Data Analysis</h4>
+          <p>
+            You have data points (2, 15) and (8, 45). Use linear interpolation
+            to estimate the y-value when x = 5.
+          </p>
+        </div>
+      </div>
+
+  
+    </div>
+          <!-- Footer -->
+      <div
+        class="section"
+        style="
+          background: #000000;
+          color: #ffffff;
+          text-align: center;
+          margin-bottom: 0;
+        "
+      >
+        <h3 style="color: #ffffff; border: none">
+          Continue Your Learning Journey
+        </h3>
+        <p>You've mastered Data Types! Ready for more statistical concepts?</p>
+        <div style="margin-top: 2rem">
+          <a
+            href="../Week4/FSPWeekFourB.html"
+            style="
+              display: inline-block;
+              border: 2px solid #ffffff;
+              color: #ffffff;
+              padding: 15px 30px;
+              text-decoration: none;
+              font-weight: bold;
+              margin: 10px;
+            "
+          >
+            <i class="fas fa-arrow-left"></i> Previous: Week 4B
+          </a>
+          <a
+            href="../Week4/FSPWeekFourD.html"
+            style="
+              display: inline-block;
+              background: #ffffff;
+              color: #000000;
+              padding: 15px 30px;
+              text-decoration: none;
+              font-weight: bold;
+              margin: 10px;
+            "
+          >
+            Next: Week 4D <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div
+          style="
+            margin-top: 30px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            color: #888;
+          "
+        >
+          <a
+            href="../../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >Home</a
+          >
+          |
+          <a
+            href="../index.html"
+            style="color: #888; text-decoration: none; margin: 0 10px"
+            >FSP Notes</a
+          >
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9em; color: #666">
+          Foundations of Statistics & Probability | Visual Learning Companion
+        </p>
+      </div>
+
+    <script>
+      // Initialize Mermaid with better config
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "base",
+        themeVariables: {
+          primaryColor: '#ffffff',
+          primaryTextColor: '#000000',
+          primaryBorderColor: '#000000',
+          lineColor: '#000000',
+          secondaryColor: '#f4f4f4',
+          tertiaryColor: '#fff'
+        },
+        flowchart: { curve: "basis" },
+        securityLevel: "loose",
+      });
+
+      // Canvas 1: Ratio Visualization
+      const ratioCanvas = document.getElementById("ratioCanvas");
+      const ratioCtx = ratioCanvas.getContext("2d");
+
+      // Draw line segment
+      ratioCtx.strokeStyle = "#000";
+      ratioCtx.lineWidth = 3;
+      ratioCtx.beginPath();
+      ratioCtx.moveTo(50, 100);
+      ratioCtx.lineTo(550, 100);
+      ratioCtx.stroke();
+
+      // Point A
+      ratioCtx.fillStyle = "#3b82f6";
+      ratioCtx.beginPath();
+      ratioCtx.arc(50, 100, 8, 0, Math.PI * 2);
+      ratioCtx.fill();
+      ratioCtx.fillStyle = "#000";
+      ratioCtx.font = "bold 16px Georgia";
+      ratioCtx.fillText("Point A", 35, 130);
+
+      // Point B (3:1 ratio means 75% of the way)
+      const pointBX = 50 + (550 - 50) * 0.75;
+      ratioCtx.fillStyle = "#10b981";
+      ratioCtx.beginPath();
+      ratioCtx.arc(pointBX, 100, 8, 0, Math.PI * 2);
+      ratioCtx.fill();
+      ratioCtx.fillStyle = "#000";
+      ratioCtx.fillText("Point B", pointBX - 25, 130);
+
+      // Point C
+      ratioCtx.fillStyle = "#ef4444";
+      ratioCtx.beginPath();
+      ratioCtx.arc(550, 100, 8, 0, Math.PI * 2);
+      ratioCtx.fill();
+      ratioCtx.fillStyle = "#000";
+      ratioCtx.fillText("Point C", 535, 130);
+
+      // Labels
+      ratioCtx.fillStyle = "#666";
+      ratioCtx.font = "14px Georgia";
+      ratioCtx.fillText("3 parts (75%)", 200, 70);
+      ratioCtx.fillText("1 part (25%)", pointBX + 50, 70);
+
+      // Arrows
+      ratioCtx.strokeStyle = "#666";
+      ratioCtx.lineWidth = 1;
+      ratioCtx.setLineDash([5, 5]);
+      ratioCtx.beginPath();
+      ratioCtx.moveTo(200, 75);
+      ratioCtx.lineTo(200, 95);
+      ratioCtx.stroke();
+      ratioCtx.beginPath();
+      ratioCtx.moveTo(pointBX + 80, 75);
+      ratioCtx.lineTo(pointBX + 80, 95);
+      ratioCtx.stroke();
+      ratioCtx.setLineDash([]);
+
+      // Canvas 2: Interpolation Visualization
+      const interpCanvas = document.getElementById("interpolationCanvas");
+      const interpCtx = interpCanvas.getContext("2d");
+
+      // Set up coordinate system
+      const padding = 60;
+      const graphWidth = interpCanvas.width - 2 * padding;
+      const graphHeight = interpCanvas.height - 2 * padding;
+
+      // Draw axes
+      interpCtx.strokeStyle = "#000";
+      interpCtx.lineWidth = 2;
+      interpCtx.beginPath();
+      interpCtx.moveTo(padding, padding);
+      interpCtx.lineTo(padding, interpCanvas.height - padding);
+      interpCtx.lineTo(
+        interpCanvas.width - padding,
+        interpCanvas.height - padding
+      );
+      interpCtx.stroke();
+
+      // Known points
+      const point1 = { x: 1, y: 20 };
+      const point2 = { x: 5, y: 10 };
+
+      // Scale to canvas
+      const scaleX = (x) => padding + (x - 0) * (graphWidth / 6);
+      const scaleY = (y) =>
+        interpCanvas.height - padding - (y - 0) * (graphHeight / 30);
+
+      // Draw line
+      interpCtx.strokeStyle = "#3b82f6";
+      interpCtx.lineWidth = 2;
+      interpCtx.beginPath();
+      interpCtx.moveTo(scaleX(point1.x), scaleY(point1.y));
+      interpCtx.lineTo(scaleX(point2.x), scaleY(point2.y));
+      interpCtx.stroke();
+
+      // Draw known points
+      interpCtx.fillStyle = "#10b981";
+      interpCtx.beginPath();
+      interpCtx.arc(scaleX(point1.x), scaleY(point1.y), 8, 0, Math.PI * 2);
+      interpCtx.fill();
+
+      interpCtx.beginPath();
+      interpCtx.arc(scaleX(point2.x), scaleY(point2.y), 8, 0, Math.PI * 2);
+      interpCtx.fill();
+
+      // Interpolated point
+      const xInterp = 3;
+      const yInterp =
+        point1.y +
+        ((point2.y - point1.y) / (point2.x - point1.x)) * (xInterp - point1.x);
+      interpCtx.fillStyle = "#ef4444";
+      interpCtx.beginPath();
+      interpCtx.arc(scaleX(xInterp), scaleY(yInterp), 8, 0, Math.PI * 2);
+      interpCtx.fill();
+
+      // Labels
+      interpCtx.fillStyle = "#000";
+      interpCtx.font = "14px Georgia";
+      interpCtx.fillText(
+        `(${point1.x}, ${point1.y})`,
+        scaleX(point1.x) - 15,
+        scaleY(point1.y) - 15
+      );
+      interpCtx.fillText(
+        `(${point2.x}, ${point2.y})`,
+        scaleX(point2.x) - 15,
+        scaleY(point2.y) + 25
+      );
+      interpCtx.fillText(
+        `(${xInterp}, ${yInterp})`,
+        scaleX(xInterp) + 10,
+        scaleY(yInterp) - 10
+      );
+
+      // Axis labels
+      interpCtx.fillText(
+        "x",
+        interpCanvas.width - padding + 10,
+        interpCanvas.height - padding + 5
+      );
+      interpCtx.fillText("y", padding - 15, padding - 10);
+
+      // Canvas 3: Limitation Example
+      const limitCanvas = document.getElementById("limitationCanvas");
+      const limitCtx = limitCanvas.getContext("2d");
+
+      // Set up
+      const lPadding = 60;
+      const lGraphWidth = limitCanvas.width - 2 * lPadding;
+      const lGraphHeight = limitCanvas.height - 2 * lPadding;
+
+      // Draw axes
+      limitCtx.strokeStyle = "#000";
+      limitCtx.lineWidth = 2;
+      limitCtx.beginPath();
+      limitCtx.moveTo(lPadding, lPadding);
+      limitCtx.lineTo(lPadding, limitCanvas.height - lPadding);
+      limitCtx.lineTo(
+        limitCanvas.width - lPadding,
+        limitCanvas.height - lPadding
+      );
+      limitCtx.stroke();
+
+      // Actual curve (quadratic)
+      limitCtx.strokeStyle = "#10b981";
+      limitCtx.lineWidth = 3;
+      limitCtx.beginPath();
+      for (let i = 0; i <= 100; i++) {
+        const x = i / 20;
+        const y = 2 + x * x; // Quadratic
+        const canvasX = lPadding + (x / 5) * lGraphWidth;
+        const canvasY = limitCanvas.height - lPadding - (y / 30) * lGraphHeight;
+        if (i === 0) limitCtx.moveTo(canvasX, canvasY);
+        else limitCtx.lineTo(canvasX, canvasY);
+      }
+      limitCtx.stroke();
+
+      // Linear interpolation (between x=1 and x=4)
+      const lPoint1 = { x: 1, y: 3 };
+      const lPoint2 = { x: 4, y: 18 };
+      const lScaleX = (x) => lPadding + (x / 5) * lGraphWidth;
+      const lScaleY = (y) =>
+        limitCanvas.height - lPadding - (y / 30) * lGraphHeight;
+
+      limitCtx.strokeStyle = "#ef4444";
+      limitCtx.lineWidth = 2;
+      limitCtx.setLineDash([10, 5]);
+      limitCtx.beginPath();
+      limitCtx.moveTo(lScaleX(lPoint1.x), lScaleY(lPoint1.y));
+      limitCtx.lineTo(lScaleX(lPoint2.x), lScaleY(lPoint2.y));
+      limitCtx.stroke();
+      limitCtx.setLineDash([]);
+
+      // Points
+      limitCtx.fillStyle = "#000";
+      limitCtx.beginPath();
+      limitCtx.arc(lScaleX(lPoint1.x), lScaleY(lPoint1.y), 6, 0, Math.PI * 2);
+      limitCtx.fill();
+      limitCtx.beginPath();
+      limitCtx.arc(lScaleX(lPoint2.x), lScaleY(lPoint2.y), 6, 0, Math.PI * 2);
+      limitCtx.fill();
+
+      // Legend
+      limitCtx.font = "14px Georgia";
+      limitCtx.fillStyle = "#10b981";
+      limitCtx.fillText("Actual Curve (Non-linear)", 200, 30);
+      limitCtx.fillStyle = "#ef4444";
+      limitCtx.fillText("Linear Interpolation (Inaccurate)", 200, 50);
+
+      // Interactive Calculator
+      function calculateInterpolation() {
+        const x1 = parseFloat(document.getElementById("x1").value);
+        const y1 = parseFloat(document.getElementById("y1").value);
+        const x2 = parseFloat(document.getElementById("x2").value);
+        const y2 = parseFloat(document.getElementById("y2").value);
+        const xTarget = parseFloat(document.getElementById("xTarget").value);
+
+        if (
+          isNaN(x1) ||
+          isNaN(y1) ||
+          isNaN(x2) ||
+          isNaN(y2) ||
+          isNaN(xTarget)
+        ) {
+          alert("Please enter valid numbers for all fields.");
+          return;
+        }
+
+        if (x1 === x2) {
+          alert("x1 and x2 cannot be the same (division by zero).");
+          return;
+        }
+
+        // Calculate slope
+        const slope = (y2 - y1) / (x2 - x1);
+
+        // Interpolate
+        const yResult = y1 + slope * (xTarget - x1);
+
+        // Display result
+        const resultDiv = document.getElementById("interpResult");
+        const resultText = document.getElementById("resultText");
+        const formulaText = document.getElementById("formulaText");
+
+        resultText.innerText = `At x = ${xTarget}, the interpolated y = ${yResult.toFixed(
+          2
+        )}`;
+        formulaText.innerHTML = `<strong>Calculation:</strong><br>
+          Slope (m) = (${y2} - ${y1}) / (${x2} - ${x1}) = ${slope.toFixed(
+          2
+        )}<br>
+          y = ${y1} + ${slope.toFixed(
+          2
+        )} × (${xTarget} - ${x1}) = ${yResult.toFixed(2)}`;
+
+        resultDiv.style.display = "block";
+      }
+    </script>
+  </body>
+</html>
